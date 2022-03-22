@@ -6,7 +6,7 @@ import { useState } from "react";
 // Styles
 import styles from "../styles/scss/modules.module.scss";
 
-const logRegister: NextPage = () => {
+const LogRegister: NextPage = () => {
   const [selectedForm, setSelectedForm] = useState<"Login" | "Register">(
     "Register"
   );
@@ -66,4 +66,4 @@ const logRegister: NextPage = () => {
   );
 };
 
-export default logRegister;
+export default LogRegister;
