@@ -1,0 +1,55 @@
+@mixin alignCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin hideScrollBar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@mixin GradientColorText($color1, $color2, $direction) {
+  background: linear-gradient(to $direction, $color1, $color2);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-background: linear-gradient(to $direction, $color1, $color2);
+  -webkit-background-clip: text;
+}
+
+@mixin GenericButtonStyle($color-value) {
+  cursor: pointer;
+  border-radius: 10px;
+  outline: none;
+  border: 1px solid transparent;
+  transition: background-color 500ms, border 500ms, color 500ms;
+  background-color: var(--BgColor);
+  border: 1px solid $color-value;
+  color: $color-value;
+  padding: clamp(5px, 4vw, 20px) clamp(10px, 2vw, 40px);
+
+  a,
+  p {
+    color: $color-value;
+  }
+
+  &::after {
+    opacity: 0;
+  }
+
+  &:hover {
+    transition: background-color 500ms, border 500ms, color 500ms;
+    background-color: $color-value;
+    color: var(--BGColor);
+
+    a,
+    p {
+      color: var(--BGColor);
+      transition: color 500ms;
+    }
+  }
+}

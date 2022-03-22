@@ -1,0 +1,16 @@
+#LogRegisterForm {
+  height: 60%;
+  width: 400px;
+  overflow: visible;
+  // border: 2px solid var(--SecondaryColor);
+  border-radius: 20px;
+  @include alignCenter;
+  flex-direction: column;
+  justify-content: space-around;
+  box-shadow: 4px 2px 14px rgba(45, 27, 110, 0.13);
+
+  > * {
+    @include alignCenter;
+    width: 80%;
+  }
+}

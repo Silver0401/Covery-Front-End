@@ -1,0 +1,9 @@
+:root {
+  --BgColor: white;
+  --PrimaryColor: black;
+  --SecondaryColor: blue;
+  --TertiaryColor: red;
+}
+@import "./modules/functions";
+@import "./modules/nav";
+@import "./modules/logRegister";

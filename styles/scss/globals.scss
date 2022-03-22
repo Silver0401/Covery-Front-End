@@ -1,68 +1,35 @@
-.alignCenter {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+* {
+  margin: 0;
+  padding: 0;
 }
 
-.hideScrollBar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
+section {
+  width: 100vw;
+  height: 100vh;
 }
 
 h1 {
-  font-size: clamp(1rem, 4vw, 4rem);
+  font-size: clamp(1rem, 8vw, 4rem);
+  line-height: clamp(1.5rem, 7vw, 3.5rem);
 }
 h2 {
-  font-size: clamp(0.9rem, 4vw, 3rem);
+  font-size: clamp(0.9rem, 6vw, 3rem);
 }
 h3 {
   font-size: clamp(0.8rem, 4vw, 2rem);
 }
+h4 {
+  font-size: clamp(0.6rem, 4vw, 1rem);
+}
 p {
-  font-size: clamp(0.7rem, 4vw, 1rem);
+  font-size: clamp(0.6rem, 2vw, 0.8rem);
 }
 
-@mixin GradientColorText($color1, $color2, $direction) {
-  background: linear-gradient(to $direction, $color1, $color2);
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -webkit-background: linear-gradient(to $direction, $color1, $color2);
-  -webkit-background-clip: text;
-}
-
-@mixin GenericButtonStyle($color-value) {
-  cursor: pointer;
+button {
+  display: grid;
+  place-items: center;
+  padding: clamp(0.5rem, 2vw, 1rem) clamp(1rem, 2vw, 2rem);
   border-radius: 10px;
-  outline: none;
-  border: 1px solid transparent;
-  transition: background-color 500ms, border 500ms, color 500ms;
-  background-color: var(--BGColor);
-  border: 1px solid $color-value;
-  color: $color-value;
-  padding: clamp(5px, 4vw, 20px) clamp(10px, 2vw, 40px);
-
-  a,
-  p {
-    color: $color-value;
-  }
-
-  &::after {
-    opacity: 0;
-  }
-
-  &:hover {
-    transition: background-color 500ms, border 500ms, color 500ms;
-    background-color: $color-value;
-    color: var(--BGColor);
-
-    a,
-    p {
-      color: var(--BGColor);
-      transition: color 500ms;
-    }
-  }
+  cursor: pointer;
+  font-size: clamp(0.8rem, 4vw, 2rem);
 }

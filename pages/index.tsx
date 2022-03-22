@@ -1,20 +1,12 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { Grommet } from "grommet";
+
+// Library Pages
+import Header from "../libs/index/Header";
 
 const Home: NextPage = () => {
-  const theme = {
-    global: {
-      font: {
-        family: "Roboto",
-        size: "18px",
-        height: "20px",
-      },
-    },
-  };
-
   return (
-    <Grommet theme={theme}>
+    <div>
       <Head>
         <title>Covery</title>
         <meta
@@ -23,8 +15,8 @@ const Home: NextPage = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      Pene
-    </Grommet>
+      <Header />
+    </div>
   );
 };
 
