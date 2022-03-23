@@ -13,7 +13,7 @@ const Header: React.FC = () => {
   const router = useRouter();
 
   return (
-    <section className={styles.phoneOptAbsolute}>
+    <section className={styles.phoneOptAbsolute} id="HomeSection">
       <div className={styles.spaceItemsVertical} id="HeaderLeftBox">
         <h1>Create and discover events near you</h1>
         <h3>The easiest way to pay and accept event cover payments.</h3>
