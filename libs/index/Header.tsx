@@ -3,7 +3,7 @@ import React from "react";
 import { useRouter } from "next/router";
 
 // Lottie Stuff
-import MoneyLottieAnimation from "../../assets/lotties/money-investment.json";
+import BeerLottieAnimation from "../../assets/lotties/beersLottie.json";
 import LottieContainer from "../../components/LottieContainer";
 
 // Styles
@@ -27,7 +27,10 @@ const Header: React.FC = () => {
         </div>
       </div>
       <div id="HeaderRightBox" className={styles.alignCenter}>
-        <LottieContainer lottie={MoneyLottieAnimation} />
+        <LottieContainer
+          style={{ transform: "scale(2)" }}
+          lottie={BeerLottieAnimation}
+        />
       </div>
     </section>
   );

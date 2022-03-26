@@ -5,6 +5,7 @@ import { useContext, useState } from "react";
 import axios from "axios";
 import bcrypt from "bcryptjs";
 import { GlobalContext } from "../e2e/globalContext";
+import { useRouter } from "next/router";
 
 // Styles
 import styles from "../styles/scss/modules.module.scss";
@@ -17,13 +18,17 @@ interface UserData {
 }
 
 const LogRegister: NextPage = () => {
+  const router = useRouter();
+  const [buttonLoading, setButtonLoading] = useState<boolean>(false);
+  const { createNotification, setLoginState, setUserData } =
+    useContext(GlobalContext);
   const [selectedForm, setSelectedForm] = useState<"Login" | "Register">(
     "Register"
   );
-  const { createNotification, setLoginState } = useContext(GlobalContext);
 
   const onFinish = async (values: UserData) => {
     const salt = bcrypt.genSaltSync(10);
+    setButtonLoading(true);
 
     if (selectedForm === "Register") {
       const userData: UserData = {
@@ -57,10 +62,12 @@ const LogRegister: NextPage = () => {
               "Please try again"
             );
           }
+          setButtonLoading(false);
         })
         .catch((err) => {
           console.error(err);
           createNotification("error", "Error Registering", "Please try again");
+          setButtonLoading(false);
         });
     }
 
@@ -82,11 +89,18 @@ const LogRegister: NextPage = () => {
             );
             if (result) {
               setLoginState(true);
+              setUserData({
+                username: response.data[0].username,
+                bio: response.data[0].bio,
+              });
               createNotification(
                 "success",
                 "Login Successfull",
                 "Redirecting you"
               );
+              setTimeout(() => {
+                router.push("/dashboard");
+              }, 1000);
             } else {
               createNotification(
                 "error",
@@ -101,6 +115,7 @@ const LogRegister: NextPage = () => {
               "Please try again"
             );
           }
+          setButtonLoading(false);
         })
         .catch((err) => {
           console.error(err);
@@ -109,6 +124,7 @@ const LogRegister: NextPage = () => {
             "Error Logging You In",
             "Please try again"
           );
+          setButtonLoading(false);
         });
     }
   };
@@ -118,7 +134,7 @@ const LogRegister: NextPage = () => {
   };
 
   return (
-    <section className={styles.spaceItemsVertical}>
+    <section id="GlobalSection" className={styles.spaceItemsVertical}>
       <h2>{selectedForm}</h2>
       <Form
         id="LogRegisterForm"
@@ -155,13 +171,14 @@ const LogRegister: NextPage = () => {
         </Form.Item>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" loading={buttonLoading}>
             Submit
           </Button>
         </Form.Item>
 
         <p
           onClick={() =>
+            !buttonLoading &&
             setSelectedForm(selectedForm === "Login" ? "Register" : "Login")
           }
         >
