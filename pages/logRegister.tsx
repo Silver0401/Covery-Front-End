@@ -177,6 +177,7 @@ const LogRegister: NextPage = () => {
         </Form.Item>
 
         <p
+          style={{cursor: "pointer"}}
           onClick={() =>
             !buttonLoading &&
             setSelectedForm(selectedForm === "Login" ? "Register" : "Login")

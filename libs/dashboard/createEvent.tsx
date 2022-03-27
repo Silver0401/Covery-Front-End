@@ -7,6 +7,9 @@ import {
   Tooltip,
   DatePicker,
   TimePicker,
+  Switch,
+  Row,
+  Col,
 } from "antd";
 import {
   UserSwitchOutlined,
@@ -17,6 +20,7 @@ import {
 } from "@ant-design/icons";
 import styles from "../../styles/scss/modules.module.scss";
 import { GlobalContext } from "../../e2e/globalContext";
+import { useRouter } from "next/router";
 import axios from "axios";
 
 type steps = "1) Creator Info" | "2) Event Description" | "3) Review";
@@ -25,11 +29,13 @@ type stepsKeys = {
 };
 
 const Dashboard: React.FC = () => {
+  const router = useRouter();
   const { Step } = Steps;
   const { TextArea } = Input;
-  const { setCreateEventData, createEventData, createNotification } =
+  const { setCreateEventData, createEventData, createNotification, userData } =
     useContext(GlobalContext);
   const [currentStep, setCurrentStep] = useState<steps>("1) Creator Info");
+  const [coverSwitchOn, setCoverSwitchON] = useState<boolean>(false);
 
   const StepsFormsObject: stepsKeys = {
     "1) Creator Info": (
@@ -39,7 +45,7 @@ const Dashboard: React.FC = () => {
           name="username"
           rules={[{ required: true, message: "Please input your username!" }]}
         >
-          <Input />
+          <Input disabled />
         </Form.Item>
 
         <Form.Item
@@ -49,12 +55,51 @@ const Dashboard: React.FC = () => {
             { required: true, message: "Please input a short biography!" },
           ]}
         >
-          <TextArea showCount maxLength={100} style={{ height: 120 }} />
+          <TextArea
+            placeholder="short bio about you and the event"
+            showCount
+            maxLength={100}
+            style={{ height: 120 }}
+          />
         </Form.Item>
+
+        <Row>
+          <Col span={10} className={styles.spaceItemsVertical}>
+            <p>Cover</p>
+            <Switch onChange={() => setCoverSwitchON(!coverSwitchOn)} />
+          </Col>
+
+          <Col span={14} className={styles.alignCenter}>
+            {coverSwitchOn ? (
+              <Form.Item
+                name="cover"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input the price per ticket",
+                  },
+                ]}
+              >
+                <Input placeholder="$ cost per ticket" suffix="mxn" />
+              </Form.Item>
+            ) : (
+              <p>Your event is free</p>
+            )}
+          </Col>
+        </Row>
       </>
     ),
     "2) Event Description": (
       <>
+        <Form.Item
+          label="Event Name"
+          name="eventName"
+          rules={[
+            { required: true, message: "Please input your event's name!" },
+          ]}
+        >
+          <Input />
+        </Form.Item>
         <Form.Item
           label="Event Date"
           name="eventDate"
@@ -103,9 +148,8 @@ const Dashboard: React.FC = () => {
         {Object.entries(createEventData).map((entry) => {
           const [key, value] = entry;
           return (
-            <div key={key} className={styles.spaceItemsHorizontal}>
-              <p>{key}:</p>
-              <p>{value}</p>
+            <div key={key}>
+              <p>{`${key}: ${value} `}</p>
             </div>
           );
         })}
@@ -121,7 +165,7 @@ const Dashboard: React.FC = () => {
     );
     axios
       .post(
-        `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/event`,
+        `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/event/pene`,
         createEventData,
         {
           headers: {
@@ -134,7 +178,7 @@ const Dashboard: React.FC = () => {
         createNotification(
           "success",
           "Success!",
-          "Event created successfully, redirecting"
+          "Event created successfully, you can now check your events tab"
         );
       })
       .catch((err) => {
@@ -157,13 +201,19 @@ const Dashboard: React.FC = () => {
       location_url: values.eventLocation
         ? values.eventLocation
         : createEventData.location_url,
-      name: values.username ? values.username : createEventData.name,
+      name: values.eventName ? values.eventName : createEventData.name,
       time_end: values.endTime
         ? values.endTime._d.toString()
         : createEventData.time_end,
       time_start: values.startTime
         ? values.startTime._d.toString()
         : createEventData.time_start,
+      price:
+        coverSwitchOn && values.cover
+          ? values.cover
+          : createEventData.price
+          ? createEventData.price
+          : 0,
     });
     StepSwitcher("next");
   };
@@ -245,7 +295,7 @@ const Dashboard: React.FC = () => {
       <Form
         id="LogRegisterForm"
         name="basic"
-        initialValues={{ remember: true }}
+        initialValues={{ remember: true, username: userData.username }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
@@ -258,7 +308,7 @@ const Dashboard: React.FC = () => {
           style={{
             position: "absolute",
             left: "20px",
-            bottom: "0",
+            bottom: "-15px",
             width: "33px",
           }}
         >
@@ -278,7 +328,7 @@ const Dashboard: React.FC = () => {
           style={{
             position: "absolute",
             right: "20px",
-            bottom: "0",
+            bottom: "-15px",
             width: "33px",
           }}
         >

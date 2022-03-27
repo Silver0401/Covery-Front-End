@@ -1,5 +1,5 @@
 // Libraries
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Layout, Menu } from "antd";
 import {
   ToolOutlined,
@@ -13,6 +13,7 @@ import styles from "../styles/scss/modules.module.scss";
 import CreateEvent from "../libs/dashboard/createEvent";
 import MyEvents from "../libs/dashboard/myEvents";
 import UserSettings from "../libs/dashboard/userSettings";
+import { useRouter } from "next/router";
 
 type NavComponents = "Create Event" | "My Events" | "User Settings";
 interface NavElement {
@@ -26,10 +27,12 @@ type NavComponentsIndex = {
 };
 
 const Dashboard: React.FC = () => {
+  const router = useRouter();
   const { Header, Content, Footer, Sider } = Layout;
   const [displayedNavElement, setDisplayedNavElement] =
     useState<NavComponents>("Create Event");
   const { loginState } = useContext(GlobalContext);
+
   const NavElements: NavComponentsIndex = {
     "Create Event": {
       Name: "Create Event",
@@ -50,6 +53,13 @@ const Dashboard: React.FC = () => {
       Component: <UserSettings />,
     },
   };
+
+  useEffect(() => {
+    !loginState &&
+      setTimeout(() => {
+        router.push("/logRegister");
+      }, 1000);
+  }, []);
 
   return loginState ? (
     <Layout>
@@ -102,8 +112,9 @@ const Dashboard: React.FC = () => {
       </Layout>
     </Layout>
   ) : (
-    <section className={styles.alignCenter}>
+    <section id="GlobalSection" className={styles.spaceItemsVertical}>
       <h2>Unauthorized Access</h2>
+      <p>Redirecting to Login Page...</p>
     </section>
   );
 };

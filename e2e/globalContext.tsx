@@ -16,6 +16,7 @@ interface createEvent {
   time_start: string | undefined;
   time_end: string | undefined;
   location_url: string | undefined;
+  price: number | undefined;
 }
 
 interface GlobalContextProps {
@@ -44,6 +45,7 @@ export const GlobalContext = createContext<GlobalContextProps>({
     time_start: undefined,
     time_end: undefined,
     location_url: undefined,
+    price: undefined,
   },
   setCreateEventData: () => {},
   userData: {
@@ -54,7 +56,7 @@ export const GlobalContext = createContext<GlobalContextProps>({
 });
 
 export const GlobalContextProvider: React.FC = (props) => {
-  const [loginState, setLoginState] = useState<boolean>(true);
+  const [loginState, setLoginState] = useState<boolean>(false);
   const [createEventData, setCreateEventData] = useState<createEvent>({
     creator: undefined,
     name: undefined,
@@ -63,6 +65,7 @@ export const GlobalContextProvider: React.FC = (props) => {
     time_start: undefined,
     time_end: undefined,
     location_url: undefined,
+    price: undefined,
   });
   const [userData, setUserData] = useState<userData>({
     username: undefined,

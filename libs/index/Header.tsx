@@ -1,6 +1,7 @@
 // Libraries
-import React from "react";
+import React, { useContext } from "react";
 import { useRouter } from "next/router";
+import { GlobalContext } from "../../e2e/globalContext";
 
 // Lottie Stuff
 import BeerLottieAnimation from "../../assets/lotties/beersLottie.json";
@@ -11,6 +12,7 @@ import styles from "../../styles/scss/modules.module.scss";
 
 const Header: React.FC = () => {
   const router = useRouter();
+  const { loginState } = useContext(GlobalContext);
 
   return (
     <section className={styles.phoneOptAbsolute} id="HomeSection">
@@ -18,10 +20,16 @@ const Header: React.FC = () => {
         <h1>Create and discover events near you</h1>
         <h3>The easiest way to pay and accept event cover payments.</h3>
         <div className={styles.spaceItemsHorizontal} style={{ width: "70%" }}>
-          <button onClick={() => router.push("/logRegister")}>
+          <button
+            onClick={() =>
+              loginState
+                ? router.push("/dashboard")
+                : router.push("/logRegister")
+            }
+          >
             Create Event
           </button>
-          <button onClick={() => router.push("/logRegister")}>
+          <button onClick={() => router.push("/searchEvents")}>
             Search Events
           </button>
         </div>

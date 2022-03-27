@@ -39,6 +39,13 @@
   }
 }
 
+.card {
+  border-radius: 20px;
+  padding: 20px;
+  margin: 20px;
+  box-shadow: 4px 2px 14px rgba(45, 27, 110, 0.13);
+}
+
 .spaceItemsVertical {
   display: flex;
   justify-content: space-evenly;
@@ -60,6 +67,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.alignCenterVertical {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .hideScrollBar {
