@@ -10,7 +10,7 @@ interface searchID {
   idIntroduced: string;
 }
 
-const searchEventsIndex: NextPage = () => {
+const SearchEventsIndex: NextPage = () => {
   const { createNotification } = useContext(GlobalContext);
   const router = useRouter();
   const { eventID } = router.query;
@@ -77,4 +77,4 @@ const searchEventsIndex: NextPage = () => {
   );
 };
 
-export default searchEventsIndex;
+export default SearchEventsIndex;

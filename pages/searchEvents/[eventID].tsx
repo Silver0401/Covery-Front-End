@@ -21,7 +21,7 @@ interface eventData {
   _id: string;
 }
 
-const searchEventsIndex: NextPage = () => {
+const SearchEventsIndex: NextPage = () => {
   const router = useRouter();
   const [fetchedData, setFetchedData] = useState<eventData>();
   const { eventID } = router.query;
@@ -73,4 +73,4 @@ const searchEventsIndex: NextPage = () => {
   );
 };
 
-export default searchEventsIndex;
+export default SearchEventsIndex;
