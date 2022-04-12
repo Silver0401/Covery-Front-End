@@ -13,11 +13,9 @@ interface searchID {
 const SearchEventsIndex: NextPage = () => {
   const { createNotification } = useContext(GlobalContext);
   const router = useRouter();
-  const { eventID } = router.query;
   const [buttonLoading, setButtonLoading] = useState<boolean>(false);
   const onFinish = (values: searchID) => {
     setButtonLoading(true);
-    console.log(eventID);
     axios
       .post(
         "https://covery-api.herokuapp.com/queries/filter_events",
@@ -36,10 +34,8 @@ const SearchEventsIndex: NextPage = () => {
           "redirecting you to event"
         );
         setButtonLoading(false);
-        console.log(eventID);
         setTimeout(() => {
-          console.log(eventID);
-          router.push(`/searchEvents/eventID:${eventID}`);
+          router.push(`/searchEvents/${values.idIntroduced}`);
         }, 1000);
       })
       .catch((err) => {
