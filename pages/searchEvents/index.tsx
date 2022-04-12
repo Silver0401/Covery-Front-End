@@ -30,8 +30,17 @@ const SearchEventsIndex: NextPage = () => {
       )
       .then((res) => {
         console.log(res);
-        createNotification("success", "Event found", "data in console");
+        createNotification(
+          "success",
+          "Event found",
+          "redirecting you to event"
+        );
         setButtonLoading(false);
+        console.log(eventID);
+        setTimeout(() => {
+          console.log(eventID);
+          router.push(`/searchEvents/eventID:${eventID}`);
+        }, 1000);
       })
       .catch((err) => {
         console.error(err);
@@ -68,7 +77,12 @@ const SearchEventsIndex: NextPage = () => {
           <Input />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit" loading={buttonLoading}>
+          <Button
+            block
+            type="primary"
+            htmlType="submit"
+            loading={buttonLoading}
+          >
             Submit
           </Button>
         </Form.Item>

@@ -252,48 +252,58 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <section id="DashboardElementSection" className={styles.spaceItemsVertical}>
-      <h3>Fill in the information to create your event</h3>
+    <section
+      id="DashboardElementSection"
+      className={styles.spaceItemsHorizontal}
+    >
+      <div
+        id="instructionsBox"
+        className={styles.spaceItemsVertical}
+        style={{ width: "50%", height: "100%" }}
+      >
+        <h3>Fill in the information to create your event</h3>
 
-      <Steps style={{ width: "80%" }}>
-        <Step
-          // onClick={() => setCurrentStep("1) Creator Info")}
-          status={
-            currentStep === "1) Creator Info"
-              ? "process"
-              : currentStep === "2) Event Description" ||
-                currentStep === "3) Review"
-              ? "finish"
-              : "wait"
-          }
-          title="1) Creator Info"
-          icon={<UserSwitchOutlined />}
-        />
-        <Step
-          // onClick={() => setCurrentStep("2) Event Description")}
-          status={
-            currentStep === "2) Event Description"
-              ? "process"
-              : currentStep === "3) Review"
-              ? "finish"
-              : "wait"
-          }
-          title="2) Event Description"
-          icon={<ExceptionOutlined />}
-        />
-        <Step
-          // onClick={() => {
-          //   setCurrentStep("3) Review");
-          //   console.log(createEventData);
-          // }}
-          status={currentStep === "3) Review" ? "process" : "wait"}
-          title="3) Review"
-          icon={<ScheduleOutlined />}
-        />
-      </Steps>
+        <Steps direction="vertical" style={{ width: "50%", height: "50%" }}>
+          <Step
+            // onClick={() => setCurrentStep("1) Creator Info")}
+            status={
+              currentStep === "1) Creator Info"
+                ? "process"
+                : currentStep === "2) Event Description" ||
+                  currentStep === "3) Review"
+                ? "finish"
+                : "wait"
+            }
+            title="1) Creator Info"
+            icon={<UserSwitchOutlined />}
+          />
+          <Step
+            // onClick={() => setCurrentStep("2) Event Description")}
+            status={
+              currentStep === "2) Event Description"
+                ? "process"
+                : currentStep === "3) Review"
+                ? "finish"
+                : "wait"
+            }
+            title="2) Event Description"
+            icon={<ExceptionOutlined />}
+          />
+          <Step
+            // onClick={() => {
+            //   setCurrentStep("3) Review");
+            //   console.log(createEventData);
+            // }}
+            status={currentStep === "3) Review" ? "process" : "wait"}
+            title="3) Review"
+            icon={<ScheduleOutlined />}
+          />
+        </Steps>
+      </div>
 
       <Form
         id="LogRegisterForm"
+        style={{ height: "100%", width: "50%" }}
         name="basic"
         initialValues={{ remember: true, username: userData.username }}
         onFinish={onFinish}

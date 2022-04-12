@@ -3,6 +3,7 @@ import styles from "../../styles/scss/modules.module.scss";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import StripeForm from "../../components/StripeFrom";
 import Head from "next/head";
 
 interface searchID {
@@ -68,7 +69,9 @@ const SearchEventsIndex: NextPage = () => {
           <p>{`Duration: ${fetchedData?.time_start} - ${fetchedData?.time_end}`}</p>
         </div>
       </div>
-      <div className={styles.card}></div>
+      {/* <div className={styles.card}> */}
+      <StripeForm />
+      {/* </div> */}
     </section>
   );
 };

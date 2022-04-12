@@ -1,11 +1,24 @@
 :root {
-  --BgColor: white;
-  --PrimaryColor: black;
-  --SecondaryColor: blue;
-  --TertiaryColor: red;
+  --PrimaryColor: #5eb2b6;
+  --SecondaryColor: #ffa336;
+  --TertiaryColor: whitesmoke;
+  --TextColor: black;
 }
+
+body {
+  background: linear-gradient(
+    -225deg,
+    whitesmoke,
+    hsla(183, 38%, 54%, 0.15),
+    whitesmoke,
+    hsla(33, 100%, 61%, 0.15),
+    whitesmoke
+  ) !important;
+}
+
 @import "./modules/functions";
 @import "./modules/nav";
 @import "./modules/logRegister";
 @import "./modules/home";
 @import "./modules/dashboard";
+@import "./modules/paymentForm";

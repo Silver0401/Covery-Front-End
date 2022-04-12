@@ -6,6 +6,7 @@ import axios from "axios";
 import bcrypt from "bcryptjs";
 import { GlobalContext } from "../e2e/globalContext";
 import { useRouter } from "next/router";
+import Head from "next/head";
 
 // Styles
 import styles from "../styles/scss/modules.module.scss";
@@ -135,6 +136,14 @@ const LogRegister: NextPage = () => {
 
   return (
     <section id="GlobalSection" className={styles.spaceItemsVertical}>
+      <Head>
+        <title>Covery | Log Register Page</title>
+        <meta
+          name="description"
+          content="Log in or Register into you covery profile to create and manage events"
+        />
+      </Head>
+
       <h2>{selectedForm}</h2>
       <Form
         id="LogRegisterForm"
@@ -171,13 +180,18 @@ const LogRegister: NextPage = () => {
         </Form.Item>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit" loading={buttonLoading}>
+          <Button
+            type="primary"
+            block
+            htmlType="submit"
+            loading={buttonLoading}
+          >
             Submit
           </Button>
         </Form.Item>
 
         <p
-          style={{cursor: "pointer"}}
+          style={{ cursor: "pointer" }}
           onClick={() =>
             !buttonLoading &&
             setSelectedForm(selectedForm === "Login" ? "Register" : "Login")

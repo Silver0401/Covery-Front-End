@@ -6,17 +6,16 @@ import Header from "../libs/index/Header";
 
 const Home: NextPage = () => {
   return (
-    <div>
+    <>
       <Head>
-        <title>Covery</title>
+        <title>Covery | Home Page</title>
         <meta
           name="description"
           content="Create or discover parties around you; the easiest way to pay and accept cover payments."
         />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
-    </div>
+    </>
   );
 };
 

@@ -17,10 +17,20 @@ const Header: React.FC = () => {
   return (
     <section className={styles.phoneOptAbsolute} id="HomeSection">
       <div className={styles.spaceItemsVertical} id="HeaderLeftBox">
-        <h1>Create and discover events near you</h1>
-        <h3>The easiest way to pay and accept event cover payments.</h3>
+        <div
+          id="h1Titles"
+          className={styles.spaceItemsVertical}
+          style={{ width: "100%" }}
+        >
+          <h1>Create and discover events</h1>
+          <h1>near you!</h1>
+        </div>
+        <h3 style={{ margin: "0px 20%" }}>
+          The easiest way to pay 💰️ and accept event cover payments 💵
+        </h3>
         <div className={styles.spaceItemsHorizontal} style={{ width: "70%" }}>
           <button
+            className="GenericButton"
             onClick={() =>
               loginState
                 ? router.push("/dashboard")
@@ -29,16 +39,21 @@ const Header: React.FC = () => {
           >
             Create Event
           </button>
-          <button onClick={() => router.push("/searchEvents")}>
+          <button
+            className="GenericButton"
+            onClick={() => router.push("/searchEvents")}
+          >
             Search Events
           </button>
         </div>
       </div>
       <div id="HeaderRightBox" className={styles.alignCenter}>
-        <LottieContainer
-          style={{ transform: "scale(2)" }}
-          lottie={BeerLottieAnimation}
-        />
+        <div className="LottieBox">
+          <LottieContainer
+            // style={{ transform: "scale(2)" }}
+            lottie={BeerLottieAnimation}
+          />
+        </div>
       </div>
     </section>
   );

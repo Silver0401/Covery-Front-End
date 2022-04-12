@@ -1,6 +1,6 @@
 * {
-  margin: 0;
-  padding: 0;
+  margin: 0px;
+  padding: 0px;
 }
 
 #GlobalSection {
@@ -19,6 +19,19 @@
   position: absolute;
   width: 100vw;
   height: 100vh;
+  padding-top: 60px;
+}
+
+h1,
+h2,
+h4,
+h5 {
+  // font-family: "Montserrat Alternates", sans-serif;
+  font-family: "Bungee", cursive;
+  // font-family: "Fredoka One", cursive;
+  // font-family: "Montserrat Alternates", sans-serif;
+  // font-family: "Poiret One", cursive;
+  // font-family: "Righteous", cursive;
 }
 
 h1 {
@@ -30,6 +43,12 @@ h2 {
 }
 h3 {
   font-size: clamp(0.8rem, 4vw, 2rem);
+  // font-family: "Fredoka One", cursive;
+  // font-family: "Indie Flower", cursive;
+  // font-family: "Mali", cursive;
+  // font-family: "Montserrat Alternates", sans-serif;
+  // font-family: "Poiret One", cursive;
+  // font-family: "Righteous", cursive;
 }
 h4 {
   font-size: clamp(0.6rem, 4vw, 1rem);
@@ -38,11 +57,27 @@ p {
   font-size: clamp(0.6rem, 2vw, 0.8rem);
 }
 
+h3,
+p,
+a,
 button {
+  // font-family: "Righteous", cursive;
+  font-family: "Fredoka One", cursive !important;
+  // font-family: 'Indie Flower', cursive;
+  // font-family: 'Mali', cursive;
+  // font-family: 'Montserrat Alternates', sans-serif;
+  // font-family: 'Permanent Marker', cursive;
+  // font-family: 'Poiret One', cursive;
+  // font-family: 'Righteous', cursive;
+}
+
+.GenericButton {
   display: grid;
   place-items: center;
   padding: clamp(0.5rem, 2vw, 1rem) clamp(1rem, 2vw, 2rem);
   border-radius: 10px;
   cursor: pointer;
-  font-size: clamp(0.8rem, 4vw, 2rem);
+  font-size: clamp(0.8rem, 4vw, 1.1rem);
+  border: 2px solid var(--TertiaryColor);
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
 }

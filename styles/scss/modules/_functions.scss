@@ -21,20 +21,15 @@
   -webkit-background-clip: text;
 }
 
-@mixin GenericButtonStyle($color-value) {
-  cursor: pointer;
-  border-radius: 10px;
-  outline: none;
-  border: 1px solid transparent;
+@mixin GenericButtonStyle($color1, $color2) {
   transition: background-color 500ms, border 500ms, color 500ms;
-  background-color: var(--BgColor);
-  border: 1px solid $color-value;
-  color: $color-value;
-  padding: clamp(5px, 4vw, 20px) clamp(10px, 2vw, 40px);
+  background-color: $color1;
+  color: $color2;
+  // padding: clamp(5px, 4vw, 20px) clamp(10px, 2vw, 40px);
 
   a,
   p {
-    color: $color-value;
+    color: $color2;
   }
 
   &::after {
@@ -43,12 +38,12 @@
 
   &:hover {
     transition: background-color 500ms, border 500ms, color 500ms;
-    background-color: $color-value;
-    color: var(--BGColor);
+    background-color: $color2;
+    color: $color1;
 
     a,
     p {
-      color: var(--BGColor);
+      color: $color1;
       transition: color 500ms;
     }
   }
