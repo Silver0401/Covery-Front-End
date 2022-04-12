@@ -22,56 +22,69 @@ interface eventData {
   _id: string;
 }
 
-const SearchEventsIndex: NextPage = () => {
-  const router = useRouter();
-  const [fetchedData, setFetchedData] = useState<eventData>();
-  const { eventID } = router.query;
+export const getStaticPaths = async () => {
+  const { data } = await axios.post(
+    "https://covery-api.herokuapp.com/queries/filter_events",
+    {},
+    {
+      headers: {
+        AUTH_TOKEN: `${process.env.NEXT_APP_NOT_BACKEND_TOKEN}`,
+      },
+    }
+  );
 
-  useEffect(() => {
-    eventID &&
-      axios
-        .post(
-          "https://covery-api.herokuapp.com/queries/filter_events",
-          { _id: eventID?.slice(8) },
-          {
-            headers: {
-              AUTH_TOKEN: `${process.env.NEXT_APP_NOT_BACKEND_TOKEN}`,
-            },
-          }
-        )
-        .then((res) => {
-          const data: eventData = res.data[0];
-          setFetchedData(data);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-  }, [eventID]);
+  const paths = Object.values(data).map((event: any) => {
+    return {
+      params: { ["eventID"]: event._id },
+    };
+  });
+  return {
+    paths: paths,
+    fallback: false,
+  };
+};
 
+export const getStaticProps = async (context: any) => {
+  const eventID = context.params.eventID;
+  const { data } = await axios.post(
+    "https://covery-api.herokuapp.com/queries/filter_events",
+    { _id: eventID },
+    {
+      headers: {
+        AUTH_TOKEN: `${process.env.NEXT_APP_NOT_BACKEND_TOKEN}`,
+      },
+    }
+  );
+
+  const event: eventData = data[0];
+  return {
+    props: { event },
+  };
+};
+
+// @ts-ignore
+const SearchEventsIndex: NextPage = ({ event }) => {
   return (
     <section id="GlobalSection" className={styles.spaceItemsHorizontal}>
       <Head>
-        <title>Covery Event: {fetchedData?.name}</title>
-        <meta
-          name="description"
-          content={`${fetchedData?.creator}: ${fetchedData?.bio}`}
-        />
+        <title>Covery Event: {event?.name}</title>
+        <meta name="description" content={`${event?.creator}: ${event?.bio}`} />
       </Head>
       <div className={styles.card}>
         <div>
-          <h3>{fetchedData?.name}</h3>
-          <h4>{`eventID: ${fetchedData?._id}`}</h4>
+          <h3>{event?.name}</h3>
+          <h4>{`eventID: ${event?._id}`}</h4>
         </div>
         <div>
-          <p>{`Creator: ${fetchedData?.creator}`}</p>
-          <p>{`Date: ${fetchedData?.date}`}</p>
-          <p>{`Location: ${fetchedData?.location_url}`}</p>
-          <p>{`Duration: ${fetchedData?.time_start} - ${fetchedData?.time_end}`}</p>
+          <p>{`Creator: ${event?.creator}`}</p>
+          <p>{`Date: ${event?.date}`}</p>
+          <p>{`Location: ${event?.location_url}`}</p>
+          <p>{`Duration: ${event?.time_start} - ${event?.time_end}`}</p>
         </div>
       </div>
-      {/* <div className={styles.card}> */}
-      <StripeForm />
-      {/* </div> */}
+      {/* <div className={styles.card}>
+        <StripeForm />
+      </div> */}
     </section>
   );
 };
