@@ -1,9 +1,12 @@
 import type { NextPage } from "next";
+import { useContext } from "react";
+import { GlobalContext } from "../../e2e/globalContext";
 import styles from "../../styles/scss/modules.module.scss";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import StripeForm from "../../components/StripeFrom";
+import { Button, Col, Row } from "antd";
+import bcrypt from "bcryptjs";
 import Head from "next/head";
 
 interface searchID {
@@ -64,16 +67,53 @@ export const getStaticProps = async (context: any) => {
 
 // @ts-ignore
 const SearchEventsIndex: NextPage = ({ event }) => {
+  const { userData } = useContext(GlobalContext);
+
+  const HandlePayment = () => {
+    // const salt = bcrypt.genSaltSync(10);
+
+    axios
+      .post(
+        "https://covery-api.herokuapp.com/payments/pay_cover",
+        {
+          username: userData.username,
+          eventID: event?._id,
+          secretHash: "tangamandapian",
+          // secretHash: bcrypt.hashSync(
+          //   `${Math.floor(Math.random() * 100000 + 1)}`,
+          //   salt
+          // ),
+        },
+        {
+          headers: {
+            AUTH_TOKEN: `${process.env.NEXT_APP_NOT_BACKEND_TOKEN}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        window.open(res.data.url);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  useEffect(() => {
+    console.log(event);
+  }, []);
+
   return (
     <section id="GlobalSection" className={styles.spaceItemsHorizontal}>
       <Head>
         <title>Covery Event: {event?.name}</title>
-        <meta name="description" content={`${event?.creator}: ${event?.bio}`} />
+        <meta name="description" content={`Event description: ${event?.bio}`} />
       </Head>
       <div className={styles.card}>
         <div>
-          <h3>{event?.name}</h3>
-          <h4>{`eventID: ${event?._id}`}</h4>
+          <h2>{event?.name}</h2>
+          <h3>{`Ticket Price: $ ${event?.price}`}</h3>
+          <h4>{`event_ID: ${event?._id}`}</h4>
         </div>
         <div>
           <p>{`Creator: ${event?.creator}`}</p>
@@ -81,10 +121,10 @@ const SearchEventsIndex: NextPage = ({ event }) => {
           <p>{`Location: ${event?.location_url}`}</p>
           <p>{`Duration: ${event?.time_start} - ${event?.time_end}`}</p>
         </div>
+        <Button size="large" block type="primary" onClick={HandlePayment}>
+          Buy Ticket 🎟️
+        </Button>
       </div>
-      {/* <div className={styles.card}>
-        <StripeForm />
-      </div> */}
     </section>
   );
 };

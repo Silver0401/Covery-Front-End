@@ -56,7 +56,6 @@ const nav: React.FC = () => {
             fill="#FFA336"
           />
         </svg>
-
         <h5>Covery</h5>
       </div>
       <ul>
