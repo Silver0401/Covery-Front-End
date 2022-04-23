@@ -1,6 +1,15 @@
+#CreateEventForm {
+  position: relative;
+  height: 600px;
+  width: 700px;
+  overflow: scroll;
+  border-radius: 20px;
+  box-shadow: 4px 2px 14px rgba(45, 27, 110, 0.5);
+}
+
 #LogRegisterForm {
   position: relative;
-  height: 60%;
+  height: 500px;
   width: 400px;
   overflow: scroll;
   border-radius: 20px;

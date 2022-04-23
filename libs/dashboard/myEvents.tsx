@@ -41,23 +41,31 @@ const MyEvents: React.FC = () => {
 
   return (
     <section id="DashboardElementSection">
-      {fetchedEvents &&
-        Object.values(fetchedEvents).map((event: any) => {
-          return (
-            <div className={styles.card} style={{ width: "90%" }}>
-              <div>
-                <h3>{event?.name}</h3>
-                <h4>{`eventID: ${event?._id}`}</h4>
+      <div
+        style={{
+          width: "100%",
+          height: "77%",
+          overflow: "scroll",
+        }}
+      >
+        {fetchedEvents &&
+          Object.values(fetchedEvents).map((event: any) => {
+            return (
+              <div className={styles.card} style={{ width: "90%" }}>
+                <div>
+                  <h3>{event?.name}</h3>
+                  <h4>{`eventID: ${event?._id}`}</h4>
+                </div>
+                <div>
+                  <p>{`Creator: ${event?.creator}`}</p>
+                  <p>{`Date: ${event?.date}`}</p>
+                  <p>{`Location: ${event?.location_url}`}</p>
+                  <p>{`Duration: ${event?.time_start} - ${event?.time_end}`}</p>
+                </div>
               </div>
-              <div>
-                <p>{`Creator: ${event?.creator}`}</p>
-                <p>{`Date: ${event?.date}`}</p>
-                <p>{`Location: ${event?.location_url}`}</p>
-                <p>{`Duration: ${event?.time_start} - ${event?.time_end}`}</p>
-              </div>
-            </div>
-          );
-        })}
+            );
+          })}
+      </div>
     </section>
   );
 };
