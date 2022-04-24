@@ -1,5 +1,5 @@
-import React, { useState, useContext } from "react";
-import { GoogleMap, useJsApiLoader, Circle } from "@react-google-maps/api";
+import React, { useState, useContext, useRef } from "react";
+import GoogleMapsComponent from "../../components/googleMap";
 import {
   Button,
   Form,
@@ -17,33 +17,31 @@ import { GlobalContext } from "../../e2e/globalContext";
 import axios from "axios";
 import moment from "moment";
 
+interface coordinates {
+  lat: number;
+  lng: number;
+}
+
+interface LocationProps {
+  address: string;
+  coordinates: coordinates;
+}
+
 const Dashboard: React.FC = () => {
   const { TextArea } = Input;
   const { createNotification, userData } = useContext(GlobalContext);
   const [coverSwitchOn, setCoverSwitchON] = useState<boolean>(false);
   const [modalState, setModalState] = useState<"visible" | "hidden">("hidden");
+  const [mapData, setMapData] = useState<LocationProps>();
   const { Option } = Select;
-
-  const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
-    googleMapsApiKey: "AIzaSyCLK4wlMhNfLl93M-BsUB8l1cfBADDPkYY",
-  });
-
-  const containerStyle = {
-    width: "470px",
-    height: "400px",
-  };
-
-  const center = {
-    lat: 25.65096525299222,
-    lng: -100.28974385015961,
-  };
+  const [form] = Form.useForm();
 
   const onFinish = (values: any) => {
+    console.log(values);
     createNotification(
       "info",
       "Loading...",
-      "Processing your data and creating event"
+      "Processing your data to creating event"
     );
     axios
       .post(
@@ -73,6 +71,7 @@ const Dashboard: React.FC = () => {
           );
         } else {
           console.log(response);
+          form.resetFields();
           createNotification(
             "success",
             "Success!",
@@ -103,6 +102,7 @@ const Dashboard: React.FC = () => {
           display: "grid",
           placeItems: "center",
         }}
+        form={form}
         name="basic"
         initialValues={{ remember: true, username: userData.username }}
         onFinish={onFinish}
@@ -198,6 +198,19 @@ const Dashboard: React.FC = () => {
               </Col>
             </Row>
           </Col>
+
+          <Col span={24}>
+            <Form.Item
+              label="Image"
+              name="image"
+              rules={[
+                { required: true, message: "Please input your event's Date!" },
+              ]}
+            >
+              <input type="file" accept="image/png, image/jpeg" />
+            </Form.Item>
+          </Col>
+
           <Col span={24}>
             <Form.Item
               label="Event Date"
@@ -252,6 +265,7 @@ const Dashboard: React.FC = () => {
               ]}
             >
               <Input
+                onChange={() => setModalState("visible")}
                 onClick={() => {
                   setModalState("visible");
                 }}
@@ -270,28 +284,19 @@ const Dashboard: React.FC = () => {
       <Modal
         title="Select a Place"
         visible={modalState === "visible" ? true : false}
-        onOk={() => setModalState("hidden")}
+        onOk={() => {
+          setModalState("hidden");
+          form.setFieldsValue({ eventLocation: mapData?.address });
+        }}
         onCancel={() => setModalState("hidden")}
+        bodyStyle={{ height: "450px" }}
       >
-        {isLoaded ? (
-          <GoogleMap
-            mapContainerStyle={containerStyle}
-            center={center}
-            zoom={15}
-            onClick={(data: any) => console.log(data)}
-          >
-            {/* Child components, such as markers, info windows, etc. */}
-            <>
-              <Circle center={center} radius={5} />
-              {/* <DirectionsService
-                callback={(data: any) => console.log(data)}
-                options={directions}
-              /> */}
-            </>
-          </GoogleMap>
-        ) : (
-          <h4>Loading...</h4>
-        )}
+        <GoogleMapsComponent
+          location={(data) => {
+            console.log(data);
+            setMapData(data);
+          }}
+        />
       </Modal>
     </section>
   );
