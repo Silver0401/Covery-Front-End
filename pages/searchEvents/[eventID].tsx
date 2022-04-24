@@ -115,14 +115,11 @@ const SearchEventsIndex: NextPage<eventProps> = (props) => {
           "Create Account",
           "To buy a ticket to this event, you must create an account, redirecting..."
         );
-    setTimeout(() => {
-      router.push("/logRegister");
-    }, 3500);
   };
 
-  useEffect(() => {
-    console.log(props.event);
-  }, []);
+  // useEffect(() => {
+  //   console.log(props.event);
+  // }, []);
 
   return (
     <section id="GlobalSection" className={styles.spaceItemsHorizontal}>

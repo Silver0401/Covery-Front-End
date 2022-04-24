@@ -21,7 +21,7 @@ interface UserData {
 const LogRegister: NextPage = () => {
   const router = useRouter();
   const [buttonLoading, setButtonLoading] = useState<boolean>(false);
-  const { createNotification, setLoginState, setUserData } =
+  const { createNotification, setLoginState, setUserData, searchedEventID } =
     useContext(GlobalContext);
   const [selectedForm, setSelectedForm] = useState<"Login" | "Register">(
     "Register"
@@ -103,7 +103,9 @@ const LogRegister: NextPage = () => {
                 "Redirecting you"
               );
               setTimeout(() => {
-                router.push("/dashboard");
+                searchedEventID
+                  ? router.push("/dashboard")
+                  : router.push(`/searchEvent/${router.push("/dashboard")}`);
               }, 1000);
             } else {
               createNotification(
