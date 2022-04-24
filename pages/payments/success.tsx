@@ -46,10 +46,10 @@ const SuccessPage: NextPage = () => {
         .then((res: any) => {
           console.log(res);
 
-          if (res[0].data.status === 400) {
+          if (res.status === 400) {
             setRequestStatus("error");
           } else {
-            setEventInfo(res[0]);
+            setEventInfo(res.data);
             setRequestStatus("success");
           }
         })
@@ -69,7 +69,7 @@ const SuccessPage: NextPage = () => {
       onClick={() => {
         console.log(requestStatus);
         console.log(eventInfo);
-        console.log(username, event_id, secret_token);
+        console.log(username, event_id, ` ------ ${secret_token}`);
       }}
     >
       <div className={styles.alignCenter}>
@@ -107,7 +107,7 @@ const SuccessPage: NextPage = () => {
       onClick={() => {
         console.log(requestStatus);
         console.log(eventInfo);
-        console.log(username, event_id, secret_token);
+        console.log(username, event_id, ` ------ ${secret_token}`);
       }}
     >
       <div className={styles.alignCenter}>
