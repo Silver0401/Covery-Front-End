@@ -68,12 +68,20 @@ const Dashboard: React.FC = () => {
         }
       )
       .then((response) => {
-        console.log(response);
-        createNotification(
-          "success",
-          "Success!",
-          "Event created successfully, you can now check your events tab"
-        );
+        if (response.data.satus === 400) {
+          createNotification(
+            "error",
+            "Error in request!",
+            "Error creating event, try again"
+          );
+        } else {
+          console.log(response);
+          createNotification(
+            "success",
+            "Success!",
+            "Event created successfully, you can now check your events tab"
+          );
+        }
       })
       .catch((err) => {
         console.error(err);
@@ -124,7 +132,7 @@ const Dashboard: React.FC = () => {
           <Col span={24}>
             <Form.Item
               label="Event Name"
-              name="name"
+              name="eventName"
               rules={[
                 {
                   required: true,
