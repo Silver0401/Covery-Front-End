@@ -3,6 +3,7 @@ import { useContext } from "react";
 import { GlobalContext } from "../../e2e/globalContext";
 import styles from "../../styles/scss/modules.module.scss";
 import axios from "axios";
+import { useRouter } from "next/router";
 import { Button } from "antd";
 import Head from "next/head";
 
@@ -68,6 +69,7 @@ export const getStaticProps = async (context: any) => {
 const SearchEventsIndex: NextPage<eventProps> = (props) => {
   const { userData, loginState, createNotification } =
     useContext(GlobalContext);
+  const router = useRouter();
 
   const pricesID = {
     500: "price_1KrpeOFLKFgqJf56E8DVxzuq",
@@ -83,34 +85,39 @@ const SearchEventsIndex: NextPage<eventProps> = (props) => {
   };
 
   const HandlePayment = () => {
-    loginState
-      ? axios
-          .post(
-            `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/payments/pay_cover`,
-            {
-              username: userData.username,
-              eventID: props.event?._id,
-              priceID: pricesID[props.event?.price],
-              secretHash: "tangamandapian",
+    if (loginState) {
+      axios
+        .post(
+          `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/payments/pay_cover`,
+          {
+            username: userData.username,
+            eventID: props.event?._id,
+            priceID: pricesID[props.event?.price],
+            secretHash: "tangamandapian",
+          },
+          {
+            headers: {
+              AUTH_TOKEN: `${process.env.NEXT_APP_NOT_BACKEND_TOKEN}`,
             },
-            {
-              headers: {
-                AUTH_TOKEN: `${process.env.NEXT_APP_NOT_BACKEND_TOKEN}`,
-              },
-            }
-          )
-          .then((res) => {
-            console.log(res);
-            window.open(res.data.url, "_self");
-          })
-          .catch((err) => {
-            console.error(err);
-          })
-      : createNotification(
-          "info",
-          "Create Account",
-          "To buy a ticket to this event, you must create an account, redirecting..."
-        );
+          }
+        )
+        .then((res) => {
+          console.log(res);
+          window.open(res.data.url, "_self");
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } else {
+      createNotification(
+        "info",
+        "Create Account",
+        "To buy a ticket to this event, you must create an account, redirecting..."
+      );
+      setTimeout(() => {
+        router.push("/logRegister");
+      }, 2000);
+    }
   };
 
   // useEffect(() => {
