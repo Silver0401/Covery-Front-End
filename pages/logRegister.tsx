@@ -105,7 +105,7 @@ const LogRegister: NextPage = () => {
               setTimeout(() => {
                 searchedEventID === undefined
                   ? router.push("/dashboard")
-                  : router.push(`/searchEvent/${searchedEventID}`);
+                  : router.push(`/searchEvents/${searchedEventID}`);
               }, 1000);
             } else {
               createNotification(
