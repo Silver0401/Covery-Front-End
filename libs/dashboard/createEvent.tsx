@@ -1,11 +1,5 @@
 import React, { useState, useContext } from "react";
-import {
-  GoogleMap,
-  useJsApiLoader,
-  Circle,
-  DirectionsService,
-  DirectionsServiceProps,
-} from "@react-google-maps/api";
+import { GoogleMap, useJsApiLoader, Circle } from "@react-google-maps/api";
 import {
   Button,
   Form,
@@ -16,19 +10,18 @@ import {
   Switch,
   Row,
   Col,
+  Select,
 } from "antd";
 import styles from "../../styles/scss/modules.module.scss";
 import { GlobalContext } from "../../e2e/globalContext";
-import { useRouter } from "next/router";
 import axios from "axios";
 
 const Dashboard: React.FC = () => {
-  const router = useRouter();
   const { TextArea } = Input;
-  const { setCreateEventData, createEventData, createNotification, userData } =
-    useContext(GlobalContext);
+  const { createNotification, userData } = useContext(GlobalContext);
   const [coverSwitchOn, setCoverSwitchON] = useState<boolean>(false);
   const [modalState, setModalState] = useState<"visible" | "hidden">("hidden");
+  const { Option } = Select;
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -36,8 +29,8 @@ const Dashboard: React.FC = () => {
   });
 
   const containerStyle = {
-    width: "100%",
-    height: "100%",
+    width: "470px",
+    height: "400px",
   };
 
   const center = {
@@ -180,7 +173,19 @@ const Dashboard: React.FC = () => {
                       },
                     ]}
                   >
-                    <Input placeholder="$ cost per ticket" suffix="mxn" />
+                    <Select defaultValue={200} style={{ width: "200px" }}>
+                      <Option value={500}>500 $mxn</Option>
+                      <Option value={400}>400 $mxn</Option>
+                      <Option value={300}>300 $mxn</Option>
+                      <Option value={200}>200 $mxn</Option>
+                      <Option value={100}>100 $mxn</Option>
+                      <Option value={90}>90 $mxn</Option>
+                      <Option value={80}>80 $mxn</Option>
+                      <Option value={70}>70 $mxn</Option>
+                      <Option value={60}>60 $mxn</Option>
+                      <Option value={50}>50 $mxn</Option>
+                    </Select>
+                    {/* <Input placeholder="$ cost per ticket" suffix="mxn" /> */}
                   </Form.Item>
                 ) : (
                   <p>Your event is free</p>
