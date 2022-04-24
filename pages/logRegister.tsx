@@ -103,9 +103,9 @@ const LogRegister: NextPage = () => {
                 "Redirecting you"
               );
               setTimeout(() => {
-                searchedEventID
-                  ? router.push("/dashboard")
-                  : router.push(`/searchEvent/${searchedEventID}`);
+                searchedEventID === undefined
+                  ? router.push(`/searchEvent/${searchedEventID}`)
+                  : router.push("/dashboard");
               }, 1000);
             } else {
               createNotification(
