@@ -15,6 +15,7 @@ import {
 import styles from "../../styles/scss/modules.module.scss";
 import { GlobalContext } from "../../e2e/globalContext";
 import axios from "axios";
+import moment from "moment";
 
 const Dashboard: React.FC = () => {
   const { TextArea } = Input;
@@ -38,10 +39,6 @@ const Dashboard: React.FC = () => {
     lng: -100.28974385015961,
   };
 
-  // const directions: DirectionsServiceProps = {
-  //   options: { origin: center, destination: center, travelMode: "DRIVING" },
-  // };
-
   const onFinish = (values: any) => {
     createNotification(
       "info",
@@ -54,11 +51,11 @@ const Dashboard: React.FC = () => {
         {
           bio: values.bio,
           creator: values.username,
-          date: values.eventDate._d.toString(),
+          date: moment(values.startTime).format("YYYY/MM/DD"),
           location_url: values.eventLocation,
           name: values.eventName,
-          time_end: values.endTime._d.toString(),
-          time_start: values.startTime._d.toString(),
+          time_end: moment(values.endTime).format("hh:mm:ss a"),
+          time_start: moment(values.startTime).format("hh:mm:ss a"),
           price: coverSwitchOn ? values.cover : 0,
         },
         {
