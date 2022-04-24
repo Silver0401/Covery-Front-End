@@ -41,7 +41,7 @@ const LogRegister: NextPage = () => {
 
       axios
         .post(
-          `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/user/pene`,
+          `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/resource/user/pene`,
           userData,
           {
             headers: {
@@ -75,7 +75,7 @@ const LogRegister: NextPage = () => {
     if (selectedForm === "Login") {
       axios
         .get(
-          `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/user/${values.username}`,
+          `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/resource/user/${values.username}`,
           {
             headers: {
               AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,

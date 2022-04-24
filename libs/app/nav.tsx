@@ -1,14 +1,26 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useRouter } from "next/router";
 import { GlobalContext } from "../../e2e/globalContext";
 
 const nav: React.FC = () => {
   const router = useRouter();
+  const [navState, setNavState] = useState<"open" | "closed">("closed");
   const { loginState, setLoginState, createNotification } =
     useContext(GlobalContext);
 
+  const createLink = (route: string, title: string) => {
+    return (
+      <li onClick={() => router.push(route)}>
+        <h4>{title}</h4>
+      </li>
+    );
+  };
+
   return (
-    <nav id="globalNav">
+    <nav
+      id="globalNav"
+      className={navState === "open" ? "navOpen" : "navClosed"}
+    >
       <div id="LogoContainer" onClick={() => router.push("/")}>
         <svg
           id="CoveryLogo"
@@ -58,19 +70,23 @@ const nav: React.FC = () => {
         </svg>
         <h5>Covery</h5>
       </div>
+
+      <div
+        className="burger"
+        onClick={() => setNavState(navState === "closed" ? "open" : "closed")}
+      >
+        <span id="line1" />
+        <span id="line2" />
+        <span id="line3" />
+      </div>
+
       <ul>
-        <li>
-          <h4>About</h4>
-        </li>
-        <li onClick={() => router.push("/searchEvents")}>
-          <h4>Search</h4>
-        </li>
+        {createLink("/", "About")}
+        {createLink("/searchEvents", "Search")}
 
         {loginState ? (
           <>
-            <li onClick={() => router.push("/dashboard")}>
-              <h4>Dashboard</h4>
-            </li>
+            {createLink("/dashboard", "Dashboard")}
             <li
               onClick={() => {
                 createNotification(
@@ -93,9 +109,7 @@ const nav: React.FC = () => {
             </li>
           </>
         ) : (
-          <li onClick={() => router.push("/logRegister")}>
-            <h4>Login / Register</h4>
-          </li>
+          <>{createLink("/logRegister", "Login / Register")}</>
         )}
       </ul>
     </nav>

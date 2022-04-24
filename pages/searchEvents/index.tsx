@@ -18,7 +18,7 @@ const SearchEventsIndex: NextPage = () => {
     setButtonLoading(true);
     axios
       .post(
-        "https://covery-api.herokuapp.com/queries/filter_events",
+        `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/queries/filter_events`,
         { _id: values.idIntroduced },
         {
           headers: {

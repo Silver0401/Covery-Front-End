@@ -32,7 +32,7 @@ const SuccessPage: NextPage = () => {
     if (username && event_id) {
       axios
         .post(
-          "https://covery-api.herokuapp.com/queries/filter_events",
+          `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/queries/filter_events`,
           { _id: event_id },
           {
             headers: {

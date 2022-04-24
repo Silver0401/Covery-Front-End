@@ -9,12 +9,15 @@ import { Button, Col, Row } from "antd";
 import bcrypt from "bcryptjs";
 import Head from "next/head";
 
+type Prices = 50 | 60 | 70 | 80 | 90 | 100 | 200 | 300 | 400 | 500;
+
 interface searchID {
   idIntroduced: string;
 }
 
 interface eventData {
   assistants: Array<string>;
+  price: Prices;
   bio: string;
   creator: string;
   date: string;
@@ -25,9 +28,13 @@ interface eventData {
   _id: string;
 }
 
+interface eventProps {
+  event: eventData;
+}
+
 export const getStaticPaths = async () => {
   const { data } = await axios.post(
-    "https://covery-api.herokuapp.com/queries/filter_events",
+    `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/queries/filter_events`,
     {},
     {
       headers: {
@@ -50,7 +57,7 @@ export const getStaticPaths = async () => {
 export const getStaticProps = async (context: any) => {
   const eventID = context.params.eventID;
   const { data } = await axios.post(
-    "https://covery-api.herokuapp.com/queries/filter_events",
+    `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/queries/filter_events`,
     { _id: eventID },
     {
       headers: {
@@ -65,24 +72,31 @@ export const getStaticProps = async (context: any) => {
   };
 };
 
-// @ts-ignore
-const SearchEventsIndex: NextPage = ({ event }) => {
+const SearchEventsIndex: NextPage<eventProps> = (props) => {
   const { userData } = useContext(GlobalContext);
 
-  const HandlePayment = () => {
-    // const salt = bcrypt.genSaltSync(10);
+  const pricesID = {
+    500: "price_1KrpeOFLKFgqJf56E8DVxzuq",
+    400: "price_1KrpeNFLKFgqJf56M366vqUv",
+    300: "price_1KrpeNFLKFgqJf562zB1rn8u",
+    200: "price_1KrpeNFLKFgqJf56Cx4kdbpz",
+    100: "price_1KrpeNFLKFgqJf567HDKb714",
+    90: "price_1KrpeNFLKFgqJf56p6MQd2NL",
+    80: "price_1KrpeNFLKFgqJf56H3D863Ci",
+    70: "price_1KrpeNFLKFgqJf56Rk7lc2n9",
+    60: "price_1KrpeNFLKFgqJf56gysn1eSO",
+    50: "price_1KrpeNFLKFgqJf56ROLiSpZI",
+  };
 
+  const HandlePayment = () => {
     axios
       .post(
-        "https://covery-api.herokuapp.com/payments/pay_cover",
+        `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/payments/pay_cover`,
         {
           username: userData.username,
-          eventID: event?._id,
+          eventID: props.event?._id,
+          priceID: pricesID[props.event?.price],
           secretHash: "tangamandapian",
-          // secretHash: bcrypt.hashSync(
-          //   `${Math.floor(Math.random() * 100000 + 1)}`,
-          //   salt
-          // ),
         },
         {
           headers: {
@@ -100,26 +114,29 @@ const SearchEventsIndex: NextPage = ({ event }) => {
   };
 
   useEffect(() => {
-    console.log(event);
+    console.log(props.event);
   }, []);
 
   return (
     <section id="GlobalSection" className={styles.spaceItemsHorizontal}>
       <Head>
-        <title>Covery Event: {event?.name}</title>
-        <meta name="description" content={`Event description: ${event?.bio}`} />
+        <title>Covery Event: {props.event?.name}</title>
+        <meta
+          name="description"
+          content={`Event description: ${props.event?.bio}`}
+        />
       </Head>
       <div className={styles.card}>
         <div>
-          <h2>{event?.name}</h2>
-          <h3>{`Ticket Price: $ ${event?.price}`}</h3>
-          <h4>{`event_ID: ${event?._id}`}</h4>
+          <h2>{props.event?.name}</h2>
+          <h3>{`Ticket Price: $ ${props.event?.price}`}</h3>
+          <h4>{`event_ID: ${props.event?._id}`}</h4>
         </div>
         <div>
-          <p>{`Creator: ${event?.creator}`}</p>
-          <p>{`Date: ${event?.date}`}</p>
-          <p>{`Location: ${event?.location_url}`}</p>
-          <p>{`Duration: ${event?.time_start} - ${event?.time_end}`}</p>
+          <p>{`Creator: ${props.event?.creator}`}</p>
+          <p>{`Date: ${props.event?.date}`}</p>
+          <p>{`Location: ${props.event?.location_url}`}</p>
+          <p>{`Duration: ${props.event?.time_start} - ${props.event?.time_end}`}</p>
         </div>
         <Button size="large" block type="primary" onClick={HandlePayment}>
           Buy Ticket 🎟️

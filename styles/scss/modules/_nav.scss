@@ -43,6 +43,7 @@
   }
 
   ul {
+    transition: transform 500ms;
     margin-right: 30px;
     margin-bottom: 0;
     @include alignCenter;
@@ -68,6 +69,101 @@
           transition: color 250ms;
           color: var(--SecondaryColor);
         }
+      }
+    }
+  }
+}
+
+@media (max-width: 800px) {
+  #globalNav {
+    .burger {
+      position: relative;
+      border: 3px solid var(--PrimaryColor);
+      border-radius: 5px;
+      width: 45px;
+      height: 45px;
+      margin-right: 20px;
+      @include alignCenter;
+      cursor: pointer;
+
+      span {
+        width: 80%;
+        background-color: var(--SecondaryColor);
+        height: 4px;
+        border-radius: 10px;
+        position: absolute;
+        transform-origin: center;
+        transition: transform 500ms, opacity 250ms;
+      }
+    }
+
+    ul {
+      position: absolute;
+      top: 60px;
+      right: 0;
+      margin: 0;
+      height: calc(100vh - 60px);
+      width: 350px;
+      display: block;
+      cursor: pointer;
+      backdrop-filter: blur(15px);
+      background: linear-gradient(
+        45deg,
+        hsla(183, 38%, 54%, 50%),
+        hsla(33, 100%, 61%, 50%)
+      );
+
+      li {
+        cursor: pointer;
+        width: 100%;
+        height: 70px;
+        margin-bottom: 5px;
+        border-bottom: 2px solid var(--TextColor);
+        transition: background-color 500ms;
+        background-color: rgba(255, 255, 255, 0.2);
+
+        &:hover {
+          cursor: pointer;
+          transition: background-color 500ms;
+          background-color: rgba(0, 0, 0, 0.5);
+        }
+      }
+    }
+  }
+
+  .navOpen {
+    ul {
+      transition: transform 500ms;
+      transform: translateX(0px);
+    }
+
+    .burger {
+      #line1 {
+        transform: rotateZ(320deg) translateY(0px);
+      }
+      #line2 {
+        opacity: 0;
+      }
+      #line3 {
+        transform: rotateZ(-320deg) translateY(-0px);
+      }
+    }
+  }
+  .navClosed {
+    ul {
+      transition: transform 500ms;
+      transform: translateX(400px);
+    }
+
+    .burger {
+      #line1 {
+        transform: rotateZ(0deg) translateY(-10px);
+      }
+      #line2 {
+        opacity: 1;
+      }
+      #line3 {
+        transform: rotateZ(0deg) translateY(10px);
       }
     }
   }

@@ -17,12 +17,12 @@ interface eventData {
 
 const MyEvents: React.FC = () => {
   const { userData } = useContext(GlobalContext);
-  const [fetchedEvents, setFetchedEvents] = useState<any>();
+  const [fetchedEvents, setFetchedEvents] = useState<any>(undefined);
 
   useEffect(() => {
     axios
       .post(
-        `https://covery-api.herokuapp.com/queries/filter_events`,
+        `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/queries/filter_events`,
         { creator: userData.username },
         {
           headers: {
@@ -41,31 +41,44 @@ const MyEvents: React.FC = () => {
 
   return (
     <section id="DashboardElementSection">
-      <div
-        style={{
-          width: "100%",
-          height: "77%",
-          overflow: "scroll",
-        }}
-      >
-        {fetchedEvents &&
-          Object.values(fetchedEvents).map((event: any) => {
-            return (
-              <div className={styles.card} style={{ width: "90%" }}>
-                <div>
-                  <h3>{event?.name}</h3>
-                  <h4>{`eventID: ${event?._id}`}</h4>
+      {fetchedEvents ? (
+        <div
+          style={{
+            width: "100%",
+            height: "77%",
+            overflow: "scroll",
+          }}
+        >
+          {fetchedEvents &&
+            Object.values(fetchedEvents).map((event: any) => {
+              return (
+                <div className={styles.card} style={{ width: "90%" }}>
+                  <div>
+                    <h3>{event?.name}</h3>
+                    <h4>{`eventID: ${event?._id}`}</h4>
+                  </div>
+                  <div>
+                    <p>{`Creator: ${event?.creator}`}</p>
+                    <p>{`Date: ${event?.date}`}</p>
+                    <p>{`Location: ${event?.location_url}`}</p>
+                    <p>{`Duration: ${event?.time_start} - ${event?.time_end}`}</p>
+                  </div>
                 </div>
-                <div>
-                  <p>{`Creator: ${event?.creator}`}</p>
-                  <p>{`Date: ${event?.date}`}</p>
-                  <p>{`Location: ${event?.location_url}`}</p>
-                  <p>{`Duration: ${event?.time_start} - ${event?.time_end}`}</p>
-                </div>
-              </div>
-            );
-          })}
-      </div>
+              );
+            })}
+        </div>
+      ) : (
+        <div
+          style={{
+            display: "grid",
+            placeItems: "center",
+            width: "100%",
+            height: "100%",
+          }}
+        >
+          <h2>Loading your events...</h2>
+        </div>
+      )}
     </section>
   );
 };

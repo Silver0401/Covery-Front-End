@@ -1,23 +1,22 @@
 import React, { useState, useContext } from "react";
 import {
+  GoogleMap,
+  useJsApiLoader,
+  Circle,
+  DirectionsService,
+  DirectionsServiceProps,
+} from "@react-google-maps/api";
+import {
   Button,
   Form,
   Input,
-  Steps,
-  Tooltip,
+  Modal,
   DatePicker,
   TimePicker,
   Switch,
   Row,
   Col,
 } from "antd";
-import {
-  UserSwitchOutlined,
-  ScheduleOutlined,
-  ExceptionOutlined,
-  ArrowRightOutlined,
-  ArrowLeftOutlined,
-} from "@ant-design/icons";
 import styles from "../../styles/scss/modules.module.scss";
 import { GlobalContext } from "../../e2e/globalContext";
 import { useRouter } from "next/router";
@@ -29,8 +28,28 @@ const Dashboard: React.FC = () => {
   const { setCreateEventData, createEventData, createNotification, userData } =
     useContext(GlobalContext);
   const [coverSwitchOn, setCoverSwitchON] = useState<boolean>(false);
+  const [modalState, setModalState] = useState<"visible" | "hidden">("hidden");
 
-  const createEventPost = () => {
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: "AIzaSyCLK4wlMhNfLl93M-BsUB8l1cfBADDPkYY",
+  });
+
+  const containerStyle = {
+    width: "100%",
+    height: "100%",
+  };
+
+  const center = {
+    lat: 25.65096525299222,
+    lng: -100.28974385015961,
+  };
+
+  // const directions: DirectionsServiceProps = {
+  //   options: { origin: center, destination: center, travelMode: "DRIVING" },
+  // };
+
+  const onFinish = (values: any) => {
     createNotification(
       "info",
       "Loading...",
@@ -38,8 +57,17 @@ const Dashboard: React.FC = () => {
     );
     axios
       .post(
-        `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/event/pene`,
-        createEventData,
+        `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/resource/event/pene`,
+        {
+          bio: values.bio,
+          creator: values.username,
+          date: values.eventDate._d.toString(),
+          location_url: values.eventLocation,
+          name: values.eventName,
+          time_end: values.endTime._d.toString(),
+          time_start: values.startTime._d.toString(),
+          price: coverSwitchOn ? values.cover : 0,
+        },
         {
           headers: {
             AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
@@ -62,32 +90,6 @@ const Dashboard: React.FC = () => {
           "Error creating event, try again"
         );
       });
-  };
-
-  const onFinish = (values: any) => {
-    setCreateEventData({
-      bio: values.bio ? values.bio : createEventData.bio,
-      creator: values.username ? values.username : createEventData.creator,
-      date: values.eventDate
-        ? values.eventDate._d.toString()
-        : createEventData.date,
-      location_url: values.eventLocation
-        ? values.eventLocation
-        : createEventData.location_url,
-      name: values.eventName ? values.eventName : createEventData.name,
-      time_end: values.endTime
-        ? values.endTime._d.toString()
-        : createEventData.time_end,
-      time_start: values.startTime
-        ? values.startTime._d.toString()
-        : createEventData.time_start,
-      price:
-        coverSwitchOn && values.cover
-          ? values.cover
-          : createEventData.price
-          ? createEventData.price
-          : 0,
-    });
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -129,6 +131,7 @@ const Dashboard: React.FC = () => {
           <Col span={24}>
             <Form.Item
               label="Event Name"
+              name="name"
               rules={[
                 {
                   required: true,
@@ -142,6 +145,7 @@ const Dashboard: React.FC = () => {
           <Col span={24}>
             <Form.Item
               label="Event Description"
+              name="bio"
               rules={[
                 {
                   required: true,
@@ -237,17 +241,48 @@ const Dashboard: React.FC = () => {
                 },
               ]}
             >
-              <Input />
+              <Input
+                onClick={() => {
+                  setModalState("visible");
+                }}
+              />
             </Form.Item>
           </Col>
 
           <Col span={24} style={{ marginBottom: "50px" }}>
-            <Button type="primary" block size="large">
+            <Button type="primary" htmlType="submit" block size="large">
               Create Event
             </Button>
           </Col>
         </Row>
       </Form>
+
+      <Modal
+        title="Select a Place"
+        visible={modalState === "visible" ? true : false}
+        onOk={() => setModalState("hidden")}
+        onCancel={() => setModalState("hidden")}
+      >
+        {isLoaded ? (
+          <GoogleMap
+            mapContainerStyle={containerStyle}
+            center={center}
+            zoom={15}
+            onClick={(data: any) => console.log(data)}
+          >
+            {/* Child components, such as markers, info windows, etc. */}
+            <>
+              <Circle center={center} radius={5} />
+              {/* <DirectionsService
+                callback={(data: any) => console.log(data)}
+                options={directions}
+              /> */}
+            </>
+          </GoogleMap>
+        ) : (
+          <h4>Loading...</h4>
+        )}
+      </Modal>
     </section>
   );
 };
