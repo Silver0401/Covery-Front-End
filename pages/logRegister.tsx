@@ -56,6 +56,9 @@ const LogRegister: NextPage = () => {
               "User Registered",
               "You can now login"
             );
+            setTimeout(() => {
+              setSelectedForm("Login");
+            }, 500);
           } else {
             createNotification(
               "error",

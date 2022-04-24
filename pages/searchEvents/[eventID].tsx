@@ -11,10 +11,6 @@ import Head from "next/head";
 
 type Prices = 50 | 60 | 70 | 80 | 90 | 100 | 200 | 300 | 400 | 500;
 
-interface searchID {
-  idIntroduced: string;
-}
-
 interface eventData {
   assistants: Array<string>;
   price: Prices;
@@ -73,7 +69,9 @@ export const getStaticProps = async (context: any) => {
 };
 
 const SearchEventsIndex: NextPage<eventProps> = (props) => {
-  const { userData } = useContext(GlobalContext);
+  const { userData, loginState, createNotification } =
+    useContext(GlobalContext);
+  const router = useRouter();
 
   const pricesID = {
     500: "price_1KrpeOFLKFgqJf56E8DVxzuq",
@@ -89,28 +87,37 @@ const SearchEventsIndex: NextPage<eventProps> = (props) => {
   };
 
   const HandlePayment = () => {
-    axios
-      .post(
-        `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/payments/pay_cover`,
-        {
-          username: userData.username,
-          eventID: props.event?._id,
-          priceID: pricesID[props.event?.price],
-          secretHash: "tangamandapian",
-        },
-        {
-          headers: {
-            AUTH_TOKEN: `${process.env.NEXT_APP_NOT_BACKEND_TOKEN}`,
-          },
-        }
-      )
-      .then((res) => {
-        console.log(res);
-        window.open(res.data.url);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    loginState
+      ? axios
+          .post(
+            `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/payments/pay_cover`,
+            {
+              username: userData.username,
+              eventID: props.event?._id,
+              priceID: pricesID[props.event?.price],
+              secretHash: "tangamandapian",
+            },
+            {
+              headers: {
+                AUTH_TOKEN: `${process.env.NEXT_APP_NOT_BACKEND_TOKEN}`,
+              },
+            }
+          )
+          .then((res) => {
+            console.log(res);
+            window.open(res.data.url);
+          })
+          .catch((err) => {
+            console.error(err);
+          })
+      : createNotification(
+          "info",
+          "Create Account",
+          "To buy a ticket to this event, you must create an account, redirecting..."
+        );
+    setTimeout(() => {
+      router.push("/logRegister");
+    }, 3500);
   };
 
   useEffect(() => {

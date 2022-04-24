@@ -22,6 +22,8 @@ interface createEvent {
 interface GlobalContextProps {
   loginState: boolean;
   setLoginState: (boolean: boolean) => void;
+  searchedEventID: string | undefined;
+  setSearchedEventID: (data: string) => void;
   createNotification: (
     type: NotificationType,
     message: string,
@@ -35,6 +37,8 @@ interface GlobalContextProps {
 
 export const GlobalContext = createContext<GlobalContextProps>({
   loginState: false,
+  searchedEventID: undefined,
+  setSearchedEventID: () => {},
   setLoginState: () => {},
   createNotification: () => {},
   createEventData: {
@@ -57,6 +61,9 @@ export const GlobalContext = createContext<GlobalContextProps>({
 
 export const GlobalContextProvider: React.FC = (props) => {
   const [loginState, setLoginState] = useState<boolean>(false);
+  const [searchedEventID, setSearchedEventID] = useState<string | undefined>(
+    undefined
+  );
   const [createEventData, setCreateEventData] = useState<createEvent>({
     creator: undefined,
     name: undefined,
@@ -93,6 +100,8 @@ export const GlobalContextProvider: React.FC = (props) => {
         setCreateEventData,
         userData,
         setUserData,
+        searchedEventID,
+        setSearchedEventID,
       }}
     >
       {props.children}

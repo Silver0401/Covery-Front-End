@@ -11,7 +11,7 @@ interface searchID {
 }
 
 const SearchEventsIndex: NextPage = () => {
-  const { createNotification } = useContext(GlobalContext);
+  const { createNotification, setSearchedEventID } = useContext(GlobalContext);
   const router = useRouter();
   const [buttonLoading, setButtonLoading] = useState<boolean>(false);
   const onFinish = (values: searchID) => {
@@ -33,10 +33,11 @@ const SearchEventsIndex: NextPage = () => {
           "Event found",
           "redirecting you to event"
         );
+        setSearchedEventID(values.idIntroduced);
         setButtonLoading(false);
         setTimeout(() => {
           router.push(`/searchEvents/${values.idIntroduced}`);
-        }, 1000);
+        }, 500);
       })
       .catch((err) => {
         console.error(err);

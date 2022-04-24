@@ -31,7 +31,8 @@ const Dashboard: React.FC = () => {
   const { Header, Content, Footer, Sider } = Layout;
   const [displayedNavElement, setDisplayedNavElement] =
     useState<NavComponents>("Create Event");
-  const { loginState } = useContext(GlobalContext);
+  const { loginState, searchedEventID, createNotification } =
+    useContext(GlobalContext);
 
   const NavElements: NavComponentsIndex = {
     "Create Event": {
@@ -59,6 +60,14 @@ const Dashboard: React.FC = () => {
       setTimeout(() => {
         router.push("/logRegister");
       }, 1000);
+
+    createNotification(
+      "success",
+      "Logged in",
+      "Now that you're logged in, you can buy your ticket"
+    );
+
+    searchedEventID && router.push(`/searchEvents/${searchedEventID}`);
   }, []);
 
   return loginState ? (
