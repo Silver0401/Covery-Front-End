@@ -101,7 +101,7 @@ const SearchEventsIndex: NextPage<eventProps> = (props) => {
           )
           .then((res) => {
             console.log(res);
-            window.open(res.data.url);
+            window.open(res.data.url, "_self");
           })
           .catch((err) => {
             console.error(err);
