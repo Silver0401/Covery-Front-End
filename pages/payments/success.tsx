@@ -24,16 +24,16 @@ interface eventData {
 
 const SuccessPage: NextPage = () => {
   const router = useRouter();
-  const { username, event_id } = router.query;
+  const { username, event_id, secret_token } = router.query;
   const [eventInfo, setEventInfo] = useState<eventData>();
   const [tickedID, setTickedID] = useState<string>("awaiting...");
 
   useEffect(() => {
-    if (username && event_id) {
+    if (username && event_id && secret_token) {
       axios
         .post(
           `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/assistance/register_assistance`,
-          { user: username, eventID: event_id },
+          { user: username, eventID: event_id, secret_hash: secret_token },
           {
             headers: {
               AUTH_TOKEN: `${process.env.NEXT_APP_NOT_BACKEND_TOKEN}`,
@@ -50,9 +50,9 @@ const SuccessPage: NextPage = () => {
 
       setTickedID(nanoid());
     }
-  }, [username, event_id]);
+  }, [username, event_id, secret_token]);
 
-  return username && event_id ? (
+  return username && event_id && secret_token ? (
     <div id="GlobalSection" className={styles.phoneOptFlex}>
       <div className={styles.alignCenter}>
         <LottieContainer

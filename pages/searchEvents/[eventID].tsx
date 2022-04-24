@@ -2,11 +2,8 @@ import type { NextPage } from "next";
 import { useContext } from "react";
 import { GlobalContext } from "../../e2e/globalContext";
 import styles from "../../styles/scss/modules.module.scss";
-import { useRouter } from "next/router";
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { Button, Col, Row } from "antd";
-import bcrypt from "bcryptjs";
+import { Button } from "antd";
 import Head from "next/head";
 
 type Prices = 50 | 60 | 70 | 80 | 90 | 100 | 200 | 300 | 400 | 500;
@@ -71,7 +68,6 @@ export const getStaticProps = async (context: any) => {
 const SearchEventsIndex: NextPage<eventProps> = (props) => {
   const { userData, loginState, createNotification } =
     useContext(GlobalContext);
-  const router = useRouter();
 
   const pricesID = {
     500: "price_1KrpeOFLKFgqJf56E8DVxzuq",
