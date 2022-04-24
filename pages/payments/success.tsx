@@ -24,6 +24,9 @@ interface eventData {
 
 const SuccessPage: NextPage = () => {
   const router = useRouter();
+  const [requestStatus, setRequestStatus] = useState<
+    "success" | "error" | "waiting"
+  >("waiting");
   const { username, event_id, secret_token } = router.query;
   const [eventInfo, setEventInfo] = useState<eventData>();
   const [tickedID, setTickedID] = useState<string>("awaiting...");
@@ -42,9 +45,16 @@ const SuccessPage: NextPage = () => {
         )
         .then((res: any) => {
           console.log(res);
-          setEventInfo(res[0]);
+
+          if (res[0].data.status === 400) {
+            setRequestStatus("error");
+          } else {
+            setEventInfo(res[0]);
+            setRequestStatus("success");
+          }
         })
         .catch((err) => {
+          setRequestStatus("error");
           console.error(err);
         });
 
@@ -52,8 +62,16 @@ const SuccessPage: NextPage = () => {
     }
   }, [username, event_id, secret_token]);
 
-  return username && event_id && secret_token ? (
-    <div id="GlobalSection" className={styles.phoneOptFlex}>
+  return username && event_id && secret_token && requestStatus === "success" ? (
+    <div
+      id="GlobalSection"
+      className={styles.phoneOptFlex}
+      onClick={() => {
+        console.log(requestStatus);
+        console.log(eventInfo);
+        console.log(username, event_id, secret_token);
+      }}
+    >
       <div className={styles.alignCenter}>
         <LottieContainer
           lottie={SuccessLottie}
@@ -78,8 +96,20 @@ const SuccessPage: NextPage = () => {
         </div>
       </div>
     </div>
+  ) : username && event_id && secret_token && requestStatus === "waiting" ? (
+    <div id="GlobalSection" className={styles.alignCenter}>
+      <h3>Loading...</h3>
+    </div>
   ) : (
-    <div id="GlobalSection" className={styles.phoneOptFlex}>
+    <div
+      id="GlobalSection"
+      className={styles.phoneOptFlex}
+      onClick={() => {
+        console.log(requestStatus);
+        console.log(eventInfo);
+        console.log(username, event_id, secret_token);
+      }}
+    >
       <div className={styles.alignCenter}>
         <LottieContainer
           lottie={ErrorLottie}
