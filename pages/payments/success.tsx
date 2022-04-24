@@ -32,8 +32,8 @@ const SuccessPage: NextPage = () => {
     if (username && event_id) {
       axios
         .post(
-          `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/queries/filter_events`,
-          { _id: event_id },
+          `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/assistance/register_assistance`,
+          { user: username, eventID: event_id },
           {
             headers: {
               AUTH_TOKEN: `${process.env.NEXT_APP_NOT_BACKEND_TOKEN}`,
@@ -41,6 +41,7 @@ const SuccessPage: NextPage = () => {
           }
         )
         .then((res: any) => {
+          console.log(res);
           setEventInfo(res[0]);
         })
         .catch((err) => {
