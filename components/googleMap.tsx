@@ -30,7 +30,7 @@ const GoogleMapsComponent: React.FC<GoogleMapProps> = ({ location }) => {
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: "AIzaSyCLK4wlMhNfLl93M-BsUB8l1cfBADDPkYY",
+    googleMapsApiKey: `${process.env.NEXT_PUBLIC_NOT_GOOGLE_API_TOKEN}`,
     libraries: ["places"],
   });
 
