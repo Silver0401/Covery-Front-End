@@ -19,7 +19,8 @@
 .DS_Store
 *.pem
 
-./env
+# env file
+.env
 
 # debug
 npm-debug.log*
