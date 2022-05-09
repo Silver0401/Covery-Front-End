@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import GoogleMapsComponent from "../../components/googleMap";
 import {
   Button,
@@ -34,59 +34,103 @@ const Dashboard: React.FC = () => {
   const [modalState, setModalState] = useState<"visible" | "hidden">("hidden");
   const [mapData, setMapData] = useState<LocationProps>();
   const { Option } = Select;
+  const [currentImg, setCurrentImg] = useState<any>("awaiting...");
   const [form] = Form.useForm();
+  const required = false;
 
   const onFinish = (values: any) => {
-    console.log(values);
-    createNotification(
-      "info",
-      "Loading...",
-      "Processing your data to creating event"
-    );
+    console.log(values.image);
+
+    // axios
+    //   .post(
+    //     `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/resource/event_pic/set/6265d4adc936f034d3dfef68`,
+    //     values.image,
+    //     {
+    //       headers: {
+    //         "Content-Type": values.image.type,
+    //         AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
+    //       },
+    //     }
+    //   )
+    //   .then((res) => {
+    //     console.log(res);
+    //   })
+    //   .catch((err) => {
+    //     console.error(err);
+    //   });
+
+    let data = new FormData();
+    data.append("image", currentImg, currentImg.name);
+
     axios
       .post(
-        `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/resource/event/pene`,
-        {
-          bio: values.bio,
-          creator: values.username,
-          date: moment(values.startTime).format("YYYY/MM/DD"),
-          location_url: values.eventLocation,
-          name: values.eventName,
-          time_end: moment(values.endTime).format("hh:mm:ss a"),
-          time_start: moment(values.startTime).format("hh:mm:ss a"),
-          price: coverSwitchOn ? values.cover : 0,
-        },
+        `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/resource/event_pic/set/6265d4adc936f034d3dfef68`,
+        data,
         {
           headers: {
+            "Content-Type": `multipart/form-data`,
             AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
           },
         }
       )
       .then((response) => {
-        if (response.data.satus === 400) {
-          createNotification(
-            "error",
-            "Error in request!",
-            "Error creating event, try again"
-          );
-        } else {
-          console.log(response);
-          form.resetFields();
-          createNotification(
-            "success",
-            "Success!",
-            "Event created successfully, you can now check your events tab"
-          );
-        }
+        //handle success
+        console.log(response);
       })
       .catch((err) => {
         console.error(err);
-        createNotification(
-          "error",
-          "Error in request!",
-          "Error creating event, try again"
-        );
+        //handle error
       });
+
+    // createNotification(
+    //   "info",
+    //   "Loading...",
+    //   "Processing your data to creating event"
+    // );
+    // axios
+    //   .post(
+    //     `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/resource/event/pene`,
+    //     {
+    //       bio: values.bio,
+    //       creator: values.username,
+    //       date: moment(values.startTime).format("YYYY/MM/DD"),
+    //       location_url: values.eventLocation,
+    //       name: values.eventName,
+    //       time_end: moment(values.endTime).format("hh:mm:ss a"),
+    //       time_start: moment(values.startTime).format("hh:mm:ss a"),
+    //       price: coverSwitchOn ? values.cover : 0,
+    //     },
+    //     {
+    //       headers: {
+    //         AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
+    //       },
+    //     }
+    //   )
+    //   .then((response) => {
+    //     if (response.data.satus === 400) {
+    //       createNotification(
+    //         "error",
+    //         "Error in request!",
+    //         "Error creating event, try again"
+    //       );
+    //     } else {
+    //       console.log(response);
+    //       form.resetFields();
+    //       createNotification(
+    //         "success",
+    //         "Success!",
+    //         "Event created successfully, you can now check your events tab"
+    //       );
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     console.error(err);
+    //     createNotification(
+    //       "error",
+    //       "Error in request!",
+    //       "Error creating event, try again"
+    //     );
+    //   });
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -132,7 +176,7 @@ const Dashboard: React.FC = () => {
               name="eventName"
               rules={[
                 {
-                  required: true,
+                  required: required,
                   message: "Please complete this field",
                 },
               ]}
@@ -146,7 +190,7 @@ const Dashboard: React.FC = () => {
               name="bio"
               rules={[
                 {
-                  required: true,
+                  required: required,
                   message: "Please complete this field",
                 },
               ]}
@@ -173,7 +217,7 @@ const Dashboard: React.FC = () => {
                     name="cover"
                     rules={[
                       {
-                        required: true,
+                        required: required,
                         message: "Please complete this field",
                       },
                     ]}
@@ -200,15 +244,29 @@ const Dashboard: React.FC = () => {
           </Col>
 
           <Col span={24}>
-            <Form.Item
+            <input
+              type="file"
+              onChange={(e) =>
+                e.target.files && setCurrentImg(e.target.files[0])
+              }
+            />
+
+            {/* <Form.Item
               label="Image"
               name="image"
               rules={[
-                { required: true, message: "Please input your event's Date!" },
+                {
+                  required: required,
+                  message: "Please input your event's Date!",
+                },
               ]}
             >
-              <input type="file" accept="image/png, image/jpeg" />
-            </Form.Item>
+              <input
+                onChange={(e) => console.log(e.target)}
+                type="file"
+                accept="image/png, image/jpeg"
+              />
+            </Form.Item> */}
           </Col>
 
           <Col span={24}>
@@ -216,7 +274,10 @@ const Dashboard: React.FC = () => {
               label="Event Date"
               name="eventDate"
               rules={[
-                { required: true, message: "Please input your event's Date!" },
+                {
+                  required: required,
+                  message: "Please input your event's Date!",
+                },
               ]}
             >
               <DatePicker />
@@ -229,7 +290,7 @@ const Dashboard: React.FC = () => {
               name="startTime"
               rules={[
                 {
-                  required: true,
+                  required: required,
                   message: "Please input your event's start time!",
                 },
               ]}
@@ -244,7 +305,7 @@ const Dashboard: React.FC = () => {
               name="endTime"
               rules={[
                 {
-                  required: true,
+                  required: required,
                   message: "Please input your event's end time!",
                 },
               ]}
@@ -259,7 +320,7 @@ const Dashboard: React.FC = () => {
               name="eventLocation"
               rules={[
                 {
-                  required: true,
+                  required: required,
                   message: "Please input your event's location!",
                 },
               ]}
@@ -283,6 +344,7 @@ const Dashboard: React.FC = () => {
 
       <Modal
         title="Select a Place"
+        maskClosable={false}
         visible={modalState === "visible" ? true : false}
         onOk={() => {
           setModalState("hidden");
@@ -293,7 +355,6 @@ const Dashboard: React.FC = () => {
       >
         <GoogleMapsComponent
           location={(data) => {
-            console.log(data);
             setMapData(data);
           }}
         />

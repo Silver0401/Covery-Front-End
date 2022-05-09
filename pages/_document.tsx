@@ -5,7 +5,6 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          <title>Covery</title>
           <meta
             name="description"
             content="Create or discover parties around you; the easiest way to pay and accept cover payments."

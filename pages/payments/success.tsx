@@ -39,7 +39,7 @@ const SuccessPage: NextPage = () => {
           { user: username, eventID: event_id, secret_hash: secret_token },
           {
             headers: {
-              AUTH_TOKEN: `${process.env.NEXT_APP_NOT_BACKEND_TOKEN}`,
+              AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
             },
           }
         )

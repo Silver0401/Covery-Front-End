@@ -1,11 +1,12 @@
 import type { NextPage } from "next";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../../e2e/globalContext";
 import styles from "../../styles/scss/modules.module.scss";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { Button } from "antd";
 import Head from "next/head";
+import GoogleMapsComponent from "../../components/googleMap";
 
 type Prices = 50 | 60 | 70 | 80 | 90 | 100 | 200 | 300 | 400 | 500;
 
@@ -26,22 +27,27 @@ interface eventProps {
   event: eventData;
 }
 
+interface coordinates {
+  lat: number;
+  lng: number;
+}
+
 export const getStaticPaths = async () => {
   const { data } = await axios.post(
     `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/queries/filter_events`,
     {},
     {
       headers: {
-        AUTH_TOKEN: `${process.env.NEXT_APP_NOT_BACKEND_TOKEN}`,
+        AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
       },
     }
   );
-
   const paths = Object.values(data).map((event: any) => {
     return {
       params: { ["eventID"]: event._id },
     };
   });
+
   return {
     paths: paths,
     fallback: false,
@@ -55,7 +61,7 @@ export const getStaticProps = async (context: any) => {
     { _id: eventID },
     {
       headers: {
-        AUTH_TOKEN: `${process.env.NEXT_APP_NOT_BACKEND_TOKEN}`,
+        AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
       },
     }
   );
@@ -66,10 +72,27 @@ export const getStaticProps = async (context: any) => {
   };
 };
 
-const SearchEventsIndex: NextPage<eventProps> = (props) => {
+const SearchEventID: NextPage<eventProps> = (props) => {
+  const [center, setCenter] = useState<coordinates>();
   const { userData, loginState, createNotification } =
     useContext(GlobalContext);
   const router = useRouter();
+  var geocoder = new google.maps.Geocoder();
+
+  useEffect(() => {
+    geocoder.geocode(
+      { address: props.event.location_url },
+      function (results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+          if (results) {
+            const latitude = results[0].geometry.location.lat();
+            const longitude = results[0].geometry.location.lng();
+            setCenter({ lat: latitude, lng: longitude });
+          }
+        }
+      }
+    );
+  }, []);
 
   const pricesID = {
     500: "price_1KrpeOFLKFgqJf56E8DVxzuq",
@@ -97,7 +120,7 @@ const SearchEventsIndex: NextPage<eventProps> = (props) => {
           },
           {
             headers: {
-              AUTH_TOKEN: `${process.env.NEXT_APP_NOT_BACKEND_TOKEN}`,
+              AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
             },
           }
         )
@@ -116,16 +139,12 @@ const SearchEventsIndex: NextPage<eventProps> = (props) => {
       );
       setTimeout(() => {
         router.push("/logRegister");
-      }, 2000);
+      }, 500);
     }
   };
 
-  // useEffect(() => {
-  //   console.log(props.event);
-  // }, []);
-
   return (
-    <section id="GlobalSection" className={styles.spaceItemsHorizontal}>
+    <section id="GlobalSection" className={styles.phoneOptFlex}>
       <Head>
         <title>Covery Event: {props.event?.name}</title>
         <meta
@@ -133,7 +152,8 @@ const SearchEventsIndex: NextPage<eventProps> = (props) => {
           content={`Event description: ${props.event?.bio}`}
         />
       </Head>
-      <div className={styles.card}>
+
+      <div className={`${styles.card} ${styles.spaceItemsVertical}`}>
         <div>
           <h2>{props.event?.name}</h2>
           <h3>{`Ticket Price: $ ${props.event?.price}`}</h3>
@@ -149,8 +169,11 @@ const SearchEventsIndex: NextPage<eventProps> = (props) => {
           Buy Ticket 🎟️
         </Button>
       </div>
+      <div className={styles.card}>
+        <GoogleMapsComponent searchBarHidden initialLocation={center} />
+      </div>
     </section>
   );
 };
 
-export default SearchEventsIndex;
+export default SearchEventID;
