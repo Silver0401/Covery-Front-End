@@ -88,6 +88,7 @@ const GoogleMapsComponent: React.FC<GoogleMapProps> = ({
         address: placeSelcted,
         coordinates: center,
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [center]);
 
   useEffect(() => {

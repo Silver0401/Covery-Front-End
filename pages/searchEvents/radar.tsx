@@ -63,7 +63,7 @@ const RadarPage: NextPage = () => {
   return (
     <section id="GlobalSection">
       <Head>
-        <title>Covery's Radar</title>
+        <title>{"Covery's Radar"}</title>
         <meta name="description" content="Scann every event around you" />
       </Head>
       <div className={`${styles.phoneOptAbsolute} ${styles.fillSpace}`}>
@@ -95,6 +95,7 @@ const RadarPage: NextPage = () => {
               eventsList.map((event) => {
                 return (
                   <div
+                    key={`${event.name} ${event.creator}`}
                     id="radarEventCard"
                     style={{
                       width: "90%",
