@@ -1,5 +1,7 @@
 :root {
-  --PrimaryColor: #5eb2b6;
+  // Previous Primary Color
+  // --PrimaryColor: #5eb2b6;
+  --PrimaryColor: #0286ec;
   --SecondaryColor: #ffa336;
   --TertiaryColor: whitesmoke;
   --TextColor: black;
@@ -24,3 +26,4 @@ body {
 @import "./modules/paymentForm";
 @import "./modules/googleMap";
 @import "./modules/searchEvents";
+@import "./modules/radar";

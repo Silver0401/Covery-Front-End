@@ -107,11 +107,7 @@
       display: block;
       cursor: pointer;
       backdrop-filter: blur(15px);
-      background: linear-gradient(
-        45deg,
-        hsla(183, 38%, 54%, 50%),
-        hsla(33, 100%, 61%, 50%)
-      );
+      background-color: rgba(255, 255, 255, 0.5);
 
       li {
         cursor: pointer;

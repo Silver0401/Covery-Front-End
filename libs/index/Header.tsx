@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { GlobalContext } from "../../e2e/globalContext";
 
 // Lottie Stuff
-import BeerLottieAnimation from "../../assets/lotties/beersLottie.json";
+import ScannerLottieAnimation from "../../assets/lotties/Scanning.json";
 import LottieContainer from "../../components/LottieContainer";
 
 // Styles
@@ -26,7 +26,7 @@ const Header: React.FC = () => {
           <h1>near you!</h1>
         </div>
         <h3 style={{ margin: "0px 20%" }}>
-          The easiest way to pay 💰️ and accept event cover payments 💵
+          The easiest way to find, pay 💰️ and accept event cover payments 💵
         </h3>
         <div className={styles.spaceItemsHorizontal} style={{ width: "70%" }}>
           <button
@@ -51,7 +51,7 @@ const Header: React.FC = () => {
         <div className="LottieBox">
           <LottieContainer
             // style={{ transform: "scale(2)" }}
-            lottie={BeerLottieAnimation}
+            lottie={ScannerLottieAnimation}
           />
         </div>
       </div>

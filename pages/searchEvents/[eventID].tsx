@@ -8,7 +8,7 @@ import { Button } from "antd";
 import Head from "next/head";
 import GoogleMapsComponent from "../../components/googleMap";
 
-type Prices = 50 | 60 | 70 | 80 | 90 | 100 | 200 | 300 | 400 | 500;
+type Prices = 0 | 50 | 60 | 70 | 80 | 90 | 100 | 200 | 300 | 400 | 500;
 
 interface eventData {
   assistants: Array<string>;
@@ -77,22 +77,6 @@ const SearchEventID: NextPage<eventProps> = (props) => {
   const { userData, loginState, createNotification } =
     useContext(GlobalContext);
   const router = useRouter();
-  var geocoder = new google.maps.Geocoder();
-
-  useEffect(() => {
-    geocoder.geocode(
-      { address: props.event.location_url },
-      function (results, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
-          if (results) {
-            const latitude = results[0].geometry.location.lat();
-            const longitude = results[0].geometry.location.lng();
-            setCenter({ lat: latitude, lng: longitude });
-          }
-        }
-      }
-    );
-  }, []);
 
   const pricesID = {
     500: "price_1KrpeOFLKFgqJf56E8DVxzuq",
@@ -105,32 +89,61 @@ const SearchEventID: NextPage<eventProps> = (props) => {
     70: "price_1KrpeNFLKFgqJf56Rk7lc2n9",
     60: "price_1KrpeNFLKFgqJf56gysn1eSO",
     50: "price_1KrpeNFLKFgqJf56ROLiSpZI",
+    0: "none",
   };
+
+  useEffect(() => {
+    const fetchCoordinates = async () => {
+      const geocoder = new google.maps.Geocoder();
+      geocoder.geocode(
+        { address: props.event.location_url },
+        function (results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            if (results) {
+              const latitude = results[0].geometry.location.lat();
+              const longitude = results[0].geometry.location.lng();
+              setCenter({ lat: latitude, lng: longitude });
+            }
+          }
+        }
+      );
+    };
+
+    window.onload = () => {
+      fetchCoordinates();
+    };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const HandlePayment = () => {
     if (loginState) {
-      axios
-        .post(
-          `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/payments/pay_cover`,
-          {
-            username: userData.username,
-            eventID: props.event?._id,
-            priceID: pricesID[props.event?.price],
-            secretHash: "tangamandapian",
-          },
-          {
-            headers: {
-              AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
+      if (props.event.price === 0) {
+        console.log("create ticket page");
+      } else {
+        axios
+          .post(
+            `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/payments/pay_cover`,
+            {
+              username: userData.username,
+              eventID: props.event?._id,
+              priceID: pricesID[props.event?.price],
+              secretHash: "tangamandapian",
             },
-          }
-        )
-        .then((res) => {
-          console.log(res);
-          window.open(res.data.url, "_self");
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+            {
+              headers: {
+                AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
+              },
+            }
+          )
+          .then((res) => {
+            console.log(res);
+            window.open(res.data.url, "_self");
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
     } else {
       createNotification(
         "info",
@@ -156,7 +169,13 @@ const SearchEventID: NextPage<eventProps> = (props) => {
       <div className={`${styles.card} ${styles.spaceItemsVertical}`}>
         <div>
           <h2>{props.event?.name}</h2>
-          <h3>{`Ticket Price: $ ${props.event?.price}`}</h3>
+          <h3>
+            {`Ticket Price: $ ${
+              props.event?.price === 0 || props.event?.price === undefined
+                ? "FREE"
+                : props.event?.price
+            }`}
+          </h3>
           <h4>{`event_ID: ${props.event?._id}`}</h4>
         </div>
         <div>

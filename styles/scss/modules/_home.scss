@@ -12,7 +12,6 @@
       box-shadow: inset 5px 5px 30px 5px var(--PrimaryColor),
         inset -5px -5px 30px 10px var(--SecondaryColor),
         5px 5px 10px rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(20px);
 
       > * {
         transform: scale(1.5);

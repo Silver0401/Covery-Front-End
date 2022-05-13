@@ -1,0 +1,36 @@
+#radarEventCard {
+  #radarContentWrapper {
+    transition: transform 250ms;
+    padding: 20px;
+    cursor: pointer;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    @include alignCenter;
+    justify-content: space-around;
+    margin: 30px clamp(0%, 4vw, 5%);
+
+    #radarCardPrice {
+      color: var(--PrimaryColor);
+    }
+
+    .svgContainer {
+      width: 60px;
+      height: 60px;
+      @include alignCenter;
+      border-radius: 50%;
+      background-color: var(--SecondaryColor);
+
+      svg {
+        width: 50%;
+        height: 50%;
+      }
+    }
+  }
+  &:hover {
+    #radarContentWrapper {
+      transition: transform 250ms;
+      transform: translateY(-10px);
+    }
+  }
+}

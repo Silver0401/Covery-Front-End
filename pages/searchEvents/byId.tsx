@@ -35,9 +35,7 @@ const IdInputPage: NextPage = () => {
         );
         setSearchedEventID(values.idIntroduced);
         setButtonLoading(false);
-        setTimeout(() => {
-          router.push(`/searchEvents/${values.idIntroduced}`);
-        }, 500);
+        router.push(`/searchEvents/${values.idIntroduced}`);
       })
       .catch((err) => {
         console.error(err);

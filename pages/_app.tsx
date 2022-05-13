@@ -7,10 +7,12 @@ import { GlobalContextProvider } from "../e2e/globalContext";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <GlobalContextProvider>
-      <GlobalNav />
-      <Component {...pageProps} />
-    </GlobalContextProvider>
+    <div id="AppContainer">
+      <GlobalContextProvider>
+        <GlobalNav />
+        <Component {...pageProps} />
+      </GlobalContextProvider>
+    </div>
   );
 }
 
