@@ -36,10 +36,10 @@ const Dashboard: React.FC = () => {
   const { Option } = Select;
   const [currentImg, setCurrentImg] = useState<any>("awaiting...");
   const [form] = Form.useForm();
-  const required = false;
+  const required = true;
 
   const onFinish = (values: any) => {
-    console.log(values.image);
+    // console.log(values.image);
 
     // axios
     //   .post(
