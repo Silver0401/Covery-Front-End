@@ -74,7 +74,7 @@ export const getStaticProps = async (context: any) => {
 
 const SearchEventID: NextPage<eventProps> = (props) => {
   const [center, setCenter] = useState<coordinates>();
-  const { userData, loginState, createNotification } =
+  const { userData, loginState, createNotification, setSearchedEventID } =
     useContext(GlobalContext);
   const router = useRouter();
 
@@ -92,26 +92,38 @@ const SearchEventID: NextPage<eventProps> = (props) => {
     0: "none",
   };
 
-  useEffect(() => {
-    const fetchCoordinates = async () => {
-      const geocoder = new google.maps.Geocoder();
-      geocoder.geocode(
-        { address: props.event.location_url },
-        function (results, status) {
-          if (status == google.maps.GeocoderStatus.OK) {
-            if (results) {
-              const latitude = results[0].geometry.location.lat();
-              const longitude = results[0].geometry.location.lng();
-              setCenter({ lat: latitude, lng: longitude });
-            }
-          }
+  const fetchCoordinates = (googleGeo: any) => {
+    googleGeo.geocode(
+      { address: props.event.location_url },
+      function (results: any, status: any) {
+        if (status == google.maps.GeocoderStatus.OK && results) {
+          const latitude = results[0].geometry.location.lat();
+          const longitude = results[0].geometry.location.lng();
+          setCenter({ lat: latitude, lng: longitude });
         }
-      );
-    };
+      }
+    );
+  };
+
+  useEffect(() => {
+    setSearchedEventID(props.event._id);
 
     window.onload = () => {
-      fetchCoordinates();
+      const googleGeo = new google.maps.Geocoder();
+
+      fetchCoordinates(googleGeo);
     };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    try {
+      const googleGeo = new google.maps.Geocoder();
+      fetchCoordinates(googleGeo);
+    } catch (err) {
+      console.error(err);
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -137,7 +149,6 @@ const SearchEventID: NextPage<eventProps> = (props) => {
             }
           )
           .then((res) => {
-            console.log(res);
             window.open(res.data.url, "_self");
           })
           .catch((err) => {
@@ -185,7 +196,9 @@ const SearchEventID: NextPage<eventProps> = (props) => {
           <p>{`Duration: ${props.event?.time_start} - ${props.event?.time_end}`}</p>
         </div>
         <Button size="large" block type="primary" onClick={HandlePayment}>
-          Buy Ticket 🎟️
+          {props.event?.price === 0 || props.event?.price === undefined
+            ? "Get A Ticket 🎟️"
+            : "Buy Ticket 🎟️"}
         </Button>
       </div>
       <div className={styles.card}>

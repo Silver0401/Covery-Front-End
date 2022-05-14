@@ -5,6 +5,7 @@ import LottieContainer from "../../components/LottieContainer";
 import LottieRadar from "../../assets/lotties/Scanning.json";
 import styles from "../../styles/scss/modules.module.scss";
 import { useEffect, useState } from "react";
+import LoadingAnimation from "../../components/LoadingAnimation";
 import axios from "axios";
 
 type Prices = 0 | 50 | 60 | 70 | 80 | 90 | 100 | 200 | 300 | 400 | 500;
@@ -84,9 +85,7 @@ const RadarPage: NextPage = () => {
             }}
           >
             {eventsFetchState === "fetching" ? (
-              <div className={`${styles.alignCenter} ${styles.fillSpace}`}>
-                <h3>Searching events near you...</h3>
-              </div>
+              <LoadingAnimation loadingText="Searching events around you..." />
             ) : eventsList === [] ? (
               <div className={`${styles.alignCenter} ${styles.card}`}>
                 <h2>No events near you :(</h2>

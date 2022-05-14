@@ -41,3 +41,18 @@
   background: var(--SecondaryColor) !important;
   border: 2px solid var(--SecondaryColor) !important;
 }
+
+#MyEventsCardContainer {
+  p,
+  h4 {
+    margin: 0;
+    padding: 0;
+  }
+
+  .sentence {
+    border-top: 1px solid lightgrey;
+    > * {
+      margin: 0;
+    }
+  }
+}

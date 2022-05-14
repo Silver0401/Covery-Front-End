@@ -1,10 +1,15 @@
 import React, { useEffect, useContext, useState } from "react";
 import axios from "axios";
 import styles from "../../styles/scss/modules.module.scss";
+import LoadingAnimation from "../../components/LoadingAnimation";
 import { GlobalContext } from "../../e2e/globalContext";
+import { List } from "antd";
+
+type Prices = 0 | 50 | 60 | 70 | 80 | 90 | 100 | 200 | 300 | 400 | 500;
 
 interface eventData {
   assistants: Array<string>;
+  price: Prices;
   bio: string;
   creator: string;
   date: string;
@@ -17,70 +22,150 @@ interface eventData {
 
 const MyEvents: React.FC = () => {
   const { userData } = useContext(GlobalContext);
-  const [fetchedEvents, setFetchedEvents] = useState<any>(undefined);
+  const [fetchingStatus, setFetchingStatus] = useState<"fetching" | "fetched">(
+    "fetched"
+  );
+  const [fetchedEvents, setFetchedEvents] = useState<Array<eventData>>([]);
 
   useEffect(() => {
-    axios
-      .post(
-        `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/queries/filter_events`,
-        { creator: userData.username },
-        {
-          headers: {
-            AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
-          },
-        }
-      )
-      .then((res) => {
-        console.log(res);
-        setFetchedEvents(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const FetchEvents = async () => {
+      axios
+        .post(
+          `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/queries/filter_events`,
+          { creator: userData.username },
+          {
+            headers: {
+              AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
+            },
+          }
+        )
+        .then((res) => {
+          const eventsFetched = res.data;
+          const eventsOptimized = Object.values(eventsFetched).map(
+            (eventEntry: any) => {
+              return eventEntry;
+            }
+          );
+          setFetchedEvents(eventsOptimized);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      setFetchingStatus("fetched");
+    };
+
+    FetchEvents();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <section id="DashboardElementSection">
-      {fetchedEvents ? (
-        <div
-          style={{
-            width: "100%",
-            height: "650px",
-            overflow: "scroll",
-          }}
-        >
-          {fetchedEvents &&
-            Object.values(fetchedEvents).map((event: any) => {
+      <div
+        style={{
+          width: "100%",
+          height: "650px",
+          overflow: "scroll",
+        }}
+      >
+        {fetchingStatus === "fetching" ? (
+          <LoadingAnimation loadingText="Loading your events..." />
+        ) : fetchedEvents === [] ? (
+          <div
+            className={`${styles.alignCenter} ${styles.card}`}
+            style={{ height: "400px" }}
+          >
+            <h2>No events near you :(</h2>
+          </div>
+        ) : (
+          <List
+            itemLayout="vertical"
+            size="small"
+            dataSource={fetchedEvents}
+            renderItem={(item) => {
               return (
-                <div className={styles.card} style={{ width: "90%" }}>
-                  <div>
-                    <h3>{event?.name}</h3>
-                    <h4>{`eventID: ${event?._id}`}</h4>
-                  </div>
-                  <div>
-                    <p>{`Creator: ${event?.creator}`}</p>
-                    <p>{`Date: ${event?.date}`}</p>
-                    <p>{`Location: ${event?.location_url}`}</p>
-                    <p>{`Duration: ${event?.time_start} - ${event?.time_end}`}</p>
-                  </div>
+                <div className={styles.card} id="MyEventsCardContainer">
+                  <List.Item style={{ marginTop: "20px" }}>
+                    <List.Item.Meta title={<h2>{item.name}</h2>} />
+                  </List.Item>
+                  <List.Item className="sentence">
+                    <List.Item.Meta
+                      title={<h4>{"Creator"}</h4>}
+                      description={<p>{item.creator}</p>}
+                    />
+                  </List.Item>
+                  <List.Item className="sentence">
+                    <List.Item.Meta
+                      title={<h4>{"Event ID"}</h4>}
+                      description={<p>{item._id}</p>}
+                    />
+                  </List.Item>
+                  <List.Item className="sentence">
+                    <List.Item.Meta
+                      title={<h4>{"Price"}</h4>}
+                      description={
+                        <p>
+                          {item.price === 0 || item.price === undefined
+                            ? "FREE"
+                            : item.price}
+                        </p>
+                      }
+                    />
+                  </List.Item>
+                  <List.Item className="sentence">
+                    <List.Item.Meta
+                      title={<h4>{"Place"}</h4>}
+                      description={<p>{item.location_url}</p>}
+                    />
+                  </List.Item>
+                  <List.Item className="sentence">
+                    <List.Item.Meta
+                      title={<h4>{"Date"}</h4>}
+                      description={<p>{item.date}</p>}
+                    />
+                  </List.Item>
+                  <List.Item className="sentence">
+                    <List.Item.Meta
+                      title={<h4>{"Time Start"}</h4>}
+                      description={<p>{item.time_start}</p>}
+                    />
+                  </List.Item>
+                  <List.Item className="sentence">
+                    <List.Item.Meta
+                      title={<h4>{"Time End"}</h4>}
+                      description={<p>{item.time_end}</p>}
+                    />
+                  </List.Item>
                 </div>
               );
-            })}
-        </div>
-      ) : (
-        <div
-          style={{
-            display: "grid",
-            placeItems: "center",
-            width: "100%",
-            height: "100%",
-          }}
-        >
-          <h2>Loading your events...</h2>
-        </div>
-      )}
+            }}
+          />
+        )}
+      </div>
     </section>
   );
 };
 
 export default MyEvents;
+
+{
+  /* <List.Item>
+                    <h3>{event?.name}</h3>
+                  </List.Item>
+                  <List.Item>
+                    <h4>{`eventID: ${event?._id}`}</h4>
+                  </List.Item>
+                  <List.Item>
+                    <p>{`Creator: ${event?.creator}`}</p>
+                  </List.Item>
+                  <List.Item>
+                    <p>{`Date: ${event?.date}`}</p>
+                  </List.Item>
+                  <List.Item>
+                    <p>{`Location: ${event?.location_url}`}</p>
+                  </List.Item>
+                  <List.Item>
+                    <p>{`Duration: ${event?.time_start} - ${event?.time_end}`}</p>
+                  </List.Item>
+                </List> */
+}

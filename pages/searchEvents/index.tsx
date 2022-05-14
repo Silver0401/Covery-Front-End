@@ -1,47 +1,15 @@
 import type { NextPage } from "next";
 import styles from "../../styles/scss/modules.module.scss";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import Image from "next/image";
-import cosoimg from "../../assets/images/radarFoto.jpg";
 
 const SearchEventsIndex: NextPage = () => {
   const router = useRouter();
-  // const [img, setImg] = useState<any>(cosoimg);
-
-  // useEffect(() => {
-  //   axios
-  //     .get(
-  //       `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/resource/event_pic/get/623f9f9f8bd1a1cd6e6bf653`,
-  //       {
-  //         headers: {
-  //           AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
-  //         },
-  //       }
-  //     )
-  //     .then((response) => {
-  //       //handle success
-  //       setImg(response.data);
-  //       console.log(response);
-  //     })
-  //     .catch((err) => {
-  //       console.error(err);
-  //       //handle error
-  //     });
-  // }, []);
 
   return (
     <section
       id="GlobalSection"
       className={`searchEventsIndex ${styles.phoneOptFlex}`}
     >
-      {/* <Image
-        width={100}
-        height={100}
-        src={`${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/resource/event_pic/get/623f9f9f8bd1a1cd6e6bf653`}
-        alt="coso"
-      /> */}
       <div
         id="byId"
         className={styles.alignCenter}
