@@ -79,14 +79,17 @@ const SuccessPage: NextPage = () => {
       <div className={styles.spaceItemsVertical}>
         <h2 style={{ textAlign: "center", color: "#41ef99" }}>Success!</h2>
         <h3 style={{ textAlign: "center" }}>
-          Thanks for your purchase {username}. You can see your ticket in the
-          dashboard section: "My Tickets"{" "}
+          {"Thanks for your purchase"} {username}
+          {
+            ". You can see your ticket in the dashboard section: 'My Tickets"
+          }{" "}
         </h3>
         <h4
           style={{ textAlign: "center", textDecoration: "2px underline red" }}
         >
-          IMPORTANT: The ticket can only be used once! so don't share it or let
-          anyone scan it!
+          {
+            "IMPORTANT: The ticket can only be used once! so don't share it or let anyone scan it!"
+          }
         </h4>
       </div>
     </div>
