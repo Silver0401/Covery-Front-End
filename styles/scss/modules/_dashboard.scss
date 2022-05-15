@@ -56,3 +56,50 @@
     }
   }
 }
+
+.TicketContainer {
+  position: relative;
+  width: 350px;
+  height: 250px;
+  @include alignCenter;
+
+  img {
+    z-index: 1;
+    height: 100%;
+    width: 100%;
+  }
+
+  .TicketInfo {
+    z-index: 0;
+    position: absolute;
+    height: 65%;
+    width: 80%;
+    background: linear-gradient(to right, var(--SecondaryColor) 85%, #f0f1f4);
+    @include alignCenter;
+    flex-direction: row;
+    justify-content: flex-start;
+
+    .text {
+      margin-left: 20px;
+      width: 40%;
+      height: 85%;
+      @include alignCenter;
+      flex-direction: column;
+      justify-content: space-around;
+
+      h4,
+      p {
+        text-align: center;
+        margin: 0;
+        padding: 0;
+      }
+    }
+
+    .qrContainer {
+      background-color: var(--PrimaryColor);
+      height: 100%;
+      margin-left: 20px;
+      @include alignCenter;
+    }
+  }
+}

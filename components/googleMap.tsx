@@ -63,7 +63,7 @@ const GoogleMapsComponent: React.FC<GoogleMapProps> = ({
   };
 
   const handleMapClick = (events: any) => {
-    if (!searchBarHidden) {
+    if (!searchBarHidden || searchBarHidden === undefined) {
       const lat = events.latLng.lat();
       const lng = events.latLng.lng();
       var geocoder = new google.maps.Geocoder();
@@ -89,7 +89,7 @@ const GoogleMapsComponent: React.FC<GoogleMapProps> = ({
         coordinates: center,
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [center]);
+  }, [center, placeSelcted]);
 
   useEffect(() => {
     initialLocation && setCenter(initialLocation);
@@ -114,13 +114,15 @@ const GoogleMapsComponent: React.FC<GoogleMapProps> = ({
               position: "absolute",
               width: "300px",
               height: "50px",
-              bottom: 5,
-              left: 5,
+              bottom: 15,
+              left: 10,
               paddingLeft: 10,
               background: "#ffa336",
               border: "2px solid #5eb2b6",
+              color: "black",
+              fontWeight: "bolder",
             }}
-            placeholder="search place"
+            placeholder="Search place"
           />
         </StandaloneSearchBox>
       )}

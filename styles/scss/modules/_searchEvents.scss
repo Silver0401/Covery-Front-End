@@ -89,3 +89,8 @@
     }
   }
 }
+
+.eventIDImage {
+  width: clamp(150px, 20vw, 250px);
+  height: clamp(150px, 20vw, 250px);
+}

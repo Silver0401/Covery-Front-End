@@ -107,7 +107,7 @@ const nav: React.FC = () => {
                     "Logged Out",
                     "You have logged out of your account"
                   );
-                }, 1500);
+                }, 500);
               }}
             >
               <h4>Log Out</h4>

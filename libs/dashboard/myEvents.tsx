@@ -23,7 +23,7 @@ interface eventData {
 const MyEvents: React.FC = () => {
   const { userData } = useContext(GlobalContext);
   const [fetchingStatus, setFetchingStatus] = useState<"fetching" | "fetched">(
-    "fetched"
+    "fetching"
   );
   const [fetchedEvents, setFetchedEvents] = useState<Array<eventData>>([]);
 
@@ -46,6 +46,7 @@ const MyEvents: React.FC = () => {
               return eventEntry;
             }
           );
+          console.log(eventsOptimized);
           setFetchedEvents(eventsOptimized);
         })
         .catch((err) => {
@@ -70,13 +71,6 @@ const MyEvents: React.FC = () => {
       >
         {fetchingStatus === "fetching" ? (
           <LoadingAnimation loadingText="Loading your events..." />
-        ) : fetchedEvents === [] ? (
-          <div
-            className={`${styles.alignCenter} ${styles.card}`}
-            style={{ height: "400px" }}
-          >
-            <h2>No events near you :(</h2>
-          </div>
         ) : (
           <List
             itemLayout="vertical"
@@ -147,25 +141,3 @@ const MyEvents: React.FC = () => {
 };
 
 export default MyEvents;
-
-{
-  /* <List.Item>
-                    <h3>{event?.name}</h3>
-                  </List.Item>
-                  <List.Item>
-                    <h4>{`eventID: ${event?._id}`}</h4>
-                  </List.Item>
-                  <List.Item>
-                    <p>{`Creator: ${event?.creator}`}</p>
-                  </List.Item>
-                  <List.Item>
-                    <p>{`Date: ${event?.date}`}</p>
-                  </List.Item>
-                  <List.Item>
-                    <p>{`Location: ${event?.location_url}`}</p>
-                  </List.Item>
-                  <List.Item>
-                    <p>{`Duration: ${event?.time_start} - ${event?.time_end}`}</p>
-                  </List.Item>
-                </List> */
-}

@@ -61,7 +61,7 @@ h3 {
   // font-family: "Righteous", cursive;
 }
 h4 {
-  font-size: clamp(0.6rem, 4vw, 1rem);
+  font-size: clamp(0.6rem, 3vw, 1rem);
 }
 p {
   font-size: clamp(0.7rem, 2vw, 1rem);
@@ -79,6 +79,11 @@ button {
   // font-family: 'Permanent Marker', cursive;
   // font-family: 'Poiret One', cursive;
   // font-family: 'Righteous', cursive;
+}
+
+::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: black;
 }
 
 .GenericButton {

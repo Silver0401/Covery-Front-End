@@ -106,7 +106,7 @@ const LogRegister: NextPage = () => {
                 searchedEventID === undefined
                   ? router.push("/dashboard")
                   : router.push(`/searchEvents/${searchedEventID}`);
-              }, 1000);
+              }, 500);
             } else {
               createNotification(
                 "error",

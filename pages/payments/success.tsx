@@ -1,13 +1,12 @@
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { nanoid } from "nanoid";
 import styles from "../../styles/scss/modules.module.scss";
 import LottieContainer from "../../components/LottieContainer";
 import SuccessLottie from "../../assets/lotties/SuccessLottie.json";
 import ErrorLottie from "../../assets/lotties/ErrorLottie.json";
-import couponImg from "../../assets/images/cupon.png";
-import Image from "next/image";
+import LoadingAnimation from "../../components/LoadingAnimation";
+import { nanoid } from "nanoid";
 import axios from "axios";
 
 interface eventData {
@@ -29,7 +28,7 @@ const SuccessPage: NextPage = () => {
   >("waiting");
   const { username, event_id, secret_token } = router.query;
   const [eventInfo, setEventInfo] = useState<eventData>();
-  const [tickedID, setTickedID] = useState<string>("awaiting...");
+  const [tickedID, setTickedID] = useState<string>(nanoid());
 
   useEffect(() => {
     if (username && event_id && secret_token) {
@@ -45,6 +44,7 @@ const SuccessPage: NextPage = () => {
         )
         .then((res: any) => {
           console.log(res);
+          console.log(tickedID);
 
           if (res.status === 400) {
             setRequestStatus("error");
@@ -57,8 +57,6 @@ const SuccessPage: NextPage = () => {
           setRequestStatus("error");
           console.error(err);
         });
-
-      setTickedID(nanoid());
     }
   }, [username, event_id, secret_token]);
 
@@ -79,26 +77,22 @@ const SuccessPage: NextPage = () => {
         />
       </div>
       <div className={styles.spaceItemsVertical}>
-        <h2 style={{ textAlign: "center" }}>Success!</h2>
+        <h2 style={{ textAlign: "center", color: "#41ef99" }}>Success!</h2>
         <h3 style={{ textAlign: "center" }}>
-          Thanks for your purchase {username}
+          Thanks for your purchase {username}. You can see your ticket in the
+          dashboard section: "My Tickets"{" "}
         </h3>
-        <h4 style={{ textAlign: "center" }}>Here is your ticket</h4>
-        <div className="TicketContainer">
-          <Image src={couponImg} alt={"coupon"} />
-          <div className="textContainer">
-            <h5 id="eventName">{eventInfo?.name}</h5>
-            <h5 id=""> Your Ticked ID: {tickedID}</h5>
-            <p id="location">{eventInfo?.location_url}</p>
-            <p id="start">{eventInfo?.time_start}</p>
-            <p id="finish">{eventInfo?.time_end}</p>
-          </div>
-        </div>
+        <h4
+          style={{ textAlign: "center", textDecoration: "2px underline red" }}
+        >
+          IMPORTANT: The ticket can only be used once! so don't share it or let
+          anyone scan it!
+        </h4>
       </div>
     </div>
   ) : username && event_id && secret_token && requestStatus === "waiting" ? (
     <div id="GlobalSection" className={styles.alignCenter}>
-      <h3>Loading...</h3>
+      <LoadingAnimation />
     </div>
   ) : (
     <div

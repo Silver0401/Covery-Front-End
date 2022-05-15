@@ -39,49 +39,6 @@ const Dashboard: React.FC = () => {
   const required = true;
 
   const onFinish = (values: any) => {
-    // console.log(values.image);
-
-    // axios
-    //   .post(
-    //     `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/resource/event_pic/set/6265d4adc936f034d3dfef68`,
-    //     values.image,
-    //     {
-    //       headers: {
-    //         "Content-Type": values.image.type,
-    //         AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
-    //       },
-    //     }
-    //   )
-    //   .then((res) => {
-    //     console.log(res);
-    //   })
-    //   .catch((err) => {
-    //     console.error(err);
-    //   });
-
-    // let data = new FormData();
-    // data.append("image", currentImg, currentImg.name);
-
-    // axios
-    //   .post(
-    //     `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/resource/event_pic/set/6265d4adc936f034d3dfef68`,
-    //     data,
-    //     {
-    //       headers: {
-    //         "Content-Type": `multipart/form-data`,
-    //         AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
-    //       },
-    //     }
-    //   )
-    //   .then((response) => {
-    //     //handle success
-    //     console.log(response);
-    //   })
-    //   .catch((err) => {
-    //     console.error(err);
-    //     //handle error
-    //   });
-
     createNotification(
       "info",
       "Loading...",
@@ -115,12 +72,62 @@ const Dashboard: React.FC = () => {
           );
         } else {
           console.log(response);
-          form.resetFields();
-          createNotification(
-            "success",
-            "Success!",
-            "Event created successfully, you can now check your events tab"
-          );
+          // IMAGE POST
+
+          let data = new FormData();
+          data.append("eventpic", currentImg);
+
+          axios
+            .post(
+              `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/resource/event_pic/set/${response.data.id}`,
+              data,
+              {
+                headers: {
+                  "Content-Type": `multipart/form-data`,
+                  AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
+                },
+              }
+            )
+            .then((response) => {
+              form.resetFields();
+              createNotification(
+                "success",
+                "Success!",
+                "Event created successfully, you can now check your events tab"
+              );
+              console.log(response);
+            })
+            .catch((err) => {
+              console.error(err);
+              createNotification(
+                "success",
+                "Error in uploading image",
+                "Error uploading image, but event created successfully"
+              );
+            });
+
+          // SEARCH EVENT POST
+          // axios
+          // .post(
+          //   `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/queries/filter_events`,
+          //   { _id: response.data.id },
+          //   {
+          //     headers: {
+          //       AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
+          //     },
+          //   }
+          // )
+          // .then((res) => {
+
+          // })
+          // .catch((err) => {
+          //   console.error(err);
+          //   createNotification(
+          //     "error",
+          //     "Error in request!",
+          //     "Error searching event ID"
+          //   );
+          // });
         }
       })
       .catch((err) => {
@@ -222,7 +229,7 @@ const Dashboard: React.FC = () => {
                       },
                     ]}
                   >
-                    <Select defaultValue={200} style={{ width: "200px" }}>
+                    <Select style={{ width: "200px" }}>
                       <Option value={500}>500 $mxn</Option>
                       <Option value={400}>400 $mxn</Option>
                       <Option value={300}>300 $mxn</Option>
@@ -234,7 +241,6 @@ const Dashboard: React.FC = () => {
                       <Option value={60}>60 $mxn</Option>
                       <Option value={50}>50 $mxn</Option>
                     </Select>
-                    {/* <Input placeholder="$ cost per ticket" suffix="mxn" /> */}
                   </Form.Item>
                 ) : (
                   <p>Your event is free</p>
@@ -250,23 +256,6 @@ const Dashboard: React.FC = () => {
                 e.target.files && setCurrentImg(e.target.files[0])
               }
             />
-
-            {/* <Form.Item
-              label="Image"
-              name="image"
-              rules={[
-                {
-                  required: required,
-                  message: "Please input your event's Date!",
-                },
-              ]}
-            >
-              <input
-                onChange={(e) => console.log(e.target)}
-                type="file"
-                accept="image/png, image/jpeg"
-              />
-            </Form.Item> */}
           </Col>
 
           <Col span={24}>

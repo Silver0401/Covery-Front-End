@@ -4,8 +4,8 @@
     @include alignCenter;
 
     .LottieBox {
-      width: 550px;
-      height: 550px;
+      width: clamp(400px, 40vw, 550px);
+      height: clamp(400px, 40vw, 550px);
       border-radius: 50%;
       @include alignCenter;
       background-color: whitesmoke;

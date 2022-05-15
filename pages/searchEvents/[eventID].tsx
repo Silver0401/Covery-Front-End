@@ -15,6 +15,7 @@ interface eventData {
   price: Prices;
   bio: string;
   creator: string;
+  eventpic: string;
   date: string;
   location_url: string;
   name: string;
@@ -189,12 +190,23 @@ const SearchEventID: NextPage<eventProps> = (props) => {
           </h3>
           <h4>{`event_ID: ${props.event?._id}`}</h4>
         </div>
-        <div>
-          <p>{`Creator: ${props.event?.creator}`}</p>
-          <p>{`Date: ${props.event?.date}`}</p>
-          <p>{`Location: ${props.event?.location_url}`}</p>
-          <p>{`Duration: ${props.event?.time_start} - ${props.event?.time_end}`}</p>
+
+        <div className={styles.miniPhoneOptFlex} style={{ width: "90%" }}>
+          <div style={{ marginRight: "20px" }}>
+            <p>{`Creator: ${props.event?.creator}`}</p>
+            <p>{`Date: ${props.event?.date}`}</p>
+            <p>{`Location: ${props.event?.location_url}`}</p>
+            <p>{`Duration: ${props.event?.time_start} - ${props.event?.time_end}`}</p>
+          </div>
+          <div>
+            <img
+              style={{ borderRadius: "20px" }}
+              className="eventIDImage"
+              src={props.event.eventpic}
+            />
+          </div>
         </div>
+
         <Button size="large" block type="primary" onClick={HandlePayment}>
           {props.event?.price === 0 || props.event?.price === undefined
             ? "Get A Ticket 🎟️"

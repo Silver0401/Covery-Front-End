@@ -12,10 +12,10 @@ import styles from "../styles/scss/modules.module.scss";
 // Nav Components
 import CreateEvent from "../libs/dashboard/createEvent";
 import MyEvents from "../libs/dashboard/myEvents";
-import UserSettings from "../libs/dashboard/userSettings";
+import MyTickets from "../libs/dashboard/myTickets";
 import { useRouter } from "next/router";
 
-type NavComponents = "Create Event" | "My Events" | "User Settings";
+type NavComponents = "Create Event" | "My Events" | "My Tickets";
 interface NavElement {
   Name: string;
   Identifier: NavComponents;
@@ -46,11 +46,11 @@ const Dashboard: React.FC = () => {
       Icon: <GoldOutlined />,
       Component: <MyEvents />,
     },
-    "User Settings": {
-      Name: "User Settings",
-      Identifier: "User Settings",
+    "My Tickets": {
+      Name: "My Tickets",
+      Identifier: "My Tickets",
       Icon: <ToolOutlined />,
-      Component: <UserSettings />,
+      Component: <MyTickets />,
     },
   };
 
@@ -58,7 +58,7 @@ const Dashboard: React.FC = () => {
     !loginState &&
       setTimeout(() => {
         router.push("/logRegister");
-      }, 1000);
+      }, 500);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

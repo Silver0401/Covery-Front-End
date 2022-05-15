@@ -27,7 +27,6 @@ const IdInputPage: NextPage = () => {
         }
       )
       .then((res) => {
-        console.log(res);
         createNotification(
           "success",
           "Event found",

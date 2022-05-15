@@ -8,6 +8,16 @@
     flex-basis: 300px;
   }
 }
+.miniPhoneOptFlex {
+  display: flex;
+  flex-wrap: wrap;
+
+  & > :nth-child(1),
+  > :nth-child(2) {
+    flex: 1;
+    flex-basis: 100px;
+  }
+}
 .phoneOptAbsolute {
   display: flex;
   flex-direction: row;
