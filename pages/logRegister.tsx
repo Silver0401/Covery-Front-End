@@ -91,6 +91,7 @@ const LogRegister: NextPage = () => {
               values.password_hash,
               response.data[0].password_hash
             );
+            console.log(response);
             if (result) {
               setLoginState(true);
               setUserData({

@@ -46,7 +46,7 @@ const MyEvents: React.FC = () => {
               return eventEntry;
             }
           );
-          console.log(eventsOptimized);
+          console.log(eventsFetched);
           setFetchedEvents(eventsOptimized);
         })
         .catch((err) => {

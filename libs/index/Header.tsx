@@ -28,7 +28,7 @@ const Header: React.FC = () => {
         <h3 style={{ margin: "0px 20%" }}>
           The easiest way to find, pay 💰️ and accept event cover payments 💵
         </h3>
-        <div className={styles.spaceItemsHorizontal} style={{ width: "70%" }}>
+        <div className={styles.spaceItemsHorizontal} id="buttonsContainer">
           <button
             className="GenericButton"
             onClick={() =>
@@ -49,10 +49,7 @@ const Header: React.FC = () => {
       </div>
       <div id="HeaderRightBox" className={styles.alignCenter}>
         <div className="LottieBox">
-          <LottieContainer
-            // style={{ transform: "scale(2)" }}
-            lottie={ScannerLottieAnimation}
-          />
+          <LottieContainer lottie={ScannerLottieAnimation} />
         </div>
       </div>
     </section>

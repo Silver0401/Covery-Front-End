@@ -2,7 +2,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Layout, Menu } from "antd";
 import {
-  ToolOutlined,
+  TagOutlined,
   AppstoreAddOutlined,
   GoldOutlined,
 } from "@ant-design/icons";
@@ -49,7 +49,7 @@ const Dashboard: React.FC = () => {
     "My Tickets": {
       Name: "My Tickets",
       Identifier: "My Tickets",
-      Icon: <ToolOutlined />,
+      Icon: <TagOutlined />,
       Component: <MyTickets />,
     },
   };

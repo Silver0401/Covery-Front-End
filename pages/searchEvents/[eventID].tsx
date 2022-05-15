@@ -107,6 +107,7 @@ const SearchEventID: NextPage<eventProps> = (props) => {
   };
 
   useEffect(() => {
+    console.log(props);
     setSearchedEventID(props.event._id);
 
     window.onload = () => {
@@ -189,6 +190,7 @@ const SearchEventID: NextPage<eventProps> = (props) => {
             }`}
           </h3>
           <h4>{`event_ID: ${props.event?._id}`}</h4>
+          <p>{`Description: ${props.event?.bio}`}</p>
         </div>
 
         <div className={styles.miniPhoneOptFlex} style={{ width: "90%" }}>

@@ -41,6 +41,10 @@
       }
     }
 
+    #buttonsContainer {
+      width: clamp(90%, 10vw, 70%);
+    }
+
     button:nth-child(1) {
       @include GenericButtonStyle(var(--PrimaryColor), var(--TextColor));
     }

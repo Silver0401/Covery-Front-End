@@ -4,6 +4,8 @@
 }
 
 html {
+  // width: 100vw;
+  // height: 100vh;
   overflow: hidden;
 }
 
@@ -89,7 +91,7 @@ button {
 .GenericButton {
   display: grid;
   place-items: center;
-  padding: clamp(0.5rem, 2vw, 1rem) clamp(1rem, 2vw, 2rem);
+  padding: clamp(0.5rem, 2vw, 1rem) clamp(0.5rem, 2vw, 2rem);
   border-radius: 10px;
   cursor: pointer;
   font-size: clamp(0.8rem, 4vw, 1.1rem);
