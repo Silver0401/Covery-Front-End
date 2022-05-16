@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { QRCodeSVG } from "qrcode.react";
 import Image from "next/image";
+import { GlobalContext } from "../../e2e/globalContext";
+import styles from "../../styles/scss/modules.module.scss";
 import coupon from "../../assets/images/cupon.png";
 
 const MyTickets: React.FC = () => {
+  const { userData } = useContext(GlobalContext);
+
   const CoveryTicket = (
     confirmUrl: string,
     eventName: string,
@@ -47,12 +51,24 @@ const MyTickets: React.FC = () => {
           gap: "20px",
         }}
       >
-        {CoveryTicket(
+        {userData.tickets ? (
+          userData.tickets.map((ticket) => {
+            return CoveryTicket(
+              `http://www.covery.fun/checkIn?username=${userData.username}&event_id=${ticket.eventID}&secret_hash=${ticket.hash}`,
+              "Parker Fest",
+              "20 / 6 / 2022",
+              "9 am",
+              "2 pm"
+            );
+          })
+        ) : (
+          <div className={styles.card}>
+            <h3>You have no tickets :(</h3>
+          </div>
+        )}
+        {/* {CoveryTicket(
           "https://reactjs.org/",
-          "Parker Fest",
-          "20 / 6 / 2022",
-          "9 am",
-          "2 pm"
+          
         )}
         {CoveryTicket(
           "https://reactjs.org/",
@@ -74,7 +90,7 @@ const MyTickets: React.FC = () => {
           "20 / 6 / 2022",
           "9 am",
           "2 pm"
-        )}
+        )} */}
       </div>
     </section>
   );

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import LoadingAnimation from "./LoadingAnimation";
 import {
   GoogleMap,
   useJsApiLoader,
@@ -129,7 +130,7 @@ const GoogleMapsComponent: React.FC<GoogleMapProps> = ({
       <Marker position={center} />
     </GoogleMap>
   ) : (
-    <h4>Loading Map...</h4>
+    <LoadingAnimation loadingText="Loading Map..." />
   );
 };
 

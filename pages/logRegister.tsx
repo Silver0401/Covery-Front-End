@@ -97,6 +97,7 @@ const LogRegister: NextPage = () => {
               setUserData({
                 username: response.data[0].username,
                 bio: response.data[0].bio,
+                tickets: response.data[0].tickets,
               });
               createNotification(
                 "success",

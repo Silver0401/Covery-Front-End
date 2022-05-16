@@ -3,9 +3,15 @@ import React, { createContext, useState } from "react";
 
 type NotificationType = "warning" | "info" | "success" | "error";
 
+interface ticket {
+  eventID: string;
+  hash: string;
+}
+
 interface userData {
   username: string | undefined;
   bio: string | undefined;
+  tickets: Array<ticket> | undefined;
 }
 
 interface createEvent {
@@ -55,6 +61,7 @@ export const GlobalContext = createContext<GlobalContextProps>({
   userData: {
     username: undefined,
     bio: undefined,
+    tickets: undefined,
   },
   setUserData: () => {},
 });
@@ -77,6 +84,7 @@ export const GlobalContextProvider: React.FC = (props) => {
   const [userData, setUserData] = useState<userData>({
     username: undefined,
     bio: undefined,
+    tickets: undefined,
   });
 
   const createNotification = (
