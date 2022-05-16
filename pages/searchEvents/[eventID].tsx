@@ -177,6 +177,7 @@ const SearchEventID: NextPage<eventProps> = (props) => {
           name="description"
           content={`Event description: ${props.event?.bio}`}
         />
+        <meta name="image" content={`${props.event?.eventpic}`} />
       </Head>
 
       <div className={`${styles.card} ${styles.spaceItemsVertical}`}>
@@ -201,11 +202,18 @@ const SearchEventID: NextPage<eventProps> = (props) => {
             <p>{`Duration: ${props.event?.time_start} - ${props.event?.time_end}`}</p>
           </div>
           <div>
-            <img
-              style={{ borderRadius: "20px" }}
-              className="eventIDImage"
-              src={props.event.eventpic}
-            />
+            {props.event?.eventpic ? (
+              <img
+                alt="No photo provided by the creator"
+                style={{ borderRadius: "20px" }}
+                className="eventIDImage"
+                src={props.event.eventpic}
+              />
+            ) : (
+              <p className="eventIDImage">
+                {"No photo provided by the creator"}
+              </p>
+            )}
           </div>
         </div>
 

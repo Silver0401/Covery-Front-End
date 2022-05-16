@@ -31,6 +31,8 @@ const Dashboard: React.FC = () => {
   const { TextArea } = Input;
   const { createNotification, userData } = useContext(GlobalContext);
   const [coverSwitchOn, setCoverSwitchON] = useState<boolean>(false);
+  const [ticketLimitSwitchOn, setTicketLimitSwitchON] =
+    useState<boolean>(false);
   const [modalState, setModalState] = useState<"visible" | "hidden">("hidden");
   const [mapData, setMapData] = useState<LocationProps>();
   const { Option } = Select;
@@ -56,6 +58,8 @@ const Dashboard: React.FC = () => {
           time_end: moment(values.endTime).format("hh:mm:ss a"),
           time_start: moment(values.startTime).format("hh:mm:ss a"),
           price: coverSwitchOn ? values.cover : 0,
+          n_tickets: ticketLimitSwitchOn ? values.ticketLimit : -1,
+          treasury_account: coverSwitchOn ? `${values.cardNumber}` : null,
         },
         {
           headers: {
@@ -98,36 +102,14 @@ const Dashboard: React.FC = () => {
               console.log(response);
             })
             .catch((err) => {
+              form.resetFields();
               console.error(err);
               createNotification(
                 "success",
-                "Error in uploading image",
+                "Event created successfully, without image",
                 "Error uploading image, but event created successfully"
               );
             });
-
-          // SEARCH EVENT POST
-          // axios
-          // .post(
-          //   `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/queries/filter_events`,
-          //   { _id: response.data.id },
-          //   {
-          //     headers: {
-          //       AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
-          //     },
-          //   }
-          // )
-          // .then((res) => {
-
-          // })
-          // .catch((err) => {
-          //   console.error(err);
-          //   createNotification(
-          //     "error",
-          //     "Error in request!",
-          //     "Error searching event ID"
-          //   );
-          // });
         }
       })
       .catch((err) => {
@@ -244,6 +226,52 @@ const Dashboard: React.FC = () => {
                   </Form.Item>
                 ) : (
                   <p>Your event is free</p>
+                )}
+              </Col>
+            </Row>
+          </Col>
+          <Col span={24}>
+            {coverSwitchOn && (
+              <Form.Item
+                label="Payment Card Number"
+                name="cardNumber"
+                rules={[
+                  {
+                    required: required,
+                    message:
+                      "Please input your card's number to give you the money of the tickets",
+                  },
+                ]}
+              >
+                <Input type="number" />
+              </Form.Item>
+            )}
+          </Col>
+
+          <Col span={24}>
+            <Row>
+              <Col span={10} className={styles.spaceItemsVertical}>
+                <p>{"Ticket's Limit"}</p>
+                <Switch
+                  onChange={() => setTicketLimitSwitchON(!ticketLimitSwitchOn)}
+                />
+              </Col>
+
+              <Col span={14} className={styles.alignCenter}>
+                {ticketLimitSwitchOn ? (
+                  <Form.Item
+                    name="ticketLimit"
+                    rules={[
+                      {
+                        required: required,
+                        message: "Please complete this field",
+                      },
+                    ]}
+                  >
+                    <Input type="number" />
+                  </Form.Item>
+                ) : (
+                  <p>Your event has no guests limit</p>
                 )}
               </Col>
             </Row>
