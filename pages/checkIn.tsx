@@ -9,12 +9,21 @@ import { useEffect, useState } from "react";
 import thumbsDown from "../assets/lotties/thumbsDown.json";
 import thumbsUp from "../assets/lotties/thumbsUp.json";
 
+interface errorMessage {
+  title: string | undefined;
+  subtitle: string | undefined;
+}
+
 const CheckInPage: NextPage = () => {
   const router = useRouter();
   const [checkInState, setCheckInState] = useState<
     "success" | "error" | "awaiting"
   >("success");
   const { username, event_id, secret_hash } = router.query;
+  const [errorMesageArray, setErrorMessageArray] = useState<errorMessage>({
+    title: undefined,
+    subtitle: undefined,
+  });
 
   useEffect(() => {
     if (username && event_id && secret_hash) {
@@ -34,8 +43,18 @@ const CheckInPage: NextPage = () => {
         })
         .catch((err) => {
           console.error(err);
+          setErrorMessageArray({
+            title: "Ticket NOT allowed!",
+            subtitle: "This ticket has already been used",
+          });
           setCheckInState("error");
         });
+    } else {
+      setErrorMessageArray({
+        title: "Ticket NOT Found!",
+        subtitle: "User NOT registered in event",
+      });
+      setCheckInState("error");
     }
   }, [username, event_id, secret_hash]);
 
@@ -55,10 +74,8 @@ const CheckInPage: NextPage = () => {
     <div id="GlobalSection" className={styles.alignCenter}>
       <div className={styles.spaceItemsVertical}>
         <div className={styles.card}>
-          <h1 style={{ textAlign: "center" }}>{"Ticket NOT Found!"}</h1>
-          <h3 style={{ textAlign: "center" }}>
-            {"User not registered in event"}
-          </h3>
+          <h1 style={{ textAlign: "center" }}>{errorMesageArray.title}</h1>
+          <h3 style={{ textAlign: "center" }}>{errorMesageArray.subtitle}</h3>
         </div>
         <div className={styles.card} style={{ marginTop: "20px" }}>
           <LottieContainer lottie={thumbsDown} />

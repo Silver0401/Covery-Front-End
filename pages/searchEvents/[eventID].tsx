@@ -217,13 +217,13 @@ const SearchEventID: NextPage<eventProps> = (props) => {
           </div>
         </div>
 
-        <Button size="large" block type="primary" onClick={HandlePayment}>
-          {props.event?.price === 0 || props.event?.price === undefined
-            ? "Get A Ticket 🎟️"
-            : "Buy Ticket 🎟️"}
-        </Button>
+        {props.event?.price === 0 || props.event?.price === undefined ? null : (
+          <Button size="large" block type="primary" onClick={HandlePayment}>
+            {"Buy Ticket 🎟️"}
+          </Button>
+        )}
       </div>
-      <div className={styles.card}>
+      <div className={styles.card} style={{ minHeight: "150px" }}>
         <GoogleMapsComponent searchBarHidden initialLocation={center} />
       </div>
     </section>

@@ -93,7 +93,7 @@
 .eventIDImage {
   border: 1px solid black;
   @include alignCenter;
-  width: clamp(150px, 20vw, 250px);
-  height: clamp(150px, 20vw, 250px);
+  width: clamp(150px, 20vw, 220px);
+  height: clamp(150px, 20vw, 220px);
   text-align: center;
 }

@@ -66,31 +66,6 @@ const MyTickets: React.FC = () => {
             <h3>You have no tickets :(</h3>
           </div>
         )}
-        {/* {CoveryTicket(
-          "https://reactjs.org/",
-          
-        )}
-        {CoveryTicket(
-          "https://reactjs.org/",
-          "Parker Fest",
-          "20 / 6 / 2022",
-          "9 am",
-          "2 pm"
-        )}
-        {CoveryTicket(
-          "https://reactjs.org/",
-          "Parker Fest",
-          "20 / 6 / 2022",
-          "9 am",
-          "2 pm"
-        )}
-        {CoveryTicket(
-          "https://reactjs.org/",
-          "Parker Fest",
-          "20 / 6 / 2022",
-          "9 am",
-          "2 pm"
-        )} */}
       </div>
     </section>
   );
