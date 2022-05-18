@@ -18,7 +18,7 @@ const CheckInPage: NextPage = () => {
   const router = useRouter();
   const [checkInState, setCheckInState] = useState<
     "success" | "error" | "awaiting"
-  >("success");
+  >("awaiting");
   const { username, event_id, secret_hash } = router.query;
   const [errorMesageArray, setErrorMessageArray] = useState<errorMessage>({
     title: undefined,
