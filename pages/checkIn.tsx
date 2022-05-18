@@ -42,7 +42,7 @@ const CheckInPage: NextPage = () => {
           setCheckInState("success");
         })
         .catch((err) => {
-          console.error(err);
+          console.error(err.data);
           setErrorMessageArray({
             title: "Ticket NOT allowed!",
             subtitle: "This ticket has already been used",
@@ -58,7 +58,9 @@ const CheckInPage: NextPage = () => {
     }
   }, [username, event_id, secret_hash]);
 
-  return checkInState === "success" ? (
+  return checkInState === "awaiting" ? (
+    <LoadingAnimation />
+  ) : checkInState === "success" ? (
     <div id="GlobalSection" className={styles.alignCenter}>
       <div className={styles.spaceItemsVertical}>
         <div className={styles.card}>
