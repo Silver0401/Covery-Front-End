@@ -4,9 +4,10 @@ import { GlobalContext } from "../../e2e/globalContext";
 import styles from "../../styles/scss/modules.module.scss";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { Button } from "antd";
+import { Button, Typography, List } from "antd";
 import Head from "next/head";
 import GoogleMapsComponent from "../../components/googleMap";
+import { Data } from "@react-google-maps/api";
 
 type Prices = 0 | 50 | 60 | 70 | 80 | 90 | 100 | 200 | 300 | 400 | 500;
 
@@ -78,6 +79,29 @@ const SearchEventID: NextPage<eventProps> = (props) => {
   const { userData, loginState, createNotification, setSearchedEventID } =
     useContext(GlobalContext);
   const router = useRouter();
+  const eventDataFormated = [
+    {
+      title: "Price",
+      description: props.event.price ? `$ ${props.event.price} MXN` : "FREE",
+    },
+    {
+      title: "Creator",
+      description: props.event.creator,
+    },
+    {
+      title: "Date",
+      description: props.event.date,
+    },
+    {
+      title: "Duration",
+      description: `${props.event.time_start} - ${props.event.time_end}`,
+    },
+    {
+      title: "Location",
+      description: props.event.location_url,
+    },
+  ];
+  const { Paragraph } = Typography;
 
   const pricesID = {
     500: "price_1KrpeOFLKFgqJf56E8DVxzuq",
@@ -170,7 +194,11 @@ const SearchEventID: NextPage<eventProps> = (props) => {
   };
 
   return (
-    <section id="GlobalSection" className={styles.phoneOptFlex}>
+    <section
+      id="GlobalSection"
+      className={styles.phoneOptFlex}
+      style={{ overflow: "scroll" }}
+    >
       <Head>
         <title>Covery Event: {props.event?.name}</title>
         <meta
@@ -180,50 +208,58 @@ const SearchEventID: NextPage<eventProps> = (props) => {
         <meta name="image" content={`${props.event?.eventpic}`} />
       </Head>
 
-      <div className={`${styles.card} ${styles.spaceItemsVertical}`}>
-        <div>
-          <h2>{props.event?.name}</h2>
-          <h3>
-            {`Ticket Price: $ ${
-              props.event?.price === 0 || props.event?.price === undefined
-                ? "FREE"
-                : props.event?.price
-            }`}
-          </h3>
-          <h4>{`event_ID: ${props.event?._id}`}</h4>
-          <p>{`Description: ${props.event?.bio}`}</p>
-        </div>
-
-        <div className={styles.miniPhoneOptFlex} style={{ width: "90%" }}>
-          <div style={{ marginRight: "20px" }}>
-            <p>{`Creator: ${props.event?.creator}`}</p>
-            <p>{`Date: ${props.event?.date}`}</p>
-            <p>{`Location: ${props.event?.location_url}`}</p>
-            <p>{`Duration: ${props.event?.time_start} - ${props.event?.time_end}`}</p>
-          </div>
-          <div>
-            {props.event?.eventpic ? (
-              <img
-                alt="No photo provided by the creator"
-                style={{ borderRadius: "20px" }}
-                className="eventIDImage"
-                src={props.event.eventpic}
-              />
-            ) : (
-              <p className="eventIDImage">
-                {"No photo provided by the creator"}
-              </p>
+      <div id="eventIDInfoContainer" className={styles.card}>
+        <h2>{props.event?.name}</h2>
+        <Paragraph
+          id="IdTextCopy"
+          className="fakeh4"
+          copyable={{ text: props.event?._id }}
+        >
+          {`event_ID:    ${props.event?._id}`}
+        </Paragraph>
+        <div className="listsContainer">
+          <List
+            className="LeftList"
+            itemLayout="horizontal"
+            dataSource={eventDataFormated}
+            renderItem={(dataItem) => (
+              <List.Item>
+                <List.Item.Meta
+                  title={<h4>{dataItem.title}</h4>}
+                  description={<p>{dataItem.description}</p>}
+                />
+              </List.Item>
+            )}
+          />
+          <div className="RightList">
+            <div className="eventIdImageContainer">
+              {props.event?.eventpic ? (
+                <img
+                  alt="No photo provided by the creator"
+                  style={{ borderRadius: "20px" }}
+                  className="eventIDImage"
+                  src={props.event.eventpic}
+                />
+              ) : (
+                <p className="eventIDImage">
+                  {"No photo provided by the creator"}
+                </p>
+              )}
+            </div>
+            <div>
+              <h4>{"Event Description"}</h4>
+              <p style={{ color: "#7f8686" }}>{props.event.bio}</p>
+            </div>
+            {props.event?.price === 0 ||
+            props.event?.price === undefined ? null : (
+              <Button size="large" block type="primary" onClick={HandlePayment}>
+                {"Buy Ticket 🎟️"}
+              </Button>
             )}
           </div>
         </div>
-
-        {props.event?.price === 0 || props.event?.price === undefined ? null : (
-          <Button size="large" block type="primary" onClick={HandlePayment}>
-            {"Buy Ticket 🎟️"}
-          </Button>
-        )}
       </div>
-      <div className={styles.card} style={{ minHeight: "150px" }}>
+      <div id="eventIdGoogleMapsContainer" className={styles.card}>
         <GoogleMapsComponent searchBarHidden initialLocation={center} />
       </div>
     </section>

@@ -1,4 +1,8 @@
 import type { NextPage } from "next";
+import { useContext } from "react";
+import { GlobalContext } from "../../e2e/globalContext";
+import { LoadingOutlined } from "@ant-design/icons";
+import GoogleMapsComponent from "../../components/googleMap";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import LottieContainer from "../../components/LottieContainer";
@@ -28,6 +32,8 @@ const RadarPage: NextPage = () => {
     "fetching" | "fetched"
   >("fetching");
   const [eventsList, setEventsList] = useState<Array<eventData>>([]);
+  const { createNotification } = useContext(GlobalContext);
+  const [eventLocations, setEventLocations] = useState<Array<string>>([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -61,6 +67,13 @@ const RadarPage: NextPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    const eventLocations = eventsList.map((event) => {
+      return event.location_url;
+    });
+    setEventLocations(eventLocations);
+  }, [eventsList]);
+
   return (
     <section id="GlobalSection">
       <Head>
@@ -73,7 +86,7 @@ const RadarPage: NextPage = () => {
             style={{ width: "90%", margin: "0px 5%" }}
             className={`${styles.card} ${styles.alignCenter}`}
           >
-            <h1 style={{ margin: 0 }}>Events near you</h1>
+            <h1 style={{ margin: 0, textAlign: "center" }}>Events near you</h1>
           </div>
 
           <div
@@ -103,7 +116,15 @@ const RadarPage: NextPage = () => {
                     <div
                       id="radarContentWrapper"
                       className={`${styles.card}`}
-                      onClick={() => router.push(`/searchEvents/${event._id}`)}
+                      onClick={() => {
+                        createNotification(
+                          "info",
+                          "Redirecting...",
+                          "Wait a second while we redirect you to the event page",
+                          <LoadingOutlined style={{ color: "#0286ec" }} />
+                        );
+                        router.push(`/searchEvents/${event._id}`);
+                      }}
                     >
                       <div
                         className={`${styles.spaceItemsVertical}`}
@@ -149,8 +170,12 @@ const RadarPage: NextPage = () => {
             )}
           </div>
         </div>
-        <div className={`${styles.card} ${styles.alignCenter}`}>
-          <LottieContainer lottie={LottieRadar} />
+        <div
+          className={`${styles.card} ${styles.alignCenter}`}
+          id="radarGoogleMap"
+        >
+          {/* <LottieContainer lottie={LottieRadar} /> */}
+          <GoogleMapsComponent searchBarHidden locationsList={eventLocations} />
         </div>
       </div>
     </section>

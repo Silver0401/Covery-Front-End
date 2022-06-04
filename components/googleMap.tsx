@@ -10,6 +10,7 @@ import {
 interface GoogleMapProps {
   initialLocation?: coordinates;
   searchBarHidden?: boolean;
+  locationsList?: Array<string>;
   location?: (data: LocationProps) => void;
 }
 
@@ -27,6 +28,7 @@ const GoogleMapsComponent: React.FC<GoogleMapProps> = ({
   location,
   initialLocation,
   searchBarHidden,
+  locationsList,
 }) => {
   const locationRef = useRef<HTMLInputElement>(null);
   const [placeSelcted, setPlaceSelected] = useState<string>("");
@@ -54,8 +56,8 @@ const GoogleMapsComponent: React.FC<GoogleMapProps> = ({
       function (results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
           if (results) {
-            var latitude = results[0].geometry.location.lat();
-            var longitude = results[0].geometry.location.lng();
+            const latitude = results[0].geometry.location.lat();
+            const longitude = results[0].geometry.location.lng();
             setCenter({ lat: latitude, lng: longitude });
           }
         }
@@ -96,6 +98,31 @@ const GoogleMapsComponent: React.FC<GoogleMapProps> = ({
     initialLocation && setCenter(initialLocation);
   }, [initialLocation]);
 
+  useEffect(() => {
+    const getCoordinatesOfLocation = (
+      address: string
+    ): coordinates | undefined => {
+      const geocoder = new google.maps.Geocoder();
+      let coso: coordinates | undefined = undefined;
+
+      geocoder.geocode({ address: address }, function (results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+          if (results) {
+            const latitude = results[0].geometry.location.lat();
+            const longitude = results[0].geometry.location.lng();
+            coso = { lat: latitude, lng: longitude };
+          }
+        }
+      });
+
+      return coso;
+    };
+
+    locationsList?.forEach((location) => {
+      console.log(getCoordinatesOfLocation(location));
+    });
+  }, [locationsList]);
+
   return isLoaded ? (
     <GoogleMap
       onClick={(e) => handleMapClick(e)}
@@ -128,6 +155,16 @@ const GoogleMapsComponent: React.FC<GoogleMapProps> = ({
         </StandaloneSearchBox>
       )}
       <Marker position={center} />
+      {/* {locationsList &&
+        locationsList.map(async (location) => {
+          await getCoordinatesOfLocation(location)
+          .then((data) => {
+            return data && <Marker position={data} />;
+          })
+          .catch((err) => {
+            
+          })
+        })} */}
     </GoogleMap>
   ) : (
     <LoadingAnimation loadingText="Loading Map..." />

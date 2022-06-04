@@ -59,27 +59,53 @@
 
 .TicketContainer {
   position: relative;
-  width: 350px;
-  height: 250px;
-  @include alignCenter;
+  width: 300px;
+  height: 400px;
+  // @include alignCenter;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: column;
+  background: white;
+  border-radius: 10px;
+  // flex-direction: row;
 
-  img {
-    z-index: 1;
-    height: 100%;
-    width: 100%;
+  .coveryLogoSvgTicket {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    margin: 10px;
+    left: 0;
+    top: 0;
+  }
+
+  .ticketIndexContainer {
+    top: 0px;
+    right: 0px;
+    position: absolute;
+    border-bottom-left-radius: 20px;
+    width: 30px;
+    height: 30px;
+    background-color: var(--PrimaryColor);
+    @include alignCenter;
+    p {
+      color: white;
+      margin: 0;
+      padding: 0;
+    }
   }
 
   .TicketInfo {
     z-index: 0;
-    position: absolute;
+    position: relative;
     height: 65%;
     width: 80%;
-    background: linear-gradient(to right, var(--SecondaryColor) 85%, #f0f1f4);
     @include alignCenter;
     flex-direction: row;
+    border-radius: 10px;
     justify-content: flex-start;
 
-    .text {
+    .text2 {
       margin-left: 20px;
       width: 40%;
       height: 85%;
@@ -93,13 +119,71 @@
         margin: 0;
         padding: 0;
       }
+      h4 {
+        text-decoration: underline 20px #0286ec;
+      }
+
+      p {
+        font-size: 0.8rem;
+      }
+    }
+
+    .text1 {
+      h4 {
+        margin-bottom: 20px;
+        margin-top: 20px;
+      }
+      p {
+        font-size: 0.8rem;
+      }
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 25px;
+      width: 100px;
+      border-bottom-left-radius: 30px;
+      border-bottom-right-radius: 30px;
+      height: 40px;
+      background-color: #f0f1f4;
+    }
+  }
+
+  .imagesContainer {
+    position: relative;
+    @include alignCenter;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 90%;
+
+    .eventImgContainer {
+      position: relative;
+      border: 2px solid var(--PrimaryColor);
+      width: 100px;
+      height: 100px;
+      @include alignCenter;
+
+      img {
+        height: 90%;
+        width: 90%;
+      }
     }
 
     .qrContainer {
-      background-color: var(--PrimaryColor);
-      height: 100%;
-      margin-left: 20px;
       @include alignCenter;
+      flex-direction: column;
+      position: relative;
+      padding: 5px 10px;
+      border: 2px solid var(--PrimaryColor);
+      border-bottom: 0px solid transparent;
+      border-radius: 10px;
+
+      p {
+        margin: auto;
+        font-size: 0.6rem;
+      }
     }
   }
 }

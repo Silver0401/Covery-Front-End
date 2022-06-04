@@ -27,7 +27,7 @@ interface LocationProps {
   coordinates: coordinates;
 }
 
-const Dashboard: React.FC = () => {
+const CreateEvent: React.FC = () => {
   const { TextArea } = Input;
   const { createNotification, userData } = useContext(GlobalContext);
   const [coverSwitchOn, setCoverSwitchON] = useState<boolean>(false);
@@ -51,7 +51,7 @@ const Dashboard: React.FC = () => {
         `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/resource/event/pene`,
         {
           bio: values.bio,
-          creator: values.username,
+          creator: userData.username,
           date: moment(values.startTime).format("YYYY/MM/DD"),
           location_url: values.eventLocation,
           name: values.eventName,
@@ -153,11 +153,6 @@ const Dashboard: React.FC = () => {
           <Col span={24}>
             <h2> Create your Event </h2>
             <h3> Fill the information below </h3>
-          </Col>
-          <Col span={24}>
-            <Form.Item label="Username" name="username">
-              <Input disabled />
-            </Form.Item>
           </Col>
           <Col span={24}>
             <Form.Item
@@ -380,4 +375,4 @@ const Dashboard: React.FC = () => {
   );
 };
 
-export default Dashboard;
+export default CreateEvent;

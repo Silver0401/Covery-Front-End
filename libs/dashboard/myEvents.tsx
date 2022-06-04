@@ -46,7 +46,7 @@ const MyEvents: React.FC = () => {
               return eventEntry;
             }
           );
-          console.log(eventsFetched);
+          // console.log(eventsFetched);
           setFetchedEvents(eventsOptimized);
         })
         .catch((err) => {
@@ -63,9 +63,9 @@ const MyEvents: React.FC = () => {
   return (
     <section id="DashboardElementSection">
       <div
+        className="DashbaordSectionContainer"
         style={{
           width: "100%",
-          height: "650px",
           overflow: "scroll",
         }}
       >

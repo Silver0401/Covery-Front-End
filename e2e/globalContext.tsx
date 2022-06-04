@@ -1,5 +1,6 @@
 import { notification } from "antd";
-import React, { createContext, useState } from "react";
+import axios from "axios";
+import React, { createContext, useEffect, useState } from "react";
 
 type NotificationType = "warning" | "info" | "success" | "error";
 
@@ -26,14 +27,15 @@ interface createEvent {
 }
 
 interface GlobalContextProps {
-  loginState: boolean;
-  setLoginState: (boolean: boolean) => void;
+  loginState: string | null;
+  setLoginState: (data: string | null) => void;
   searchedEventID: string | undefined;
   setSearchedEventID: (data: string) => void;
   createNotification: (
     type: NotificationType,
     message: string,
-    description: string
+    description: string,
+    icon?: React.ReactElement
   ) => void;
   createEventData: createEvent;
   setCreateEventData: (data: createEvent) => void;
@@ -42,7 +44,7 @@ interface GlobalContextProps {
 }
 
 export const GlobalContext = createContext<GlobalContextProps>({
-  loginState: false,
+  loginState: null,
   searchedEventID: undefined,
   setSearchedEventID: () => {},
   setLoginState: () => {},
@@ -67,7 +69,7 @@ export const GlobalContext = createContext<GlobalContextProps>({
 });
 
 export const GlobalContextProvider: React.FC = (props) => {
-  const [loginState, setLoginState] = useState<boolean>(false);
+  const [loginState, setLoginState] = useState<string | null>(null);
   const [searchedEventID, setSearchedEventID] = useState<string | undefined>(
     undefined
   );
@@ -90,13 +92,58 @@ export const GlobalContextProvider: React.FC = (props) => {
   const createNotification = (
     type: NotificationType,
     message: string,
-    description: string
+    description: string,
+    icon?: React.ReactElement
   ) => {
     notification[type]({
       message,
       description,
+      icon,
     });
   };
+
+  useEffect(() => {
+    loginState && window.localStorage.setItem("loggedUserId", loginState);
+  }, [loginState]);
+
+  useEffect(() => {
+    window.onload = () => {
+      console.log(window.localStorage.getItem("loggedUserId"));
+      const myLocalData = window.localStorage
+        .getItem("loggedUserId")
+        ?.split("|");
+
+      axios
+        .get(
+          `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/resource/user/${
+            myLocalData && myLocalData[0]
+          }`,
+          {
+            headers: {
+              AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
+            },
+          }
+        )
+        .then(async (response: any) => {
+          if (response.data[0] && myLocalData) {
+            if (response.data[0].password_hash === myLocalData[1]) {
+              setLoginState(() => window.localStorage.getItem("loggedUserId"));
+              setUserData({
+                bio: response.data[0].bio,
+                tickets: response.data[0].tickets,
+                username: response.data[0].username,
+              });
+            }
+          } else {
+            window.localStorage.removeItem("loggedUserId");
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <GlobalContext.Provider

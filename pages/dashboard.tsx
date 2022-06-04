@@ -55,10 +55,14 @@ const Dashboard: React.FC = () => {
   };
 
   useEffect(() => {
-    !loginState &&
-      setTimeout(() => {
-        router.push("/logRegister");
-      }, 500);
+    window.onload = () => {
+      console.log(loginState);
+      if (loginState === null) {
+        setTimeout(() => {
+          router.push("/logRegister");
+        }, 500);
+      }
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -92,7 +96,13 @@ const Dashboard: React.FC = () => {
         <Content style={{ margin: "24px 16px 0" }}>
           <div
             className="site-layout-background"
-            style={{ padding: 10, minHeight: 360, height: "100%" }}
+            style={{
+              padding: 10,
+              minHeight: 360,
+              height: "100%",
+              maxHeight: 650,
+              minWidth: 300,
+            }}
           >
             {NavElements[displayedNavElement].Component}
           </div>

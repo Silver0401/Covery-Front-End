@@ -21,8 +21,13 @@ interface UserData {
 const LogRegister: NextPage = () => {
   const router = useRouter();
   const [buttonLoading, setButtonLoading] = useState<boolean>(false);
-  const { createNotification, setLoginState, setUserData, searchedEventID } =
-    useContext(GlobalContext);
+  const {
+    createNotification,
+    setLoginState,
+    setUserData,
+    searchedEventID,
+    loginState,
+  } = useContext(GlobalContext);
   const [selectedForm, setSelectedForm] = useState<"Login" | "Register">(
     "Register"
   );
@@ -91,9 +96,11 @@ const LogRegister: NextPage = () => {
               values.password_hash,
               response.data[0].password_hash
             );
-            console.log(response);
+            // console.log(response);
             if (result) {
-              setLoginState(true);
+              setLoginState(
+                `${response.data[0].username}|${response.data[0].password_hash}`
+              );
               setUserData({
                 username: response.data[0].username,
                 bio: response.data[0].bio,
@@ -142,7 +149,11 @@ const LogRegister: NextPage = () => {
   };
 
   return (
-    <section id="GlobalSection" className={styles.spaceItemsVertical}>
+    <section
+      id="GlobalSection"
+      className={styles.spaceItemsVertical}
+      onClick={() => console.log(loginState)}
+    >
       <Head>
         <title>Covery | Log Register Page</title>
         <meta
@@ -198,7 +209,7 @@ const LogRegister: NextPage = () => {
         </Form.Item>
 
         <p
-          style={{ cursor: "pointer" }}
+          style={{ cursor: "pointer", textAlign: "center" }}
           onClick={() =>
             !buttonLoading &&
             setSelectedForm(selectedForm === "Login" ? "Register" : "Login")

@@ -91,9 +91,55 @@
 }
 
 .eventIDImage {
-  border: 1px solid black;
+  border: 2px solid black;
   @include alignCenter;
   width: clamp(150px, 20vw, 220px);
   height: clamp(150px, 20vw, 220px);
   text-align: center;
+}
+
+#eventIDInfoContainer {
+  @include alignCenter;
+  flex-direction: column;
+  justify-content: space-around;
+  overflow: hidden;
+
+  h2 {
+    text-align: center;
+    margin: 0;
+    padding: 0;
+  }
+  #IdTextCopy {
+    border-bottom: 2px solid var(--PrimaryColor);
+    width: 100%;
+    margin: 0;
+    padding: 10px;
+    @include alignCenter;
+  }
+  .listsContainer {
+    @include alignCenter;
+    flex-direction: row;
+    width: 90%;
+    height: 80%;
+    gap: 10px;
+
+    > * {
+      width: 50%;
+      height: 100%;
+    }
+
+    .LeftList {
+      overflow: scroll;
+    }
+
+    .RightList {
+      @include alignCenter;
+      flex-direction: column;
+      justify-content: space-around;
+    }
+  }
+}
+
+#eventIdGoogleMapsContainer {
+  min-height: 400px;
 }

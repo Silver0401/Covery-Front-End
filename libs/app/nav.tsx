@@ -89,7 +89,7 @@ const nav: React.FC = () => {
         {createLink("/", "About")}
         {createLink("/searchEvents", "Search")}
 
-        {loginState ? (
+        {typeof loginState === "string" ? (
           <>
             {createLink("/dashboard", "Dashboard")}
             <li
@@ -100,7 +100,8 @@ const nav: React.FC = () => {
                   "Please wait a moment..."
                 );
                 setTimeout(() => {
-                  setLoginState(false);
+                  setLoginState(null);
+                  window.localStorage.removeItem("loggedUserId");
                   router.push("/");
                   createNotification(
                     "success",

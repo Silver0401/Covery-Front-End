@@ -1,7 +1,7 @@
 #CreateEventForm {
   position: relative;
   height: 600px;
-  width: 700px;
+  width: min(95%, 700px);
   overflow: scroll;
   border-radius: 20px;
   box-shadow: 4px 2px 14px rgba(45, 27, 110, 0.5);
