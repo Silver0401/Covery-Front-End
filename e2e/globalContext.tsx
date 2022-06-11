@@ -111,7 +111,7 @@ export const GlobalContextProvider: React.FC = (props) => {
       console.log(window.localStorage.getItem("loggedUserId"));
       const myLocalData = window.localStorage
         .getItem("loggedUserId")
-        ?.split("|");
+        ?.split(" ");
 
       axios
         .get(

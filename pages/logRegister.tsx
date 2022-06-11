@@ -99,7 +99,7 @@ const LogRegister: NextPage = () => {
             // console.log(response);
             if (result) {
               setLoginState(
-                `${response.data[0].username}|${response.data[0].password_hash}`
+                `${response.data[0].username} ${response.data[0].password_hash}`
               );
               setUserData({
                 username: response.data[0].username,

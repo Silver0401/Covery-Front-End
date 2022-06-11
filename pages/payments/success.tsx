@@ -58,6 +58,7 @@ const SuccessPage: NextPage = () => {
           console.error(err);
         });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [username, event_id, secret_token]);
 
   return username && event_id && secret_token && requestStatus === "success" ? (
