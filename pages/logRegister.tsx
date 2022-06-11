@@ -149,11 +149,7 @@ const LogRegister: NextPage = () => {
   };
 
   return (
-    <section
-      id="GlobalSection"
-      className={styles.spaceItemsVertical}
-      onClick={() => console.log(loginState)}
-    >
+    <section id="GlobalSection" className={styles.spaceItemsVertical}>
       <Head>
         <title>Covery | Log Register Page</title>
         <meta

@@ -107,41 +107,39 @@ export const GlobalContextProvider: React.FC = (props) => {
   }, [loginState]);
 
   useEffect(() => {
-    window.onload = () => {
-      console.log(window.localStorage.getItem("loggedUserId"));
-      const myLocalData = window.localStorage
-        .getItem("loggedUserId")
-        ?.split(" ");
+    // window.onload = () => {
+    console.log(window.localStorage.getItem("loggedUserId"));
+    const myLocalData = window.localStorage.getItem("loggedUserId")?.split(" ");
 
-      axios
-        .get(
-          `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/resource/user/${
-            myLocalData && myLocalData[0]
-          }`,
-          {
-            headers: {
-              AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
-            },
+    axios
+      .get(
+        `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/resource/user/${
+          myLocalData && myLocalData[0]
+        }`,
+        {
+          headers: {
+            AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
+          },
+        }
+      )
+      .then(async (response: any) => {
+        if (response.data[0] && myLocalData) {
+          if (response.data[0].password_hash === myLocalData[1]) {
+            setLoginState(() => window.localStorage.getItem("loggedUserId"));
+            setUserData({
+              bio: response.data[0].bio,
+              tickets: response.data[0].tickets,
+              username: response.data[0].username,
+            });
           }
-        )
-        .then(async (response: any) => {
-          if (response.data[0] && myLocalData) {
-            if (response.data[0].password_hash === myLocalData[1]) {
-              setLoginState(() => window.localStorage.getItem("loggedUserId"));
-              setUserData({
-                bio: response.data[0].bio,
-                tickets: response.data[0].tickets,
-                username: response.data[0].username,
-              });
-            }
-          } else {
-            window.localStorage.removeItem("loggedUserId");
-          }
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    };
+        } else {
+          window.localStorage.removeItem("loggedUserId");
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+    // };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
