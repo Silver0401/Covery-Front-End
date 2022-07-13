@@ -17,7 +17,7 @@ const SearchEventsIndex: NextPage = () => {
       >
         <div className="imgContainer" />
         <div className="textBox">
-          <h1>Search event by ID.</h1>
+          <h1>Search event by ID</h1>
           <h3>If you already haven an event ID, you can search it.</h3>
           <svg
             width="24"
@@ -39,7 +39,7 @@ const SearchEventsIndex: NextPage = () => {
         <div className="imgContainer" />
         <div className="textBox">
           <h1>Events Radar</h1>
-          <h3>Search and find the nearest events around you</h3>
+          <h3>Search and find the nearest events around you.</h3>
           <svg
             width="24"
             height="24"
