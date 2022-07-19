@@ -1,5 +1,6 @@
 // Libraries
 import React, { useContext, useEffect, useState } from "react";
+import Head from "next/head";
 import { Layout, Menu } from "antd";
 import {
   TagOutlined,
@@ -67,51 +68,56 @@ const Dashboard: React.FC = () => {
   }, []);
 
   return loginState ? (
-    <Layout>
-      <Sider breakpoint="lg" collapsedWidth="0" id="dashboardSlider">
-        <div className="logo" />
-        <Menu
-          theme="dark"
-          mode="inline"
-          defaultSelectedKeys={[displayedNavElement]}
-        >
-          {Object.values(NavElements).map((value) => {
-            return (
-              <Menu.Item
-                onClick={() => setDisplayedNavElement(value.Identifier)}
-                key={value.Identifier}
-                icon={value.Icon}
-              >
-                {value.Name}
-              </Menu.Item>
-            );
-          })}
-        </Menu>
-      </Sider>
+    <>
+      <Head>
+        <title>Covery | Dashboard</title>
+      </Head>
       <Layout>
-        <Header
-          className="site-layout-sub-header-background"
-          style={{ padding: 0 }}
-        />
-        <Content style={{ margin: "24px 16px 0" }}>
-          <div
-            className="site-layout-background"
-            style={{
-              padding: 10,
-              minHeight: 360,
-              height: "100%",
-              maxHeight: 650,
-              minWidth: 300,
-            }}
+        <Sider breakpoint="lg" collapsedWidth="0" id="dashboardSlider">
+          <div className="logo" />
+          <Menu
+            theme="dark"
+            mode="inline"
+            defaultSelectedKeys={[displayedNavElement]}
           >
-            {NavElements[displayedNavElement].Component}
-          </div>
-        </Content>
-        <Footer style={{ textAlign: "center" }}>
-          Covery ©2022 Created by TGMPM
-        </Footer>
+            {Object.values(NavElements).map((value) => {
+              return (
+                <Menu.Item
+                  onClick={() => setDisplayedNavElement(value.Identifier)}
+                  key={value.Identifier}
+                  icon={value.Icon}
+                >
+                  {value.Name}
+                </Menu.Item>
+              );
+            })}
+          </Menu>
+        </Sider>
+        <Layout>
+          <Header
+            className="site-layout-sub-header-background"
+            style={{ padding: 0 }}
+          />
+          <Content style={{ margin: "24px 16px 0" }}>
+            <div
+              className="site-layout-background"
+              style={{
+                padding: 10,
+                minHeight: 360,
+                height: "100%",
+                maxHeight: 650,
+                minWidth: 300,
+              }}
+            >
+              {NavElements[displayedNavElement].Component}
+            </div>
+          </Content>
+          <Footer style={{ textAlign: "center" }}>
+            Covery ©2022 Created by TGMPM
+          </Footer>
+        </Layout>
       </Layout>
-    </Layout>
+    </>
   ) : (
     <section id="GlobalSection" className={styles.spaceItemsVertical}>
       <h2>Unauthorized Access</h2>
