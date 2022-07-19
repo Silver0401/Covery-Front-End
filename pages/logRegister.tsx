@@ -26,7 +26,7 @@ const LogRegister: NextPage = () => {
     setLoginState,
     setUserData,
     searchedEventID,
-    loginState,
+    userData,
   } = useContext(GlobalContext);
   const [selectedForm, setSelectedForm] = useState<"Login" | "Register">(
     "Register"
@@ -102,6 +102,7 @@ const LogRegister: NextPage = () => {
                 `${response.data[0].username} ${response.data[0].password_hash}`
               );
               setUserData({
+                ...userData,
                 username: response.data[0].username,
                 bio: response.data[0].bio,
                 tickets: response.data[0].tickets,
