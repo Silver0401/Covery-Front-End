@@ -1,11 +1,12 @@
 import React, { useContext, useState } from "react";
 import { useRouter } from "next/router";
 import { GlobalContext } from "../../e2e/globalContext";
+import RandomAvatar from "../../components/Avatar";
 
 const nav: React.FC = () => {
   const router = useRouter();
   const [navState, setNavState] = useState<"open" | "closed">("closed");
-  const { loginState, setLoginState, createNotification } =
+  const { loginState, setLoginState, createNotification, userData } =
     useContext(GlobalContext);
 
   const createLink = (route: string, title: string) => {
@@ -92,26 +93,12 @@ const nav: React.FC = () => {
         {typeof loginState === "string" ? (
           <>
             {createLink("/dashboard", "Dashboard")}
-            <li
-              onClick={() => {
-                createNotification(
-                  "info",
-                  "Logging Out",
-                  "Please wait a moment..."
-                );
-                setTimeout(() => {
-                  setLoginState(null);
-                  window.localStorage.removeItem("loggedUserId");
-                  router.push("/");
-                  createNotification(
-                    "success",
-                    "Logged Out",
-                    "You have logged out of your account"
-                  );
-                }, 500);
-              }}
-            >
-              <h4>Log Out</h4>
+            <li className="ProfileFace" onClick={() => router.push("/profile")}>
+              <div className="HoverProfile">
+                <h4>My Profile</h4>
+              </div>
+
+              <RandomAvatar size={35} />
             </li>
           </>
         ) : (

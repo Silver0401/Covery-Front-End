@@ -22,10 +22,18 @@
 }
 
 @mixin GenericButtonStyle($color1, $color2) {
+  cursor: pointer;
+  border-radius: 10px;
+  outline: none;
+  border: 1px solid transparent;
+  background-color: var(--BgColor);
+  color: var(--PrimaryColor);
+  padding: clamp(0.5rem, 2vw, 1rem) clamp(0.5rem, 2vw, 2rem);
   transition: background-color 500ms, border 500ms, color 500ms;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+  font-size: clamp(0.8rem, 4vw, 1.1rem);
   background-color: $color1;
   color: $color2;
-  // padding: clamp(5px, 4vw, 20px) clamp(10px, 2vw, 40px);
 
   a,
   p {

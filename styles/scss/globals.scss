@@ -105,13 +105,13 @@ button {
   color: black;
 }
 
-.GenericButton {
-  display: grid;
-  place-items: center;
-  padding: clamp(0.5rem, 2vw, 1rem) clamp(0.5rem, 2vw, 2rem);
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: clamp(0.8rem, 4vw, 1.1rem);
-  border: 2px solid var(--TertiaryColor);
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
-}
+// .GenericButton {
+//   display: grid;
+//   place-items: center;
+//   padding: clamp(0.5rem, 2vw, 1rem) clamp(0.5rem, 2vw, 2rem);
+//   border-radius: 10px;
+//   cursor: pointer;
+//   font-size: clamp(0.8rem, 4vw, 1.1rem);
+//   border: 2px solid var(--TertiaryColor);
+//   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+// }

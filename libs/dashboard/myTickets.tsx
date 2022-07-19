@@ -120,8 +120,11 @@ const MyTickets: React.FC = () => {
             );
           })
         ) : (
-          <div className={styles.card}>
-            <h3>You have no tickets :(</h3>
+          <div
+            className={`${styles.card} ${styles.fillSpace} ${styles.spaceItemsVertical}`}
+          >
+            <h4>{"You have no tickets"}</h4>
+            <h2>{":("}</h2>
           </div>
         )}
       </div>

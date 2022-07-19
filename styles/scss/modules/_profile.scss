@@ -1,0 +1,12 @@
+.LogoutButton {
+  @include GenericButtonStyle(rgb(235, 79, 79), black);
+  width: 90%;
+}
+.EditButton {
+  @include GenericButtonStyle(var(--PrimaryColor), black);
+  width: 90%;
+}
+.PayDataButton {
+  @include GenericButtonStyle(var(--SecondaryColor), black);
+  width: 90%;
+}

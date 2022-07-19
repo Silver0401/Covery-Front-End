@@ -30,7 +30,6 @@ const Header: React.FC = () => {
         </h3>
         <div className={styles.spaceItemsHorizontal} id="buttonsContainer">
           <button
-            className="GenericButton"
             onClick={() =>
               loginState
                 ? router.push("/dashboard")
@@ -39,10 +38,7 @@ const Header: React.FC = () => {
           >
             Create Event
           </button>
-          <button
-            className="GenericButton"
-            onClick={() => router.push("/searchEvents")}
-          >
+          <button onClick={() => router.push("/searchEvents")}>
             Search Events
           </button>
         </div>

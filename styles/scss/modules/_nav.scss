@@ -71,6 +71,45 @@
         }
       }
     }
+
+    .ProfileFace {
+      position: relative;
+
+      .HoverProfile {
+        position: absolute;
+        opacity: 0;
+        transition: opacity 250ms;
+        top: 60px;
+        width: 100px;
+        height: 60px;
+        @include alignCenter;
+        text-align: center;
+        background-color: rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(20px);
+        border-radius: 15px;
+        h4 {
+          color: var(--PrimaryColor);
+        }
+
+        &::after {
+          top: -10px;
+          position: absolute;
+          content: "";
+          width: 0;
+          height: 0;
+          border-left: 10px solid transparent;
+          border-right: 10px solid transparent;
+          border-bottom: 10px solid rgba(0, 0, 0, 0.2);
+        }
+      }
+
+      &:hover {
+        .HoverProfile {
+          opacity: 1;
+          transition: opacity 250ms;
+        }
+      }
+    }
   }
 }
 

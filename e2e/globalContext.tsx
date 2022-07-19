@@ -1,6 +1,7 @@
 import { notification } from "antd";
 import axios from "axios";
 import React, { createContext, useEffect, useState } from "react";
+import Avatar from "boring-avatars";
 
 type NotificationType = "warning" | "info" | "success" | "error";
 
@@ -9,10 +10,15 @@ interface ticket {
   hash: string;
 }
 
+interface avatar {
+  colors: string[];
+}
+
 interface userData {
   username: string | undefined;
   bio: string | undefined;
   tickets: Array<ticket> | undefined;
+  avatar: avatar;
 }
 
 interface createEvent {
@@ -64,6 +70,9 @@ export const GlobalContext = createContext<GlobalContextProps>({
     username: undefined,
     bio: undefined,
     tickets: undefined,
+    avatar: {
+      colors: [],
+    },
   },
   setUserData: () => {},
 });
@@ -87,6 +96,9 @@ export const GlobalContextProvider: React.FC = (props) => {
     username: undefined,
     bio: undefined,
     tickets: undefined,
+    avatar: {
+      colors: ["#0286EC", "#FFA336", "#000000", "#FFF100", "#1BD4B3"],
+    },
   });
 
   const createNotification = (
@@ -127,6 +139,7 @@ export const GlobalContextProvider: React.FC = (props) => {
           if (response.data[0].password_hash === myLocalData[1]) {
             setLoginState(() => window.localStorage.getItem("loggedUserId"));
             setUserData({
+              ...userData,
               bio: response.data[0].bio,
               tickets: response.data[0].tickets,
               username: response.data[0].username,
