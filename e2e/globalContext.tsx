@@ -119,8 +119,7 @@ export const GlobalContextProvider: React.FC = (props) => {
   }, [loginState]);
 
   useEffect(() => {
-    // window.onload = () => {
-    console.log(window.localStorage.getItem("loggedUserId"));
+    // console.log(window.localStorage.getItem("loggedUserId"));
     const myLocalData = window.localStorage.getItem("loggedUserId")?.split(" ");
 
     axios
@@ -150,7 +149,8 @@ export const GlobalContextProvider: React.FC = (props) => {
         }
       })
       .catch((err) => {
-        console.error(err);
+        console.log("coso aqui");
+        console.log(err.message);
       });
     // };
     // eslint-disable-next-line react-hooks/exhaustive-deps

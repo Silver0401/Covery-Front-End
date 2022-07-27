@@ -57,6 +57,10 @@ const Profile: NextPage = () => {
       .post(
         `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/resource/user_treasury/activate/${userData.username}`,
         {
+          refresh_url: "https://www.covery.fun/accounts/activationSuccess",
+          return_url: "https://www.covery.fun/accounts/activationFailed",
+        },
+        {
           headers: {
             AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
           },
@@ -66,7 +70,7 @@ const Profile: NextPage = () => {
         console.log(res);
       })
       .catch((err) => {
-        console.error(err);
+        console.error(err.message);
       });
   };
 
@@ -76,14 +80,14 @@ const Profile: NextPage = () => {
         <title>Covery | Profile Page</title>
       </Head>
       <section id="GlobalSection" className={styles.phoneOptFlex}>
-        <div className={`${styles.alignCenter}`}>
+        <div className={`${styles.spaceItemsVertical}`}>
           <div className={styles.card}>
             <RandomAvatar size={300} />
           </div>
-        </div>
-        <div className={`${styles.card} ${styles.spaceItemsVertical}`}>
+
           <List
             style={{ width: "80%" }}
+            className={styles.card}
             itemLayout="vertical"
             dataSource={[userData]}
             renderItem={(dataItem) => (
@@ -105,6 +109,8 @@ const Profile: NextPage = () => {
               </List.Item>
             )}
           />
+        </div>
+        <div className={`${styles.card} ${styles.spaceItemsVertical}`}>
           <button className="EditButton">Edit Profile</button>
           <button className="PayDataButton" onClick={activatePaymentData}>
             Edit Payment Data
