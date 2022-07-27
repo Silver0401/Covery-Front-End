@@ -6,6 +6,7 @@ import { GlobalContext } from "../e2e/globalContext";
 import RandomAvatar from "../components/Avatar";
 import styles from "../styles/scss/modules.module.scss";
 import { useRouter } from "next/router";
+import axios from "axios";
 
 // Library Pages
 
@@ -13,6 +14,43 @@ const Profile: NextPage = () => {
   const { userData, createNotification, setLoginState } =
     useContext(GlobalContext);
   const router = useRouter();
+
+  const addPaymentData = () => {
+    axios
+      .post(
+        `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/resource/user_treasury/add/${userData.username}`,
+        {},
+        {
+          headers: {
+            AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  const getPaymentData = () => {
+    axios
+      .get(
+        `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/resource/user_treasury/get/${userData.username}`,
+        {
+          headers: {
+            AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
 
   return (
     <>
@@ -50,7 +88,9 @@ const Profile: NextPage = () => {
             )}
           />
           <button className="EditButton">Edit Profile</button>
-          <button className="PayDataButton">Edit Payment Data</button>
+          <button className="PayDataButton" onClick={getPaymentData}>
+            Edit Payment Data
+          </button>
           <button
             className="LogoutButton"
             onClick={() => {

@@ -77,6 +77,126 @@
   }
 }
 
+.LoadingInit {
+  position: absolute;
+  background-color: white;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+  @include alignCenter;
+  animation: disappear 500ms ease forwards 1.6s;
+
+  > * {
+    position: absolute;
+  }
+
+  .leftDiagonal,
+  .rightDiagonal {
+    width: 58%;
+    height: 100%;
+  }
+
+  .leftDiagonal {
+    left: 0;
+    clip-path: polygon(0% 0%, 100% 0%, 75% 100%, 0% 100%);
+    background-color: var(--PrimaryColor);
+    animation: SlideLeft 1s ease forwards 1.35s;
+  }
+  .rightDiagonal {
+    clip-path: polygon(0% 0%, 100% 0%, 75% 100%, 0% 100%);
+    right: 0;
+    background-color: var(--SecondaryColor);
+    transform: translateX(0) rotate(180deg);
+    animation: SlideRight 1s ease forwards 1.35s;
+  }
+  .CoveryTitleAnimation {
+    width: 35%;
+    height: auto;
+    max-width: 350px;
+    fill: transparent;
+    animation: FillWriting 500ms ease forwards 0.8s;
+
+    path:nth-child(2) {
+      stroke-dashoffset: 500;
+      stroke-dasharray: 500;
+      animation: HandWriting 300ms linear forwards 100ms;
+    }
+    path:nth-child(3) {
+      stroke-dashoffset: 500;
+      stroke-dasharray: 500;
+      animation: HandWriting 300ms linear forwards 200ms;
+    }
+    path:nth-child(4) {
+      stroke-dashoffset: 500;
+      stroke-dasharray: 500;
+      animation: HandWriting 300ms linear forwards 300ms;
+    }
+    path:nth-child(5) {
+      stroke-dashoffset: 550;
+      stroke-dasharray: 550;
+      animation: HandWriting 300ms linear forwards 400ms;
+    }
+    path:nth-child(6) {
+      stroke-dashoffset: 500;
+      stroke-dasharray: 500;
+      animation: HandWriting 300ms linear forwards 500ms;
+    }
+    path:nth-child(7) {
+      stroke-dashoffset: 500;
+      stroke-dasharray: 500;
+      animation: HandWriting 300ms linear forwards 600ms;
+    }
+  }
+}
+
+@keyframes HandWriting {
+  // from {
+  //   stroke-dashoffset: 500;
+  //   stroke-dasharray: 500;
+  // }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes FillWriting {
+  from {
+    fill: transparent;
+  }
+  to {
+    fill: white;
+  }
+}
+
+@keyframes SlideLeft {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes SlideRight {
+  // from {
+  //   transform: translateX(0) rotate(180deg);
+  // }
+  to {
+    transform: translateX(100%) rotate(180deg);
+  }
+}
+
+@keyframes disappear {
+  from {
+    visibility: visible;
+    opacity: 1;
+  }
+  to {
+    visibility: hidden;
+    opacity: 0;
+  }
+}
+
 @keyframes dot1 {
   0% {
     border-color: var(--PrimaryColor);

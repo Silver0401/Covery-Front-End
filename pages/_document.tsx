@@ -1,4 +1,5 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
+import InitLoader from "../components/InitLoader";
 
 class MyDocument extends Document {
   render() {
@@ -25,6 +26,7 @@ class MyDocument extends Document {
           <link rel="icon" type="image/png" sizes="16x16" href="/favicon.png" />
         </Head>
         <body>
+          <InitLoader />
           <Main />
           <NextScript />
         </body>
