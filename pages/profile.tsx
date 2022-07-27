@@ -52,6 +52,24 @@ const Profile: NextPage = () => {
       });
   };
 
+  const activatePaymentData = () => {
+    axios
+      .post(
+        `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/resource/user_treasury/activate/${userData.username}`,
+        {
+          headers: {
+            AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
   return (
     <>
       <Head>
@@ -88,7 +106,7 @@ const Profile: NextPage = () => {
             )}
           />
           <button className="EditButton">Edit Profile</button>
-          <button className="PayDataButton" onClick={getPaymentData}>
+          <button className="PayDataButton" onClick={activatePaymentData}>
             Edit Payment Data
           </button>
           <button
