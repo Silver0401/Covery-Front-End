@@ -4,7 +4,7 @@ import styles from "../../styles/scss/modules.module.scss";
 import ErrorLottie from "../../assets/lotties/ErrorLottie.json";
 import LottieContainer from "../../components/LottieContainer";
 
-const activationSuccess: NextPage = () => {
+const ActivationSuccess: NextPage = () => {
   const router = useRouter();
 
   return (
@@ -33,4 +33,4 @@ const activationSuccess: NextPage = () => {
   );
 };
 
-export default activationSuccess;
+export default ActivationSuccess;

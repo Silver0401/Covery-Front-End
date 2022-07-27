@@ -6,7 +6,7 @@ import { GlobalContext } from "../../e2e/globalContext";
 import SuccessLottie from "../../assets/lotties/SuccessLottie.json";
 import LottieContainer from "../../components/LottieContainer";
 
-const activationSuccess: NextPage = () => {
+const ActivationSuccess: NextPage = () => {
   const { userData } = useContext(GlobalContext);
 
   return (
@@ -30,4 +30,4 @@ const activationSuccess: NextPage = () => {
   );
 };
 
-export default activationSuccess;
+export default ActivationSuccess;
