@@ -68,6 +68,7 @@ const Profile: NextPage = () => {
       )
       .then((res) => {
         console.log(res);
+        window.open(res.data.activation_link.url);
       })
       .catch((err) => {
         console.error(err.message);
