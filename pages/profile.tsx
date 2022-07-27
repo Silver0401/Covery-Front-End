@@ -57,8 +57,8 @@ const Profile: NextPage = () => {
       .post(
         `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/resource/user_treasury/activate/${userData.username}`,
         {
-          refresh_url: "https://www.covery.fun/accounts/activationSuccess",
-          return_url: "https://www.covery.fun/accounts/activationFailed",
+          return_url: "https://www.covery.fun/accounts/activationSuccess",
+          refresh_url: "https://www.covery.fun/accounts/activationFailed",
         },
         {
           headers: {
