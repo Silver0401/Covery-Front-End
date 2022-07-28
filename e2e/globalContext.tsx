@@ -151,12 +151,14 @@ export const GlobalContextProvider: React.FC = (props) => {
               setLoginState(() => window.localStorage.getItem("loggedUserId"));
               fetchedData = {
                 ...userData,
-                bio: response.data[0].bio,
-                tickets: response.data[0].tickets,
+                bio: response.data[0].bio ? response.data[0].bio : undefined,
+                tickets: response.data[0].tickets
+                  ? response.data[0].tickets
+                  : undefined,
                 username: response.data[0].username,
                 treasury_account: response.data[0].treasury_account
                   ? response.data[0].treasury_account
-                  : null,
+                  : undefined,
               };
             }
           } else {
@@ -178,7 +180,7 @@ export const GlobalContextProvider: React.FC = (props) => {
             }
           )
           .then((res) => {
-            if (fetchedData?.treasury_account === null) {
+            if (fetchedData?.treasury_account === undefined) {
               setUserData({
                 ...userData,
                 ...fetchedData,

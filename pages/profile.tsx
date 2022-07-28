@@ -132,9 +132,10 @@ const Profile: NextPage = () => {
         <div
           className={`${styles.spaceItemsVertical}`}
           style={{ minHeight: "500px", maxHeight: "70%" }}
-          onClick={() => console.log(userData)}
         >
-          <button className="EditButton">Edit my Info</button>
+          <button onClick={() => console.log(userData)} className="EditButton">
+            Edit my Info
+          </button>
           <button
             className="PayDataButton"
             onClick={createNewStripeLinkedAccount}

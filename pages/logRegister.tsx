@@ -81,7 +81,9 @@ const LogRegister: NextPage = () => {
     }
 
     if (selectedForm === "Login") {
-      axios
+      let fetchedData: any | undefined;
+
+      await axios
         .get(
           `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/resource/user/${values.username}`,
           {
@@ -96,32 +98,33 @@ const LogRegister: NextPage = () => {
               values.password_hash,
               response.data[0].password_hash
             );
-            console.log(response);
+            // console.log(response);
             if (result) {
               setLoginState(
                 `${response.data[0].username} ${response.data[0].password_hash}`
               );
-              setUserData({
+              fetchedData = {
                 ...userData,
-                username: response.data[0].username,
-                bio: response.data[0].bio,
+                bio: response.data[0].bio ? response.data[0].bio : undefined,
                 tickets: response.data[0].tickets
                   ? response.data[0].tickets
                   : undefined,
+                username: response.data[0].username,
                 treasury_account: response.data[0].treasury_account
                   ? response.data[0].treasury_account
                   : undefined,
-              });
-              createNotification(
-                "success",
-                "Login Successfull",
-                "Redirecting you"
-              );
-              setTimeout(() => {
-                searchedEventID === undefined
-                  ? router.push("/dashboard")
-                  : router.push(`/searchEvents/${searchedEventID}`);
-              }, 500);
+              };
+              // setUserData({
+              //   ...userData,
+              //   username: response.data[0].username,
+              //   bio: response.data[0].bio,
+              //   tickets: response.data[0].tickets
+              //     ? response.data[0].tickets
+              //     : undefined,
+              //   treasury_account: response.data[0].treasury_account
+              //     ? response.data[0].treasury_account
+              //     : undefined,
+              // });
             } else {
               createNotification(
                 "error",
@@ -147,6 +150,48 @@ const LogRegister: NextPage = () => {
           );
           setButtonLoading(false);
         });
+
+      createNotification("success", "Login Successfull", "Redirecting you");
+      setTimeout(() => {
+        searchedEventID === undefined
+          ? router.push("/dashboard")
+          : router.push(`/searchEvents/${searchedEventID}`);
+      }, 500);
+
+      if (fetchedData) {
+        await axios
+          .get(
+            `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/resource/user_treasury/get/${fetchedData.username}`,
+            {
+              headers: {
+                AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
+              },
+            }
+          )
+          .then((res) => {
+            if (fetchedData?.treasury_account === undefined) {
+              setUserData({
+                ...userData,
+                ...fetchedData,
+              });
+            } else {
+              setUserData({
+                ...userData,
+                ...fetchedData,
+                treasury_account: res.data.id,
+                treasury_account_activated:
+                  res.data.details_submitted && res.data.payouts_enabled,
+              });
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+            setUserData({
+              ...userData,
+              ...fetchedData,
+            });
+          });
+      }
     }
   };
 
