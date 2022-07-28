@@ -113,31 +113,33 @@ const Profile: NextPage = () => {
         </div>
         <div className={`${styles.card} ${styles.spaceItemsVertical}`}>
           <button className="EditButton" onClick={addPaymentData}>
-            Edit Profile
+            Add Payment Data
           </button>
           <button className="PayDataButton" onClick={getPaymentData}>
-            Edit Payment Data
+            Get Payment Data
+          </button>
+          <button className="EditButton" onClick={activatePaymentData}>
+            Activate Payment Data
           </button>
           <button
             className="LogoutButton"
-            onClick={activatePaymentData}
-            // onClick={() => {
-            //   createNotification(
-            //     "info",
-            //     "Logging Out",
-            //     "Please wait a moment..."
-            //   );
-            //   setTimeout(() => {
-            //     setLoginState(null);
-            //     window.localStorage.removeItem("loggedUserId");
-            //     router.push("/");
-            //     createNotification(
-            //       "success",
-            //       "Logged Out",
-            //       "You have logged out of your account"
-            //     );
-            //   }, 500);
-            // }}
+            onClick={() => {
+              createNotification(
+                "info",
+                "Logging Out",
+                "Please wait a moment..."
+              );
+              setTimeout(() => {
+                setLoginState(null);
+                window.localStorage.removeItem("loggedUserId");
+                router.push("/");
+                createNotification(
+                  "success",
+                  "Logged Out",
+                  "You have logged out of your account"
+                );
+              }, 500);
+            }}
           >
             Log Out
           </button>
