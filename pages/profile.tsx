@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { List } from "antd";
+import { List, Typography } from "antd";
 import { useContext, useEffect } from "react";
 import { GlobalContext } from "../e2e/globalContext";
 import RandomAvatar from "../components/Avatar";
@@ -19,6 +19,7 @@ const Profile: NextPage = () => {
     loginState,
   } = useContext(GlobalContext);
   const router = useRouter();
+  const { Text } = Typography;
 
   const createNewStripeLinkedAccount = async () => {
     if (!userData.treasury_account) {
@@ -75,7 +76,7 @@ const Profile: NextPage = () => {
       createNotification(
         "error",
         "Error",
-        "You have already created and filled the payment data"
+        "You have already created and filled the data of your treasury account"
       );
     }
   };
@@ -107,7 +108,7 @@ const Profile: NextPage = () => {
           <RandomAvatar size={250} />
 
           <List
-            style={{ width: "min(90%, 400px)", marginTop: "40px" }}
+            style={{ width: "min(90%, 500px)", marginTop: "40px" }}
             className={`${styles.card}`}
             itemLayout="vertical"
             dataSource={[userData]}
@@ -127,14 +128,29 @@ const Profile: NextPage = () => {
                     </p>
                   }
                 />
+
                 <List.Item.Meta
-                  title={<h4>{"Pay Account"}</h4>}
+                  title={<h4>{"Treasury Account"}</h4>}
                   description={
                     dataItem.treasury_account &&
                     dataItem.treasury_account_activated ? (
-                      <p style={{ color: "lime" }}>Activated</p>
+                      <>
+                        <p style={{ color: "lime" }}>Activated</p>
+                      </>
                     ) : (
-                      <p style={{ color: "red" }}>Deactivated</p>
+                      <>
+                        <p style={{ color: "red" }}>Deactivated</p>
+                        <Text type="secondary">
+                          {
+                            "----> Note: You do NOT need a treasury account to buy Tickets!"
+                          }
+                        </Text>
+                        <Text type="secondary">
+                          {
+                            "   You only need to activate it for creating and receiving monery for your event ticket sales"
+                          }
+                        </Text>
+                      </>
                     )
                   }
                 />
@@ -153,7 +169,7 @@ const Profile: NextPage = () => {
             className="PayDataButton"
             onClick={createNewStripeLinkedAccount}
           >
-            Set my payment data
+            Set my treasury account
           </button>
 
           <button
