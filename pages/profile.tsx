@@ -82,6 +82,8 @@ const Profile: NextPage = () => {
 
   useEffect(() => {
     if (!contextIsFetchingData) {
+      console.log(userData);
+
       if (loginState === null) {
         setTimeout(() => {
           router.push("/logRegister");
@@ -105,7 +107,7 @@ const Profile: NextPage = () => {
           <RandomAvatar size={250} />
 
           <List
-            style={{ width: "min(90%, 350px)", marginTop: "40px" }}
+            style={{ width: "min(90%, 400px)", marginTop: "40px" }}
             className={`${styles.card}`}
             itemLayout="vertical"
             dataSource={[userData]}
@@ -123,6 +125,17 @@ const Profile: NextPage = () => {
                         ? dataItem.bio
                         : "You have not written a personal description of yourself"}
                     </p>
+                  }
+                />
+                <List.Item.Meta
+                  title={<h4>{"Pay Account"}</h4>}
+                  description={
+                    dataItem.treasury_account &&
+                    dataItem.treasury_account_activated ? (
+                      <p style={{ color: "lime" }}>Activated</p>
+                    ) : (
+                      <p style={{ color: "red" }}>Deactivated</p>
+                    )
                   }
                 />
               </List.Item>

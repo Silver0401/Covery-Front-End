@@ -98,7 +98,6 @@ const LogRegister: NextPage = () => {
               values.password_hash,
               response.data[0].password_hash
             );
-            // console.log(response);
             if (result) {
               setLoginState(
                 `${response.data[0].username} ${response.data[0].password_hash}`
@@ -114,17 +113,6 @@ const LogRegister: NextPage = () => {
                   ? response.data[0].treasury_account
                   : undefined,
               };
-              // setUserData({
-              //   ...userData,
-              //   username: response.data[0].username,
-              //   bio: response.data[0].bio,
-              //   tickets: response.data[0].tickets
-              //     ? response.data[0].tickets
-              //     : undefined,
-              //   treasury_account: response.data[0].treasury_account
-              //     ? response.data[0].treasury_account
-              //     : undefined,
-              // });
             } else {
               createNotification(
                 "error",
@@ -166,6 +154,7 @@ const LogRegister: NextPage = () => {
               setUserData({
                 ...userData,
                 ...fetchedData,
+                treasury_account_activated: false,
               });
             } else {
               setUserData({
@@ -185,6 +174,7 @@ const LogRegister: NextPage = () => {
             });
           });
 
+        // console.log(userData);
         createNotification("success", "Login Successfull", "Redirecting you");
         setTimeout(() => {
           searchedEventID === undefined
