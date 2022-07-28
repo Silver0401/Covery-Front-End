@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import { List } from "antd";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { GlobalContext } from "../e2e/globalContext";
 import RandomAvatar from "../components/Avatar";
 import styles from "../styles/scss/modules.module.scss";
@@ -11,84 +11,102 @@ import axios from "axios";
 // Library Pages
 
 const Profile: NextPage = () => {
-  const { userData, createNotification, setLoginState } =
-    useContext(GlobalContext);
+  const {
+    userData,
+    createNotification,
+    setLoginState,
+    contextIsFetchingData,
+    loginState,
+  } = useContext(GlobalContext);
   const router = useRouter();
 
-  const addPaymentData = () => {
-    axios
-      .post(
-        `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/resource/user_treasury/add/${userData.username}`,
-        {},
-        {
-          headers: {
-            AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
+  const createNewStripeLinkedAccount = async () => {
+    if (!userData.treasury_account) {
+      createNotification("info", "Loading...", "processing your request");
+      await axios
+        .post(
+          `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/resource/user_treasury/add/${userData.username}`,
+          {},
+          {
+            headers: {
+              AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
+            },
+          }
+        )
+        .then(async (res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.error(err);
+          createNotification(
+            "error",
+            "Error",
+            "there was an error processing your request"
+          );
+        });
+    }
+
+    if (!userData.treasury_account_activated) {
+      await axios
+        .post(
+          `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/resource/user_treasury/activate/${userData.username}`,
+          {
+            return_url: "https://www.covery.fun/accounts/activationSuccess",
+            refresh_url: "https://www.covery.fun/accounts/activationFailed",
           },
-        }
-      )
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+          {
+            headers: {
+              AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
+            },
+          }
+        )
+        .then((res) => {
+          window.open(res.data.activation_link.url, "_self");
+        })
+        .catch((err) => {
+          console.error(err.message);
+          createNotification(
+            "error",
+            "Error",
+            "there was an error processing your request"
+          );
+        });
+    } else {
+      createNotification(
+        "error",
+        "Error",
+        "You have already created and filled the payment data"
+      );
+    }
   };
 
-  const getPaymentData = () => {
-    axios
-      .get(
-        `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/resource/user_treasury/get/${userData.username}`,
-        {
-          headers: {
-            AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
-          },
-        }
-      )
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
+  useEffect(() => {
+    if (!contextIsFetchingData) {
+      if (loginState === null) {
+        setTimeout(() => {
+          router.push("/logRegister");
+        }, 500);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [contextIsFetchingData]);
 
-  const activatePaymentData = () => {
-    axios
-      .post(
-        `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/resource/user_treasury/activate/${userData.username}`,
-        {
-          return_url: "https://www.covery.fun/accounts/activationSuccess",
-          refresh_url: "https://www.covery.fun/accounts/activationFailed",
-        },
-        {
-          headers: {
-            AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
-          },
-        }
-      )
-      .then((res) => {
-        console.log(res);
-        window.open(res.data.activation_link.url);
-      })
-      .catch((err) => {
-        console.error(err.message);
-      });
-  };
-
-  return (
+  return loginState ? (
     <>
       <Head>
         <title>Covery | Profile Page</title>
       </Head>
-      <section id="GlobalSection" className={styles.phoneOptFlex}>
+      <section
+        id="GlobalSection"
+        className={styles.phoneOptFlex}
+        style={{ overflow: "scroll" }}
+      >
         <div className={`${styles.spaceItemsVertical}`}>
-          <div className={styles.card}>
-            <RandomAvatar size={300} />
-          </div>
+          <RandomAvatar size={250} />
 
           <List
-            style={{ width: "80%" }}
-            className={styles.card}
+            style={{ width: "min(90%, 350px)", marginTop: "40px" }}
+            className={`${styles.card}`}
             itemLayout="vertical"
             dataSource={[userData]}
             renderItem={(dataItem) => (
@@ -111,16 +129,19 @@ const Profile: NextPage = () => {
             )}
           />
         </div>
-        <div className={`${styles.card} ${styles.spaceItemsVertical}`}>
-          <button className="EditButton" onClick={addPaymentData}>
-            Add Payment Data
+        <div
+          className={`${styles.spaceItemsVertical}`}
+          style={{ minHeight: "500px", maxHeight: "70%" }}
+          onClick={() => console.log(userData)}
+        >
+          <button className="EditButton">Edit my Info</button>
+          <button
+            className="PayDataButton"
+            onClick={createNewStripeLinkedAccount}
+          >
+            Set my payment data
           </button>
-          <button className="PayDataButton" onClick={getPaymentData}>
-            Get Payment Data
-          </button>
-          <button className="EditButton" onClick={activatePaymentData}>
-            Activate Payment Data
-          </button>
+
           <button
             className="LogoutButton"
             onClick={() => {
@@ -146,6 +167,11 @@ const Profile: NextPage = () => {
         </div>
       </section>
     </>
+  ) : (
+    <section id="GlobalSection" className={styles.spaceItemsVertical}>
+      <h2>Unauthorized Access</h2>
+      <p>Redirecting to Login Page...</p>
+    </section>
   );
 };
 

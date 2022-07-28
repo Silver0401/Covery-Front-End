@@ -96,7 +96,7 @@ const LogRegister: NextPage = () => {
               values.password_hash,
               response.data[0].password_hash
             );
-            // console.log(response);
+            console.log(response);
             if (result) {
               setLoginState(
                 `${response.data[0].username} ${response.data[0].password_hash}`
@@ -105,7 +105,12 @@ const LogRegister: NextPage = () => {
                 ...userData,
                 username: response.data[0].username,
                 bio: response.data[0].bio,
-                tickets: response.data[0].tickets,
+                tickets: response.data[0].tickets
+                  ? response.data[0].tickets
+                  : undefined,
+                treasury_account: response.data[0].treasury_account
+                  ? response.data[0].treasury_account
+                  : undefined,
               });
               createNotification(
                 "success",

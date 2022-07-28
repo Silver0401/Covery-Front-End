@@ -78,7 +78,8 @@
       .HoverProfile {
         position: absolute;
         opacity: 0;
-        transition: opacity 250ms;
+        visibility: hidden;
+        transition: opacity 250ms, visibility 500ms;
         top: 60px;
         width: 100px;
         height: 60px;
@@ -106,7 +107,8 @@
       &:hover {
         .HoverProfile {
           opacity: 1;
-          transition: opacity 250ms;
+          visibility: visible;
+          transition: opacity 250ms, visibility 500ms;
         }
       }
     }
@@ -199,6 +201,34 @@
       }
       #line3 {
         transform: rotateZ(0deg) translateY(10px);
+      }
+    }
+  }
+
+  ul {
+    .ProfileFace {
+      flex-direction: row-reverse;
+
+      .HoverProfile {
+        position: relative !important;
+        width: 35% !important;
+        top: 0 !important;
+        background-color: transparent !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        backdrop-filter: blur(0px) !important;
+
+        &::after {
+          opacity: 0;
+        }
+      }
+
+      &:hover {
+        .HoverProfile {
+          h4 {
+            color: var(--SecondaryColor) !important;
+          }
+        }
       }
     }
   }

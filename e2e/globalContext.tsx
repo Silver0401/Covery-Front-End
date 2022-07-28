@@ -15,10 +15,12 @@ interface avatar {
 }
 
 interface userData {
-  username: string | undefined;
+  username: string;
   bio: string | undefined;
-  tickets: Array<ticket> | undefined;
+  tickets?: Array<ticket>;
   avatar: avatar;
+  treasury_account?: string;
+  treasury_account_activated: boolean;
 }
 
 interface createEvent {
@@ -35,6 +37,7 @@ interface createEvent {
 interface GlobalContextProps {
   loginState: string | null;
   setLoginState: (data: string | null) => void;
+  contextIsFetchingData: boolean;
   searchedEventID: string | undefined;
   setSearchedEventID: (data: string) => void;
   createNotification: (
@@ -52,6 +55,7 @@ interface GlobalContextProps {
 export const GlobalContext = createContext<GlobalContextProps>({
   loginState: null,
   searchedEventID: undefined,
+  contextIsFetchingData: true,
   setSearchedEventID: () => {},
   setLoginState: () => {},
   createNotification: () => {},
@@ -67,12 +71,13 @@ export const GlobalContext = createContext<GlobalContextProps>({
   },
   setCreateEventData: () => {},
   userData: {
-    username: undefined,
+    username: "awaiting...",
     bio: undefined,
     tickets: undefined,
     avatar: {
       colors: [],
     },
+    treasury_account_activated: false,
   },
   setUserData: () => {},
 });
@@ -82,6 +87,8 @@ export const GlobalContextProvider: React.FC = (props) => {
   const [searchedEventID, setSearchedEventID] = useState<string | undefined>(
     undefined
   );
+  const [contextIsFetchingData, setContextIsFetchingData] =
+    useState<boolean>(true);
   const [createEventData, setCreateEventData] = useState<createEvent>({
     creator: undefined,
     name: undefined,
@@ -93,12 +100,13 @@ export const GlobalContextProvider: React.FC = (props) => {
     price: undefined,
   });
   const [userData, setUserData] = useState<userData>({
-    username: undefined,
+    username: "awaiting...",
     bio: undefined,
     tickets: undefined,
     avatar: {
       colors: ["#0286EC", "#FFA336", "#000000", "#FFF100", "#1BD4B3"],
     },
+    treasury_account_activated: false,
   });
 
   const createNotification = (
@@ -122,36 +130,82 @@ export const GlobalContextProvider: React.FC = (props) => {
     // console.log(window.localStorage.getItem("loggedUserId"));
     const myLocalData = window.localStorage.getItem("loggedUserId")?.split(" ");
 
-    axios
-      .get(
-        `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/resource/user/${
-          myLocalData && myLocalData[0]
-        }`,
-        {
-          headers: {
-            AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
-          },
-        }
-      )
-      .then(async (response: any) => {
-        if (response.data[0] && myLocalData) {
-          if (response.data[0].password_hash === myLocalData[1]) {
-            setLoginState(() => window.localStorage.getItem("loggedUserId"));
+    const LoginFetchDetection = async () => {
+      let fetchedData: userData | undefined;
+
+      await axios
+        .get(
+          `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/resource/user/${
+            myLocalData && myLocalData[0]
+          }`,
+          {
+            headers: {
+              AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
+            },
+          }
+        )
+        .then(async (response: any) => {
+          if (response.data[0] && myLocalData) {
+            if (response.data[0].password_hash === myLocalData[1]) {
+              // console.log(response);
+              setLoginState(() => window.localStorage.getItem("loggedUserId"));
+              fetchedData = {
+                ...userData,
+                bio: response.data[0].bio,
+                tickets: response.data[0].tickets,
+                username: response.data[0].username,
+                treasury_account: response.data[0].treasury_account
+                  ? response.data[0].treasury_account
+                  : null,
+              };
+            }
+          } else {
+            window.localStorage.removeItem("loggedUserId");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      if (fetchedData) {
+        await axios
+          .get(
+            `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/resource/user_treasury/get/${fetchedData.username}`,
+            {
+              headers: {
+                AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
+              },
+            }
+          )
+          .then((res) => {
+            if (fetchedData?.treasury_account === null) {
+              setUserData({
+                ...userData,
+                ...fetchedData,
+              });
+            } else {
+              setUserData({
+                ...userData,
+                ...fetchedData,
+                treasury_account: res.data.id,
+                treasury_account_activated:
+                  res.data.details_submitted && res.data.payouts_enabled,
+              });
+            }
+          })
+          .catch((err) => {
+            console.error(err);
             setUserData({
               ...userData,
-              bio: response.data[0].bio,
-              tickets: response.data[0].tickets,
-              username: response.data[0].username,
+              ...fetchedData,
             });
-          }
-        } else {
-          window.localStorage.removeItem("loggedUserId");
-        }
-      })
-      .catch((err) => {
-        console.log("coso aqui");
-        console.log(err.message);
-      });
+          });
+      }
+
+      setContextIsFetchingData(false);
+    };
+
+    LoginFetchDetection();
     // };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -162,6 +216,7 @@ export const GlobalContextProvider: React.FC = (props) => {
         loginState,
         setLoginState,
         createNotification,
+        contextIsFetchingData,
         createEventData,
         setCreateEventData,
         userData,

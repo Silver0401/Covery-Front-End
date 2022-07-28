@@ -1,0 +1,3 @@
+.ContinueButton {
+  @include GenericButtonStyle(var(--SecondaryColor), black);
+}

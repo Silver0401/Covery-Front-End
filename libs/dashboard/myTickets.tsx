@@ -4,10 +4,12 @@ import Image from "next/image";
 import { GlobalContext } from "../../e2e/globalContext";
 import styles from "../../styles/scss/modules.module.scss";
 import CoveryLogo from "../../assets/images/CoveryLogo.png";
+import LoadingAnimation from "../../components/LoadingAnimation";
 import axios from "axios";
 
 const MyTickets: React.FC = () => {
   const { userData } = useContext(GlobalContext);
+  const [fetchingTickets, setFetchingTickets] = useState<boolean>(true);
   const [eventData, setEventData] = useState<any>({
     name: "awaiting..",
     date: "awaiting..",
@@ -73,28 +75,34 @@ const MyTickets: React.FC = () => {
   };
 
   useEffect(() => {
-    // console.log(userData.tickets);
+    const FetchTickets = async () => {
+      await axios
+        .post(
+          `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/queries/filter_events`,
+          { _id: userData.tickets && userData.tickets[2].eventID },
+          {
+            headers: {
+              AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
+            },
+          }
+        )
+        .then((res) => {
+          setEventData(res.data[0]);
+          // console.log(res);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
 
-    axios
-      .post(
-        `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/queries/filter_events`,
-        { _id: userData.tickets && userData.tickets[2].eventID },
-        {
-          headers: {
-            AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
-          },
-        }
-      )
-      .then((res) => {
-        setEventData(res.data[0]);
-        // console.log(res);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+      setFetchingTickets(false);
+    };
+
+    FetchTickets();
   }, []);
 
-  return (
+  return fetchingTickets ? (
+    <LoadingAnimation loadingText="Loading your tickets..." />
+  ) : (
     <section id="DashboardElementSection">
       <div
         className="DashbaordSectionContainer"
@@ -122,6 +130,7 @@ const MyTickets: React.FC = () => {
         ) : (
           <div
             className={`${styles.card} ${styles.fillSpace} ${styles.spaceItemsVertical}`}
+            style={{ height: "90%" }}
           >
             <h4>{"You have no tickets"}</h4>
             <h2>{":("}</h2>

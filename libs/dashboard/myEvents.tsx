@@ -29,7 +29,7 @@ const MyEvents: React.FC = () => {
 
   useEffect(() => {
     const FetchEvents = async () => {
-      axios
+      await axios
         .post(
           `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/queries/filter_events`,
           { creator: userData.username },

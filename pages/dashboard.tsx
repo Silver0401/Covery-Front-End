@@ -32,7 +32,7 @@ const Dashboard: React.FC = () => {
   const { Header, Content, Footer, Sider } = Layout;
   const [displayedNavElement, setDisplayedNavElement] =
     useState<NavComponents>("Create Event");
-  const { loginState } = useContext(GlobalContext);
+  const { loginState, contextIsFetchingData } = useContext(GlobalContext);
 
   const NavElements: NavComponentsIndex = {
     "Create Event": {
@@ -56,16 +56,15 @@ const Dashboard: React.FC = () => {
   };
 
   useEffect(() => {
-    window.onload = () => {
-      console.log(loginState);
+    if (!contextIsFetchingData) {
       if (loginState === null) {
         setTimeout(() => {
           router.push("/logRegister");
         }, 500);
       }
-    };
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [contextIsFetchingData]);
 
   return loginState ? (
     <>

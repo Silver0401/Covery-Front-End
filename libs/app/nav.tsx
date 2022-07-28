@@ -6,8 +6,7 @@ import RandomAvatar from "../../components/Avatar";
 const nav: React.FC = () => {
   const router = useRouter();
   const [navState, setNavState] = useState<"open" | "closed">("closed");
-  const { loginState, setLoginState, createNotification, userData } =
-    useContext(GlobalContext);
+  const { loginState } = useContext(GlobalContext);
 
   const createLink = (route: string, title: string) => {
     return (
@@ -93,7 +92,13 @@ const nav: React.FC = () => {
         {typeof loginState === "string" ? (
           <>
             {createLink("/dashboard", "Dashboard")}
-            <li className="ProfileFace" onClick={() => router.push("/profile")}>
+            <li
+              className="ProfileFace"
+              onClick={() => {
+                router.push("/profile");
+                setNavState("closed");
+              }}
+            >
               <div className="HoverProfile">
                 <h4>My Profile</h4>
               </div>
