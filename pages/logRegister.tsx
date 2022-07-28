@@ -151,13 +151,6 @@ const LogRegister: NextPage = () => {
           setButtonLoading(false);
         });
 
-      createNotification("success", "Login Successfull", "Redirecting you");
-      setTimeout(() => {
-        searchedEventID === undefined
-          ? router.push("/dashboard")
-          : router.push(`/searchEvents/${searchedEventID}`);
-      }, 500);
-
       if (fetchedData) {
         await axios
           .get(
@@ -191,6 +184,13 @@ const LogRegister: NextPage = () => {
               ...fetchedData,
             });
           });
+
+        createNotification("success", "Login Successfull", "Redirecting you");
+        setTimeout(() => {
+          searchedEventID === undefined
+            ? router.push("/dashboard")
+            : router.push(`/searchEvents/${searchedEventID}`);
+        }, 500);
       }
     }
   };
