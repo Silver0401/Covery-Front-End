@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { GlobalContext } from "../../e2e/globalContext";
 import styles from "../../styles/scss/modules.module.scss";
 import axios from "axios";
@@ -7,9 +7,16 @@ import { useRouter } from "next/router";
 import { Button, Typography, List } from "antd";
 import Head from "next/head";
 import GoogleMapsComponent from "../../components/googleMap";
-import { Data } from "@react-google-maps/api";
+import { RotateLeftOutlined } from "@ant-design/icons";
+import CheckoutForm from "../../components/CheckoutForm";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 
 type Prices = 0 | 50 | 60 | 70 | 80 | 90 | 100 | 200 | 300 | 400 | 500;
+
+const stripePromise = loadStripe(
+  "pk_test_51KqNXaFLKFgqJf56cmCYZr0gfhLxgJ4LvX8uwpdvayIm7wfn0bcQGy5iWpIbauep4tVwPT8mKeYwAw9rLMT1bsBs00ut0lLdVp"
+);
 
 interface eventData {
   assistants: Array<string>;
@@ -76,6 +83,8 @@ export const getStaticProps = async (context: any) => {
 
 const SearchEventID: NextPage<eventProps> = (props) => {
   const [center, setCenter] = useState<coordinates>();
+  const [clientSecret, setClientSecret] = useState("awaiting...");
+  const [cardDisplayed, setCardDisplayed] = useState<"Front" | "Back">("Front");
   const { userData, loginState, createNotification, setSearchedEventID } =
     useContext(GlobalContext);
   const router = useRouter();
@@ -117,6 +126,27 @@ const SearchEventID: NextPage<eventProps> = (props) => {
     0: "none",
   };
 
+  const options = useMemo(() => {
+    return {
+      // passing the client secret obtained in step 2
+      clientSecret: clientSecret,
+      // Fully customizable with appearance API.
+      appearance: {
+        theme: "stripe",
+        variables: {
+          colorPrimary: "#0286ec",
+          colorBackground: "f5f5f5",
+          // colorText: '#000000',
+          // colorDanger: '#df1b41',
+          // fontFamily: 'Ideal Sans, system-ui, sans-serif',
+          // spacingUnit: '2px',
+          // borderRadius: '4px',
+          // See all possible variables below
+        },
+      },
+    };
+  }, [clientSecret]);
+
   const fetchCoordinates = (googleGeo: any) => {
     googleGeo.geocode(
       { address: props.event.location_url },
@@ -130,15 +160,42 @@ const SearchEventID: NextPage<eventProps> = (props) => {
     );
   };
 
+  const FlipCard = () => {
+    setCardDisplayed(cardDisplayed === "Back" ? "Front" : "Back");
+  };
+
   useEffect(() => {
-    console.log(props);
     setSearchedEventID(props.event._id);
 
-    window.onload = () => {
-      const googleGeo = new google.maps.Geocoder();
-
-      fetchCoordinates(googleGeo);
+    const FetchClientSecret = async () => {
+      await axios
+        .post(
+          `${process.env.NEXT_PUBLIC_NOT_BACKEND_URL}/payments/charge`,
+          {
+            username: userData.username,
+            event_id: props.event._id,
+          },
+          {
+            headers: {
+              AUTH_TOKEN: `${process.env.NEXT_PUBLIC_NOT_BACKEND_TOKEN}`,
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response);
+          setClientSecret(response.data.client_secret);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     };
+
+    FetchClientSecret();
+    // window.onload = () => {
+    //   const googleGeo = new google.maps.Geocoder();
+
+    //   fetchCoordinates(googleGeo);
+    // };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -208,55 +265,71 @@ const SearchEventID: NextPage<eventProps> = (props) => {
         <meta name="image" content={`${props.event?.eventpic}`} />
       </Head>
 
-      <div id="eventIDInfoContainer" className={styles.card}>
-        <h2>{props.event?.name}</h2>
-        <Paragraph
-          id="IdTextCopy"
-          className="fakeh4"
-          copyable={{ text: props.event?._id }}
-        >
-          {`event_ID:    ${props.event?._id}`}
-        </Paragraph>
-        <div className="listsContainer">
-          <List
-            className="LeftList"
-            itemLayout="horizontal"
-            dataSource={eventDataFormated}
-            renderItem={(dataItem) => (
-              <List.Item>
-                <List.Item.Meta
-                  title={<h4>{dataItem.title}</h4>}
-                  description={<p>{dataItem.description}</p>}
-                />
-              </List.Item>
-            )}
-          />
-          <div className="RightList">
-            <div className="eventIdImageContainer">
-              {props.event?.eventpic ? (
-                <img
-                  alt="No photo provided by the creator"
-                  style={{ borderRadius: "20px" }}
-                  className="eventIDImage"
-                  src={props.event.eventpic}
-                />
-              ) : (
-                <p className="eventIDImage">
-                  {"No photo provided by the creator"}
-                </p>
+      <div
+        id="CompleteLeftEventIDContainer"
+        className={`${styles.card} Card${cardDisplayed}`}
+      >
+        <div id="eventIDInfoContainer">
+          <h2>{props.event?.name}</h2>
+          <Paragraph
+            id="IdTextCopy"
+            className="fakeh4"
+            copyable={{ text: props.event?._id }}
+          >
+            {`event_ID:    ${props.event?._id}`}
+          </Paragraph>
+          <div className="listsContainer">
+            <List
+              className="LeftList"
+              itemLayout="horizontal"
+              dataSource={eventDataFormated}
+              renderItem={(dataItem) => (
+                <List.Item>
+                  <List.Item.Meta
+                    title={<h4>{dataItem.title}</h4>}
+                    description={<p>{dataItem.description}</p>}
+                  />
+                </List.Item>
               )}
-            </div>
-            <div>
-              <h4>{"Event Description"}</h4>
-              <p style={{ color: "#7f8686" }}>{props.event.bio}</p>
-            </div>
-            {props.event?.price === 0 ||
-            props.event?.price === undefined ? null : (
-              <Button size="large" block type="primary" onClick={HandlePayment}>
+            />
+            <div className="RightList">
+              <div className="eventIdImageContainer">
+                {props.event?.eventpic ? (
+                  <img
+                    alt="No photo provided by the creator"
+                    style={{ borderRadius: "20px" }}
+                    className="eventIDImage"
+                    src={props.event.eventpic}
+                  />
+                ) : (
+                  <p className="eventIDImage">
+                    {"No photo provided by the creator"}
+                  </p>
+                )}
+              </div>
+              <div>
+                <h4>{"Event Description"}</h4>
+                <p style={{ color: "#7f8686" }}>{props.event.bio}</p>
+              </div>
+              {/* {props.event?.price === 0 ||
+              props.event?.price === undefined ? null : (
+                <Button size="large" block type="primary" onClick={FlipCard}>
+                  {"Buy Ticket 🎟️"}
+                </Button>
+              )} */}
+              <Button size="large" block type="primary" onClick={FlipCard}>
                 {"Buy Ticket 🎟️"}
               </Button>
-            )}
+            </div>
           </div>
+        </div>
+        <div id="PaymentForm">
+          <button className="returnButton" onClick={FlipCard}>
+            <RotateLeftOutlined />
+            {/* <Elements stripe={stripePromise} options={options}>
+              <CheckoutForm />
+            </Elements> */}
+          </button>
         </div>
       </div>
       <div id="eventIdGoogleMapsContainer" className={styles.card}>

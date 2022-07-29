@@ -98,45 +98,102 @@
   text-align: center;
 }
 
-#eventIDInfoContainer {
+#CompleteLeftEventIDContainer {
+  position: relative;
   @include alignCenter;
-  flex-direction: column;
-  justify-content: space-around;
-  overflow: hidden;
+  min-height: 85%;
 
-  h2 {
-    text-align: center;
-    margin: 0;
-    padding: 0;
-  }
-  #IdTextCopy {
-    border-bottom: 2px solid var(--PrimaryColor);
-    width: 100%;
-    margin: 0;
-    padding: 10px;
-    @include alignCenter;
-  }
-  .listsContainer {
-    @include alignCenter;
-    flex-direction: row;
+  #eventIDInfoContainer {
+    position: absolute;
     width: 90%;
-    height: 80%;
-    gap: 10px;
+    height: 90%;
+    transition: opacity 500ms, visibility 500ms;
+    @include alignCenter;
+    flex-direction: column;
+    justify-content: space-around;
+    overflow: hidden;
 
-    > * {
-      width: 50%;
-      height: 100%;
+    h2 {
+      text-align: center;
+      margin: 0;
+      padding: 0;
     }
-
-    .LeftList {
-      overflow: scroll;
-    }
-
-    .RightList {
+    #IdTextCopy {
+      border-bottom: 2px solid var(--PrimaryColor);
+      width: 100%;
+      margin: 0;
+      padding: 10px;
       @include alignCenter;
-      flex-direction: column;
-      justify-content: space-around;
     }
+    .listsContainer {
+      @include alignCenter;
+      flex-direction: row;
+      width: 90%;
+      height: 80%;
+      gap: 10px;
+
+      > * {
+        width: 50%;
+        height: 100%;
+      }
+
+      .LeftList {
+        overflow: scroll;
+      }
+
+      .RightList {
+        @include alignCenter;
+        flex-direction: column;
+        justify-content: space-around;
+      }
+    }
+  }
+
+  #PaymentForm {
+    position: absolute;
+    transition: opacity 500ms, visibility 500ms;
+    width: 90%;
+    height: 90%;
+    transform: rotateY(180deg);
+
+    .returnButton {
+      @include GenericButtonStyle(var(--SecondaryColor), black);
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      padding: 0;
+      @include alignCenter;
+      top: 5px;
+      left: 5px;
+      border-radius: 50%;
+    }
+  }
+}
+
+.CardFront {
+  transform: rotateY(0deg);
+  transition: transform 500ms;
+
+  #eventIDInfoContainer {
+    opacity: 1;
+    visibility: visible;
+  }
+  #PaymentForm {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.CardBack {
+  transform: rotateY(180deg);
+  transition: transform 500ms;
+  #PaymentForm {
+    opacity: 1;
+    visibility: visible;
+  }
+  #eventIDInfoContainer {
+    opacity: 0;
+    visibility: hidden;
   }
 }
 

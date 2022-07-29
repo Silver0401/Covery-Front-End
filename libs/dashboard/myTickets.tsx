@@ -88,7 +88,7 @@ const MyTickets: React.FC = () => {
         )
         .then((res) => {
           setEventData(res.data[0]);
-          // console.log(res);
+          console.log(res);
         })
         .catch((err) => {
           console.error(err);
